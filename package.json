@@ -10,13 +10,13 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "@nuxt/fonts": "0.11.4",
-    "@unocss/nuxt": "^66.5.2",
+    "@nuxt/fonts": "0.12.1",
+    "@unocss/nuxt": "^66.5.9",
     "@vueuse/nuxt": "14.0.0",
-    "nuxt": "^4.1.2",
+    "nuxt": "^4.2.1",
     "ohash": "^2.0.11",
-    "vue": "^3.5.21",
-    "vue-router": "^4.5.1",
+    "vue": "^3.5.25",
+    "vue-router": "^4.6.3",
     "wordlist-js": "^2.0.0"
   }
 }
