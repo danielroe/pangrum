@@ -3,7 +3,7 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
   routeRules: {
-    '/': { isr: 60 * 60 * 12 }
+    '/': { isr: 60 }
   },
   nitro: {
     storage: {

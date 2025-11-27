@@ -7,6 +7,13 @@ const choices = _choices as string[]
 const words = _words as string[]
 
 export default defineEventHandler(async event => {
+  const storage = useStorage('words')
+  const key = new Date().toISOString().slice(0, 10)
+
+  if (await storage.hasItem(key)) {
+    return storage.getItem(key)
+  }
+
   const query = new Set((getQuery(event).letters as string | undefined)?.toUpperCase().split('') || [])
   const letters = query.size === 7 ? [...query] : choices[Math.floor(Math.random() * choices.length)].split('').sort(() => Math.random() - 0.5)
 
@@ -15,10 +22,14 @@ export default defineEventHandler(async event => {
     return chars.includes(letters[2]) && chars.every(letter => letters.includes(letter))
   })
   
-  return {
+  const response = {
     words: validWords.map(w => w.replace(/(..)(.*)/, (_, first, rest) => first + rest.replace(/./g, '_'))).sort(),
     hashes: validWords.map(w => hash(w)),
     letters,
     pangrams: validWords.filter(word => letters.every(letter => word.includes(letter))).length
   }
+
+  event.waitUntil(storage.setItem(key, response))
+
+  return response
 })
