@@ -10,13 +10,16 @@ const props = defineProps<{
 
 const words = defineModel<Set<string>>('words')
 
-const word = ref('')
+const word = useWord()
 const input = useTemplateRef('wordInput')
 
-const stack = useState<string[]>('word-stack', () => [])
+watch(word, (letters) => {
+  word.value = letters.replace(/\W/g, '')
 
-watch(() => stack.value.join(''), () => {
-  word.value += stack.value.splice(0, stack.value.length).join('')
+  if (letters.at(-1) === '\n') {
+    return addWord()
+  }
+
   if (navigator.maxTouchPoints === 0) {
     input.value?.focus()
   }
@@ -85,7 +88,7 @@ function addWord () {
         </div>
       </div>
     </label>
-    <button type="submit" class="bg-yellow-300 text-black border-0 px-3 py-2">
+    <button type="submit" class="hidden sm:block bg-yellow-300 text-black border-0 px-3 py-2">
       <span aria-hidden="true">⏎</span>
       <span class="sr-only">Submit word</span>
     </button>

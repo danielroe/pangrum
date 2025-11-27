@@ -4,7 +4,7 @@ defineProps<{
   centreLetter: string
 }>()
 
-const stack = useState<string[]>('word-stack', () => [])
+const word = useWord()
 </script>
 
 <template>
@@ -15,7 +15,7 @@ const stack = useState<string[]>('word-stack', () => [])
       class="list-none flex items-center items-stretch aspect-square min-w-11 w-full"
       :class="[
         letter === centreLetter
-          ? 'col-start-2 col-end-4 row-start-1 row-end-3'
+          ? 'col-start-2 sm:col-end-4 row-start-1 sm:row-end-3'
           : ''
       ]"
     >
@@ -26,9 +26,29 @@ const stack = useState<string[]>('word-stack', () => [])
             ? 'bg-white'
             : 'bg-yellow-300'
         ]"
-        @click="() => stack.push(letter)"
+        @click="() => word += letter"
       >
         {{ letter }}
+      </button>
+    </li>
+    <li class="sm:hidden list-none flex items-center items-stretch aspect-square min-w-11 w-full col-start-5 row-start-1">
+
+      <button
+        class="border-2 border-transparent border-solid text-xl text-black border-white border-opacity-30 active:border-black focus:border-white flex-grow flex items-center justify-center touch-manipulation bg-transparent text-white"
+        @click="() => word = word.slice(0, -1)"
+      >
+        <span aria-hidden="true">⌫</span>
+        <span class="sr-only">Delete character</span>
+      </button>
+    </li>
+    <li class="sm:hidden list-none flex items-center items-stretch min-w-11 w-full col-start-4 col-end-6 row-start-2">
+
+      <button
+        class="border-2 border-transparent border-solid text-xl text-black border-white border-opacity-30 active:border-black focus:border-white flex-grow flex items-center justify-center touch-manipulation bg-transparent text-white"
+        @click="() => word += '\n'"
+      >
+        <span aria-hidden="true">⏎</span>
+        <span class="sr-only">Submit word</span>
       </button>
     </li>
   </ul>

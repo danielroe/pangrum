@@ -47,7 +47,7 @@ const pointsToGo = computed(() => Math.ceil((nextThreshold.value.threshold / 100
         {{ score }}
       </span>
       {{ status }}
-      <div v-if="status !== 'queen bee'" class="opacity-40">
+      <div v-if="status !== 'queen bee'" class="opacity-40 text-sm sm:text-base">
         (<span class="font-mono">{{ pointsToGo }}</span> more {{ pointsToGo > 1 ? 'points' : 'point' }} to '{{ nextThreshold.label }}')
       </div>
     </div>

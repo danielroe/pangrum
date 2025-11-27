@@ -5,6 +5,9 @@ export default defineNuxtConfig({
   routeRules: {
     '/': { isr: 60 }
   },
+  imports: {
+    dirs: ['~/stores']
+  },
   nitro: {
     storage: {
       words: {
