@@ -17,6 +17,7 @@ export default defineNuxtConfig({
       storage: {
         words: {
           driver: 'fsLite',
+          base: '.nuxt/words'
         }
       }
     },

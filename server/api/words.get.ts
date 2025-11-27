@@ -8,7 +8,7 @@ const words = _words as string[]
 
 export default defineEventHandler(async event => {
   const storage = useStorage('words')
-  const key = new Date().toISOString().slice(0, 10)
+  const key = new Date().toISOString().slice(0, 10) + '.json'
 
   if (await storage.hasItem(key)) {
     return storage.getItem(key) as never

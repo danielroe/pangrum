@@ -34,7 +34,7 @@ export default defineNuxtModule({
     nuxt.hook('nitro:init', async (nitro) => {
       const sets = [10, 20, 35, 40, /* 50, 55, 60 */] as const
 
-      const key = sets.join('-')
+      const key = sets.join('-') + '.json'
       const cachedData = await nitro.storage.getItem<{ choices: Record<string, WordMeta>, words: Record<string, Word> }>('words:list-' + key)
       if (cachedData) {
         Object.assign(choices, cachedData.choices)
