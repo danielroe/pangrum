@@ -17,7 +17,9 @@ const stack = useState<string[]>('word-stack', () => [])
 
 watch(() => stack.value.join(''), () => {
   word.value += stack.value.splice(0, stack.value.length).join('')
-  input.value?.focus()
+  if (navigator.maxTouchPoints === 0) {
+    input.value?.focus()
+  }
 })
 
 function addWord () {
@@ -45,41 +47,47 @@ function addWord () {
   } finally {
     // clear + prepare for next steps
     word.value = ''
-    input.value?.focus()
+    if (navigator.maxTouchPoints === 0) {
+      input.value?.focus()
+    }
   }
 }
 </script>
 
 <template>
-  <form @submit.prevent="addWord">
-    <label class="flex flex-col gap-2 max-w-full items-stretch">
+  <form @submit.prevent="addWord" class="flex flex-row items-end gap-2xl">
+    <label class="flex flex-col gap-2 max-w-full items-stretch overflow-hidden">
       <span class="hidden sm:block">enter your word</span>
-      <div class="relative overflow-hidden">
+      <div class="relative">
         <input
           ref="wordInput"
           name="word"
           autofocus
           v-model="word"
           type="text"
-          class="p-2 rounded-none border-none font-bold text-xl text-yellow-300 uppercase tracking-[0.5rem] h-6 bg-transparent outline-none border-b-2 border-b-solid border-transparent max-w-full focus:border-yellow-300"
+          class="p-2 rounded-none border-none font-bold text-xl text-yellow-300 uppercase tracking-[0.5rem] h-6 bg-transparent outline-none border-b-2 border-b-solid border-white border-opacity-10 border-opacity-20 focus:border-opacity-100 focus:border-yellow-300"
         >
         <!-- TODO: implement with mask instead -->
         <div v-if="word" class="absolute px-2 pt-2 pb-1 rounded-none border-none font-bold text-xl text-white uppercase gap-2 flex font-bold text-xl text-white bg-[#333] bottom-1 top-0 -left-1">
           <span 
-          v-for="letter of word.toUpperCase().split('')" 
-          class="h-6 flex items-center justify-center"
-          :class="[{
-            'text-yellow-500': centreLetter === letter,
-            'text-white': centreLetter !== letter && letters.includes(letter),
-            'text-gray-500': !letters.includes(letter)
-          },
-        ]"
-          >
-          {{ letter }}
-        </span>
-      </div>
+            v-for="letter of word.toUpperCase().split('')" 
+            class="h-6 flex items-center justify-center"
+            :class="[{
+              'text-yellow-500': centreLetter === letter,
+              'text-white': centreLetter !== letter && letters.includes(letter),
+              'text-gray-500': !letters.includes(letter)
+            },
+          ]"
+            >
+            {{ letter }}
+          </span>
+        </div>
       </div>
     </label>
+    <button type="submit" class="bg-yellow-300 text-black border-0 px-3 py-2">
+      <span aria-hidden="true">⏎</span>
+      <span class="sr-only">Submit word</span>
+    </button>
   </form>
 </template>
 

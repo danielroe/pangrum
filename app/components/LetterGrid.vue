@@ -19,7 +19,7 @@ const stack = useState<string[]>('word-stack', () => [])
       ]"
     >
       <button
-        class="border-2 border-transparent border-solid font-bold text-xl text-black active:border-black focus:border-white flex-grow flex items-center justify-center"
+        class="border-2 border-transparent border-solid font-bold text-xl text-black active:border-black focus:border-white flex-grow flex items-center justify-center touch-manipulation"
         :class="[
           letter === centreLetter
             ? 'bg-white'
