@@ -12,6 +12,7 @@
   "dependencies": {
     "@nuxt/fonts": "0.12.1",
     "@unocss/nuxt": "^66.5.9",
+    "@vercel/kv": "^3.0.0",
     "@vueuse/nuxt": "14.0.0",
     "nuxt": "^4.2.1",
     "ohash": "^2.0.11",

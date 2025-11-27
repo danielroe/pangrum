@@ -5,5 +5,12 @@ export default defineNuxtConfig({
   routeRules: {
     '/': { isr: 60 * 60 * 12 }
   },
+  nitro: {
+    storage: {
+      words: {
+        driver: 'vercel-kv',
+      }
+    }
+  },
   modules: ['@unocss/nuxt', '@vueuse/nuxt']
 })
