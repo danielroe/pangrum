@@ -52,17 +52,16 @@ const pointsToGo = computed(() => Math.ceil((nextThreshold.value.threshold / 100
       </div>
     </div>
     <div class="flex flex-row px-1 items-center">
-      <template v-for="(threshold, label) in thresholds">
-        <div class="border border-solid border-2 w-2 h-2 rounded-full" :class="{ 'bg-yellow-300': percentage > threshold, 'bg-gray-600': percentage <= threshold }">
-        </div>
-        <div v-if="label !== 'queen bee'" class="flex-grow relative flex  justify-center items-center">
-          <div class="absolute border-1 -z-1 w-full" :class="{
+      <template v-for="(threshold, label) in thresholds" :key="`${label}-dot`">
+        <div class="border border-solid border-2 w-2 h-2 rounded-full" :class="{ 'bg-yellow-300': percentage > threshold, 'bg-gray-600': percentage <= threshold }"/>
+        <div v-if="label !== 'queen bee'" :key="`${label}-status`" class="flex-grow relative flex  justify-center items-center">
+          <div
+class="absolute border-1 -z-1 w-full" :class="{
             'border-yellow-300': percentage > threshold,
             'border-dashed': status === label,
             'border-solid': status !== label,
             'border-gray-600': percentage <= threshold
-          }">
-          </div>
+          }"/>
         </div>
       </template>
     </div>

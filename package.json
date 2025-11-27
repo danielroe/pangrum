@@ -10,6 +10,7 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@nuxt/eslint": "1.11.0",
     "@nuxt/fonts": "0.12.1",
     "@unocss/nuxt": "^66.5.9",
     "@vercel/kv": "^3.0.0",
@@ -19,5 +20,9 @@
     "vue": "^3.5.25",
     "vue-router": "^4.6.3",
     "wordlist-js": "^2.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^9.39.1",
+    "typescript": "^5.9.3"
   }
 }

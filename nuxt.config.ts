@@ -12,5 +12,14 @@ export default defineNuxtConfig({
       }
     }
   },
-  modules: ['@unocss/nuxt', '@vueuse/nuxt']
+  $development: {
+    nitro: {
+      storage: {
+        words: {
+          driver: 'fsLite',
+        }
+      }
+    },
+  },
+  modules: ['@unocss/nuxt', '@vueuse/nuxt', '@nuxt/eslint']
 })

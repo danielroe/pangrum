@@ -31,18 +31,20 @@ const remainingWords = computed(() => {
   <table class="text-white p-2 text-center tabular-nums">
     <tbody>
       <tr>
-        <td></td>
+        <td/>
         <td
           v-for="i of longestWordLength - 3"
+          :key="`header-${i + 3}`"
           class="font-mono pb-3"
         >
           {{ i + 3 }}
         </td>
       </tr>
-      <tr v-for="(counts, prefix) in remainingWords">
+      <tr v-for="(counts, prefix) in remainingWords" :key="`row-${prefix}`">
         <td class="uppercase font-mono h-5 w-5 pr-4 tracking-widest text-right">{{ prefix }}</td>
         <td 
           v-for="l of longestWordLength - 3"
+          :key="`cell-${prefix}-${l + 3}`"
           class="w-3 h-3 text-xs sm:text-sm sm:h-5 sm:w-5 text-center px-1 font-mono border-white border-opacity-10 border-1 border-solid"
           :class="{
             'bg-white bg-opacity-10': counts[l + 3] !== undefined && counts[l + 3]! > 0,

@@ -6,7 +6,7 @@ const { data } = useFetch('/api/words', {
 })
 
 const letters = computed(() => data.value?.letters || [])
-const centreLetter = computed(() => data.value?.letters[2]!)
+const centreLetter = computed(() => data.value?.letters[2] || '')
 const hashes = computed(() => data.value?.hashes || [])
 const validWords = computed(() => data.value?.words || [])
 

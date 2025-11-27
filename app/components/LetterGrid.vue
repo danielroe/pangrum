@@ -11,6 +11,7 @@ const stack = useState<string[]>('word-stack', () => [])
   <ul class="gap-2 grid p-0 grid-cols-5 my-0 sm:mr-auto">
     <li 
       v-for="letter of letters"
+      :key="letter"
       class="list-none flex items-center items-stretch aspect-square min-w-11 w-full"
       :class="[
         letter === centreLetter

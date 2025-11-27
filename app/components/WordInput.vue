@@ -42,8 +42,8 @@ function addWord () {
     }
 
     words.value?.add(normalisedWord)
-  } catch (e) {
-
+  } catch {
+    // TODO: show error to user
   } finally {
     // clear + prepare for next steps
     word.value = ''
@@ -55,22 +55,23 @@ function addWord () {
 </script>
 
 <template>
-  <form @submit.prevent="addWord" class="flex flex-row items-end gap-2xl">
+  <form class="flex flex-row items-end gap-2xl" @submit.prevent="addWord">
     <label class="flex flex-col gap-2 max-w-full items-stretch overflow-hidden">
       <span class="hidden sm:block">enter your word</span>
       <div class="relative">
         <input
           ref="wordInput"
+          v-model="word"
           name="word"
           autofocus
-          v-model="word"
           type="text"
           class="p-2 rounded-none border-none font-bold text-xl text-yellow-300 uppercase tracking-[0.5rem] h-6 bg-transparent outline-none border-b-2 border-b-solid border-white border-opacity-10 border-opacity-20 focus:border-opacity-100 focus:border-yellow-300"
         >
         <!-- TODO: implement with mask instead -->
         <div v-if="word" class="absolute px-2 pt-2 pb-1 rounded-none border-none font-bold text-xl text-white uppercase gap-2 flex font-bold text-xl text-white bg-[#333] bottom-1 top-0 -left-1">
           <span 
-            v-for="letter of word.toUpperCase().split('')" 
+            v-for="letter, i of word.toUpperCase().split('')" 
+            :key="`${letter}-${i}`"
             class="h-6 flex items-center justify-center"
             :class="[{
               'text-yellow-500': centreLetter === letter,

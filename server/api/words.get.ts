@@ -11,7 +11,7 @@ export default defineEventHandler(async event => {
   const key = new Date().toISOString().slice(0, 10)
 
   if (await storage.hasItem(key)) {
-    return storage.getItem(key)
+    return storage.getItem(key) as never
   }
 
   const query = new Set((getQuery(event).letters as string | undefined)?.toUpperCase().split('') || [])
