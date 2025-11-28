@@ -1,1 +1,1 @@
-export const useWord = () => useState('word', () => '');
+export const useWord = () => useState('word', () => '')

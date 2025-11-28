@@ -6,7 +6,7 @@ const props = defineProps<{
 
 const longestWordLength = computed(() => props.validWords.reduce((acc, w) => w.length > acc ? w.length : acc, 0))
 
-const prefixes = computed(() => new Set(props.validWords.map(m => m.slice(0, 2))))
+const prefixes = computed(() => new Set(props.validWords.map(m => m.replace(/_/g, ''))))
 const remainingWords = computed(() => {
   const r: Record<string, Record<string, number>> = {}
   for (const prefix of prefixes.value) {
@@ -28,10 +28,11 @@ const remainingWords = computed(() => {
 </script>
 
 <template>
+  <!-- TODO: pangrams and two letter prefixes (+ word count?) -->
   <table class="text-white p-2 text-center tabular-nums">
     <tbody>
       <tr>
-        <td/>
+        <td />
         <td
           v-for="i of longestWordLength - 3"
           :key="`header-${i + 3}`"
@@ -40,15 +41,20 @@ const remainingWords = computed(() => {
           {{ i + 3 }}
         </td>
       </tr>
-      <tr v-for="(counts, prefix) in remainingWords" :key="`row-${prefix}`">
-        <td class="uppercase font-mono h-5 w-5 pr-4 tracking-widest text-right">{{ prefix }}</td>
-        <td 
+      <tr
+        v-for="(counts, prefix) in remainingWords"
+        :key="`row-${prefix}`"
+      >
+        <td class="uppercase font-mono h-5 w-5 pr-4 tracking-widest text-right">
+          {{ prefix }}
+        </td>
+        <td
           v-for="l of longestWordLength - 3"
           :key="`cell-${prefix}-${l + 3}`"
-          class="w-3 h-3 text-xs sm:text-sm sm:h-5 sm:w-5 text-center px-1 font-mono border-white border-opacity-10 border-1 border-solid"
+          class="w-3 h-3 text-xs sm:text-sm sm:h-5 sm:w-5 text-center px-1 font-mono border-white border-opacity-10 border-1 border-solid transition-colors"
           :class="{
             'bg-white bg-opacity-10': counts[l + 3] !== undefined && counts[l + 3]! > 0,
-            'bg-yellow-300 text-black': counts[l + 3] === 0
+            'bg-yellow-300 text-black': counts[l + 3] === 0,
           }"
         >
           {{ counts[l + 3] === undefined ? '' : counts[l + 3] === 0 ? '✔︎' : counts[l + 3] }}
@@ -57,4 +63,3 @@ const remainingWords = computed(() => {
     </tbody>
   </table>
 </template>
-

@@ -7,17 +7,30 @@ const props = defineProps<{
 const { maxScore, score, percentage } = useScore(() => props.words, () => props.validWords)
 
 const thresholds = {
-  beginner: 0,
+  'beginner': 0,
   'good start': 2.5,
   'moving up': 5,
   'good': 8,
   'solid': 15,
   'nice': 25,
   'great': 40,
-  amazing: 50,
-  genius: 70,
+  'amazing': 50,
+  'genius': 70,
   'queen bee': 100,
 }
+
+// const icons = {
+//   beginner: '👶',
+//   'good start': 2.5,
+//   'moving up': 5,
+//   'good': 8,
+//   'solid': 15,
+//   'nice': 25,
+//   'great': 40,
+//   amazing: 50,
+//   genius: 70,
+//   'queen bee': 100,
+// }
 
 const status = computed(() => {
   for (const [label, threshold] of Object.entries(thresholds).reverse()) {
@@ -47,24 +60,39 @@ const pointsToGo = computed(() => Math.ceil((nextThreshold.value.threshold / 100
         {{ score }}
       </span>
       {{ status }}
-      <div v-if="status !== 'queen bee'" class="opacity-40 text-sm sm:text-base">
-        (<span class="font-mono">{{ pointsToGo }}</span> more {{ pointsToGo > 1 ? 'points' : 'point' }} to '{{ nextThreshold.label }}')
+      <div
+        v-if="status !== 'queen bee'"
+        class="opacity-40 text-sm"
+      >
+        (<span class="font-mono">{{ pointsToGo }}</span> more to '{{ nextThreshold.label }}')
       </div>
     </div>
     <div class="flex flex-row px-1 items-center">
-      <template v-for="(threshold, label) in thresholds" :key="`${label}-dot`">
-        <div class="border border-solid border-2 w-2 h-2 rounded-full" :class="{ 'bg-yellow-300': percentage > threshold, 'bg-gray-600': percentage <= threshold }"/>
-        <div v-if="label !== 'queen bee'" :key="`${label}-status`" class="flex-grow relative flex  justify-center items-center">
+      <template
+        v-for="(threshold, label) in thresholds"
+        :key="`${label}-dot`"
+      >
+        <div
+          v-if="label !== 'queen bee'"
+          class="border border-solid border-2 w-2 h-2 rounded-full"
+          :class="{ 'bg-yellow-300': percentage > threshold, 'bg-gray-600': percentage <= threshold }"
+        />
+        <div
+          v-if="label !== 'queen bee' && label !=='genius'"
+          :key="`${label}-status`"
+          class="flex-grow relative flex  justify-center items-center"
+        >
           <div
-class="absolute border-1 -z-1 w-full" :class="{
-            'border-yellow-300': percentage > threshold,
-            'border-dashed': status === label,
-            'border-solid': status !== label,
-            'border-gray-600': percentage <= threshold
-          }"/>
+            class="absolute border-1 -z-1 w-full"
+            :class="{
+              'border-yellow-300': percentage > threshold,
+              'border-dashed': status === label,
+              'border-solid': status !== label,
+              'border-gray-600': percentage <= threshold,
+            }"
+          />
         </div>
       </template>
     </div>
   </div>
 </template>
-

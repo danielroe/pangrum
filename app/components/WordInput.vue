@@ -25,7 +25,7 @@ watch(word, (letters) => {
   }
 })
 
-function addWord () {
+function addWord() {
   const normalisedWord = word.value.toUpperCase()
   try {
     if (!normalisedWord) {
@@ -43,11 +43,26 @@ function addWord () {
     if (!props.hashes.includes(hash(normalisedWord))) {
       throw new TypeError('Not a valid word')
     }
+    if (words.value?.has(normalisedWord)) {
+      throw new TypeError('Already guessed')
+    }
 
     words.value?.add(normalisedWord)
-  } catch {
-    // TODO: show error to user
-  } finally {
+
+    addToast({
+      message: `🎉 +${scoreWord(normalisedWord)} points!`,
+    })
+  }
+  catch (err) {
+    const message = (err as Error).toString().replace('TypeError: ', '')
+    if (message === 'No word') {
+      return
+    }
+    addToast({
+      message: (err as Error).toString().replace('TypeError: ', ''),
+    })
+  }
+  finally {
     // clear + prepare for next steps
     word.value = ''
     if (navigator.maxTouchPoints === 0) {
@@ -58,7 +73,10 @@ function addWord () {
 </script>
 
 <template>
-  <form class="flex flex-row items-end gap-2xl" @submit.prevent="addWord">
+  <form
+    class="flex flex-row items-end gap-2xl"
+    @submit.prevent="addWord"
+  >
     <label class="flex flex-col gap-2 max-w-full items-stretch overflow-hidden">
       <span class="hidden sm:block">enter your word</span>
       <div class="relative">
@@ -68,30 +86,35 @@ function addWord () {
           name="word"
           autofocus
           type="text"
-          class="p-2 rounded-none border-none font-bold text-xl text-yellow-300 uppercase tracking-[0.5rem] h-6 bg-transparent outline-none border-b-2 border-b-solid border-white border-opacity-10 border-opacity-20 focus:border-opacity-100 focus:border-yellow-300"
+          class="p-2 rounded-none border-none font-mono text-xl text-yellow-300 uppercase tracking-[0.5rem] h-6 bg-transparent outline-none border-b-2 border-b-solid border-white border-opacity-10 border-opacity-20 focus:border-opacity-100 focus:border-yellow-300"
         >
         <!-- TODO: implement with mask instead -->
-        <div v-if="word" class="absolute px-2 pt-2 pb-1 rounded-none border-none font-bold text-xl text-white uppercase gap-2 flex font-bold text-xl text-white bg-[#333] bottom-1 top-0 -left-1">
-          <span 
-            v-for="letter, i of word.toUpperCase().split('')" 
+        <div
+          v-if="word"
+          class="absolute px-2 pt-2 pb-1 rounded-none border-none font-mono text-xl text-white uppercase gap-2 flex font-bold text-xl text-white bg-[#333] bottom-1 top-0 -left-1"
+        >
+          <span
+            v-for="letter, i of word.toUpperCase().split('')"
             :key="`${letter}-${i}`"
             class="h-6 flex items-center justify-center"
             :class="[{
               'text-yellow-500': centreLetter === letter,
               'text-white': centreLetter !== letter && letters.includes(letter),
-              'text-gray-500': !letters.includes(letter)
+              'text-gray-500': !letters.includes(letter),
             },
-          ]"
-            >
+            ]"
+          >
             {{ letter }}
           </span>
         </div>
       </div>
     </label>
-    <button type="submit" class="hidden sm:block bg-yellow-300 text-black border-0 px-3 py-2">
+    <button
+      type="submit"
+      class="hidden sm:block bg-yellow-300 text-black border-0 px-3 py-2"
+    >
       <span aria-hidden="true">⏎</span>
       <span class="sr-only">Submit word</span>
     </button>
   </form>
 </template>
-
