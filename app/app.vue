@@ -1,16 +1,13 @@
 <script setup lang="ts">
-const { data } = useFetch('/api/words', {
-  query: {
-    // letters: 'analdoge'
-  },
-})
+const { data } = useFetch('/api/words')
 
 const letters = computed(() => data.value?.letters || [])
 const centreLetter = computed(() => data.value?.letters[2] || '')
 const hashes = computed(() => data.value?.hashes || [])
 const validWords = computed(() => data.value?.words || [])
+const pairs = computed(() => data.value?.pairs || {})
 
-const words = useLocalStorage<Set<string>>(() => `spelling-bee-${letters.value.join('')}`, new Set(), {
+const words = useLocalStorage<Set<string>>(() => `glypher-${letters.value.join('')}`, new Set(), {
   initOnMounted: true,
   serializer: {
     read: (v: string) => new Set(JSON.parse(v)),
@@ -23,7 +20,7 @@ const words = useLocalStorage<Set<string>>(() => `spelling-bee-${letters.value.j
   <TheToast />
   <div class="flex flex-col gap-2 sm:gap-4 text-white px-2 sm:px-6 sm:py-8">
     <h2 class="text-sm absolute top-0 right-4 leading-tight mt-1 opacity-40 font-normal sm:font-bold sm:text-2xl sm:relative sm:opacity-100 sm:right-0">
-      spelling bee
+      glypher
     </h2>
     <div class="mt-3 sm:mt-0 flex flex-col-reverse sm:flex-row justify-start gap-8 sm:gap-12 items:start sm:items-end">
       <LetterGrid
@@ -46,6 +43,7 @@ const words = useLocalStorage<Set<string>>(() => `spelling-bee-${letters.value.j
     <div class="flex flex-row flex-wrap gap-2 sm:gap-6 items-stretch">
       <WordHints
         class="max-w-full mr-auto sm:w-auto"
+        :pairs="pairs"
         :words="words"
         :valid-words="validWords"
       />

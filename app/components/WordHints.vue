@@ -2,6 +2,7 @@
 const props = defineProps<{
   validWords: string[]
   words: Set<string>
+  pairs: Record<string, number>
 }>()
 
 const longestWordLength = computed(() => props.validWords.reduce((acc, w) => w.length > acc ? w.length : acc, 0))
@@ -25,41 +26,88 @@ const remainingWords = computed(() => {
   }
   return r
 })
+
+const pairsRemaining = computed(() => {
+  const r: Record<string, number> = {}
+  for (const prefix in props.pairs) {
+    const total = props.pairs[prefix] || 0
+    const found = [...props.words].filter(w => w.startsWith(prefix)).length
+    const remaining = total - found
+    r[prefix] = remaining
+  }
+  return r
+})
 </script>
 
 <template>
-  <!-- TODO: pangrams and two letter prefixes (+ word count?) -->
-  <table class="text-white p-2 text-center tabular-nums">
-    <tbody>
-      <tr>
-        <td />
-        <td
-          v-for="i of longestWordLength - 3"
-          :key="`header-${i + 3}`"
-          class="font-mono pb-3"
+  <div>
+    <!-- TODO: pangrams and two letter prefixes (+ word count?) -->
+    <table class="text-white p-2 text-center tabular-nums">
+      <tbody>
+        <tr>
+          <td />
+          <td
+            v-for="i of longestWordLength - 3"
+            :key="`header-${i + 3}`"
+            class="font-mono pb-3"
+          >
+            {{ i + 3 }}
+          </td>
+        </tr>
+        <tr
+          v-for="(counts, prefix) in remainingWords"
+          :key="`row-${prefix}`"
         >
-          {{ i + 3 }}
-        </td>
-      </tr>
-      <tr
-        v-for="(counts, prefix) in remainingWords"
-        :key="`row-${prefix}`"
+          <td class="uppercase font-mono h-5 w-5 pr-4 tracking-widest text-right">
+            {{ prefix }}
+          </td>
+          <td
+            v-for="l of longestWordLength - 3"
+            :key="`cell-${prefix}-${l + 3}`"
+            class="w-3 h-3 text-xs sm:text-sm sm:h-5 sm:w-5 text-center px-1 font-mono border-white border-opacity-10 border-1 border-solid transition-colors"
+            :class="{
+              'bg-white bg-opacity-10': counts[l + 3] !== undefined && counts[l + 3]! > 0,
+              'bg-yellow-300 text-black': counts[l + 3] === 0,
+            }"
+          >
+            {{ counts[l + 3] === undefined ? '' : counts[l + 3] === 0 ? '✔︎' : counts[l + 3] }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <dl
+      class="grid grid-cols-4 md:grid-cols-8 gap-2 mr-auto font-mono items-center"
+    >
+      <template
+        v-for="(count, prefix) in pairs"
+        :key="prefix"
       >
-        <td class="uppercase font-mono h-5 w-5 pr-4 tracking-widest text-right">
-          {{ prefix }}
-        </td>
-        <td
-          v-for="l of longestWordLength - 3"
-          :key="`cell-${prefix}-${l + 3}`"
-          class="w-3 h-3 text-xs sm:text-sm sm:h-5 sm:w-5 text-center px-1 font-mono border-white border-opacity-10 border-1 border-solid transition-colors"
-          :class="{
-            'bg-white bg-opacity-10': counts[l + 3] !== undefined && counts[l + 3]! > 0,
-            'bg-yellow-300 text-black': counts[l + 3] === 0,
-          }"
+        <dd
+          class="border-1 border-solid text-center aspect-square inline-block h-7 flex items-center justify-center"
+          :class="[
+            pairsRemaining[prefix] ? 'border-white': 'border-yellow bg-yellow text-black',
+          ]"
         >
-          {{ counts[l + 3] === undefined ? '' : counts[l + 3] === 0 ? '✔︎' : counts[l + 3] }}
-        </td>
-      </tr>
-    </tbody>
-  </table>
+          <span
+            v-if="!pairsRemaining[prefix]"
+            class="text-lg"
+            alt=""
+            v-text="'✔︎'"
+          />
+          <span :class="{ 'sr-only': !pairsRemaining[prefix] }">
+            {{ pairsRemaining[prefix] }}
+          </span>
+          <span class="sr-only">{{ pairsRemaining[prefix] === 1 ? 'word' : 'words' }}</span>
+        </dd>
+        <dt
+          class="after:border-b-1 after:border-b-solid after:content-[''] after:block after:w-10 after:border-opacity-100 after:-ml-4 after:mt-1.125 after:absolute"
+          :class="[
+            pairsRemaining[prefix] ? 'after:border-white': 'after:border-yellow',
+          ]"
+        >
+          {{ prefix }}
+        </dt>
+      </template>
+    </dl>
+  </div>
 </template>

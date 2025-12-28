@@ -22,8 +22,16 @@ export default defineEventHandler(async (event) => {
     return chars.includes(letters[2]) && chars.every(letter => letters.includes(letter))
   })
 
+  const pairs: Record<string, number> = {}
+
+  for (const word of validWords) {
+    const prefix = word.slice(0, 2)
+    pairs[prefix] = (pairs[prefix] || 0) + 1
+  }
+
   const response = {
     words: validWords.map(w => w.replace(/^(.)(.*)/, (_, first, rest) => first + rest.replace(/./g, '_'))).sort(),
+    pairs: Object.fromEntries(Object.entries(pairs).sort((a, b) => a[0].localeCompare(b[0]))),
     hashes: validWords.map(w => hash(w)),
     letters,
     pangrams: validWords.filter(word => letters.every(letter => word.includes(letter))).length,
