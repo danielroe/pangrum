@@ -40,8 +40,7 @@ const pairsRemaining = computed(() => {
 </script>
 
 <template>
-  <div>
-    <!-- TODO: pangrams and two letter prefixes (+ word count?) -->
+  <div class="select-none">
     <table class="text-white p-2 text-center tabular-nums">
       <tbody>
         <tr>
@@ -76,16 +75,16 @@ const pairsRemaining = computed(() => {
       </tbody>
     </table>
     <dl
-      class="grid grid-cols-4 md:grid-cols-8 gap-2 mr-auto font-mono items-center"
+      class="grid font-mono items-center text-sm grid-cols-[1.75rem_1fr_1.75rem_1fr] gap-row-2"
     >
       <template
         v-for="(count, prefix) in pairs"
         :key="prefix"
       >
         <dd
-          class="border-1 border-solid text-center aspect-square inline-block h-7 flex items-center justify-center"
+          class="border-1 border-solid text-center aspect-square inline-block h-7 w-7 place-content-center !m-0"
           :class="[
-            pairsRemaining[prefix] ? 'border-white': 'border-yellow bg-yellow text-black',
+            pairsRemaining[prefix] ? 'border-white border-opacity-10 bg-white bg-opacity-10': 'border-yellow bg-yellow text-black',
           ]"
         >
           <span
@@ -100,9 +99,9 @@ const pairsRemaining = computed(() => {
           <span class="sr-only">{{ pairsRemaining[prefix] === 1 ? 'word' : 'words' }}</span>
         </dd>
         <dt
-          class="after:border-b-1 after:border-b-solid after:content-[''] after:block after:w-10 after:border-opacity-100 after:-ml-4 after:mt-1.125 after:absolute"
+          class="h-7 w-auto leading-none pl-2 place-content-center relative after:border-b-1 after:border-b-solid after:content-[''] after:inline-block after:absolute after:left-0.5 -after:bottom-0.25 after:w-12 after:h-0"
           :class="[
-            pairsRemaining[prefix] ? 'after:border-white': 'after:border-yellow',
+            pairsRemaining[prefix] ? 'after:border-white after:border-opacity-10 after:bg-white after:bg-opacity-10': 'after:border-yellow',
           ]"
         >
           {{ prefix }}

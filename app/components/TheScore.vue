@@ -55,14 +55,16 @@ const pointsToGo = computed(() => Math.ceil((nextThreshold.value.threshold / 100
 
 <template>
   <div class="flex flex-col gap-4 items-stretch">
-    <div class="tabular-nums flex flex-row items-baseline gap-2">
+    <div class="tabular-nums flex flex-row items-baseline gap-2 overflow-hidden max-w-full">
       <span class="text-4xl text-yellow-300 font-bold font-mono">
         {{ score }}
       </span>
-      {{ status }}
+      <span class="inline-block flex-shrink-0">
+        {{ status }}
+      </span>
       <div
         v-if="status !== 'queen bee'"
-        class="opacity-40 text-sm"
+        class="opacity-40 text-sm line-clamp-1"
       >
         (<span class="font-mono">{{ pointsToGo }}</span> more to '{{ nextThreshold.label }}')
       </div>

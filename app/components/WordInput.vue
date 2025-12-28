@@ -79,33 +79,29 @@ function addWord() {
   >
     <label class="flex flex-col gap-2 max-w-full items-stretch overflow-hidden">
       <span class="hidden sm:block">enter your word</span>
-      <div class="relative">
+      <div class="relative flex flex-col">
         <input
           ref="wordInput"
           v-model="word"
           name="word"
           autofocus
           type="text"
-          class="p-2 rounded-none border-none font-mono text-xl text-yellow-300 uppercase tracking-[0.5rem] h-6 bg-transparent outline-none border-b-2 border-b-solid border-white border-opacity-10 border-opacity-20 focus:border-opacity-100 focus:border-yellow-300"
+          class="p-2 rounded-none border-none font-mono font-bold text-xl uppercase tracking-[0.5rem] h-6 bg-transparent outline-none border-b-2 border-b-solid border-white border-opacity-10 border-opacity-20 focus:border-opacity-100 focus:border-yellow-300 color-transparent caret-yellow-300"
         >
-        <!-- TODO: implement with mask instead -->
         <div
           v-if="word"
-          class="absolute px-2 pt-2 pb-1 rounded-none border-none font-mono text-xl text-white uppercase gap-2 flex font-bold text-xl text-white bg-[#333] bottom-1 top-0 -left-1"
+          aria-hidden="true"
+          class="absolute px-2 pt-2 pb-1 rounded-none border-none font-mono font-bold text-xl uppercase tracking-[0.5rem] pointer-events-none"
         >
           <span
             v-for="letter, i of word.toUpperCase().split('')"
             :key="`${letter}-${i}`"
-            class="h-6 flex items-center justify-center"
-            :class="[{
+            :class="{
               'text-yellow-500': centreLetter === letter,
               'text-white': centreLetter !== letter && letters.includes(letter),
               'text-gray-500': !letters.includes(letter),
-            },
-            ]"
-          >
-            {{ letter }}
-          </span>
+            }"
+          >{{ letter }}</span>
         </div>
       </div>
     </label>
