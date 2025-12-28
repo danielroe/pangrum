@@ -13,6 +13,12 @@ const words = defineModel<Set<string>>('words')
 const word = useWord()
 const input = useTemplateRef('wordInput')
 
+const matchingWords = computed(() => {
+  if (!word.value || word.value.length < 2) return []
+  const currentWord = word.value.toUpperCase()
+  return [...(words.value || [])].filter(w => w.startsWith(currentWord)).sort()
+})
+
 watch(word, (letters) => {
   word.value = letters.replace(/\W/g, '')
 
@@ -49,9 +55,27 @@ function addWord() {
 
     words.value?.add(normalisedWord)
 
-    addToast({
-      message: `🎉 +${scoreWord(normalisedWord)} points!`,
-    })
+    const isPangram = props.letters.every(letter => normalisedWord.includes(letter))
+    const points = scoreWord(normalisedWord)
+
+    if (isPangram) {
+      addToast({
+        message: `🌟 PANGRAM! +${points} points! 🌟`,
+        type: 'celebration',
+      })
+    }
+    else if (points >= 10) {
+      addToast({
+        message: `✨ Amazing! +${points} points!`,
+        type: 'success',
+      })
+    }
+    else {
+      addToast({
+        message: `🎉 +${points} points!`,
+        type: 'success',
+      })
+    }
   }
   catch (err) {
     const message = (err as Error).toString().replace('TypeError: ', '')
@@ -60,6 +84,7 @@ function addWord() {
     }
     addToast({
       message: (err as Error).toString().replace('TypeError: ', ''),
+      type: 'error',
     })
   }
   finally {
@@ -74,7 +99,7 @@ function addWord() {
 
 <template>
   <form
-    class="flex flex-row items-end gap-2xl"
+    class="flex flex-row items-end gap-2xl relative"
     @submit.prevent="addWord"
   >
     <label class="flex flex-col gap-2 max-w-full items-stretch overflow-hidden">
@@ -86,16 +111,17 @@ function addWord() {
           name="word"
           autofocus
           type="text"
-          class="p-2 rounded-none border-none font-mono font-bold text-xl uppercase tracking-[0.5rem] h-6 bg-transparent outline-none border-b-2 border-b-solid border-white border-opacity-10 border-opacity-20 focus:border-opacity-100 focus:border-yellow-300 color-transparent caret-yellow-300"
+          class="p-2 rounded-none border-none font-mono font-bold text-xl uppercase tracking-[0.5rem] h-6 bg-transparent outline-none border-b-2 border-b-solid border-white border-opacity-10 border-opacity-20 focus:border-opacity-100 focus:border-yellow-300 text-transparent caret-yellow-300"
         >
         <div
           v-if="word"
           aria-hidden="true"
-          class="absolute px-2 pt-2 pb-1 rounded-none border-none font-mono font-bold text-xl uppercase tracking-[0.5rem] pointer-events-none"
+          class="absolute px-2 pt-2 pb-1 rounded-none border-none font-mono font-bold text-xl uppercase tracking-[0.5rem] pointer-events-none flex"
         >
           <span
             v-for="letter, i of word.toUpperCase().split('')"
-            :key="`${letter}-${i}`"
+            :key="i"
+            class="inline-block"
             :class="{
               'text-yellow-500': centreLetter === letter,
               'text-white': centreLetter !== letter && letters.includes(letter),
@@ -107,10 +133,15 @@ function addWord() {
     </label>
     <button
       type="submit"
-      class="hidden sm:block bg-yellow-300 text-black border-0 px-3 py-2"
+      class="hidden sm:block bg-yellow-300 text-black border-0 px-3 py-2 transition-all duration-100 active:bg-yellow-400 focus:outline focus:outline-2 focus:outline-yellow-500 focus:outline-offset-2"
+      aria-label="Submit word"
     >
       <span aria-hidden="true">⏎</span>
-      <span class="sr-only">Submit word</span>
     </button>
+
+    <WordFilterOverlay
+      :current-word="word"
+      :matching-words="matchingWords"
+    />
   </form>
 </template>

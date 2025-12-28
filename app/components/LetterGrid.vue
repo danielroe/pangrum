@@ -5,6 +5,18 @@ defineProps<{
 }>()
 
 const word = useWord()
+
+function addLetter(letter: string) {
+  word.value += letter
+}
+
+function deleteLetter() {
+  word.value = word.value.slice(0, -1)
+}
+
+function submitWord() {
+  word.value += '\n'
+}
 </script>
 
 <template>
@@ -20,21 +32,21 @@ const word = useWord()
       ]"
     >
       <button
-        class="border-2 border-transparent border-solid bg-[#444] font-mono font-bold text-xl active:border-black focus:border-white flex-grow flex items-center justify-center touch-none"
+        class="border-2 border-transparent border-solid bg-[#444] font-mono font-bold text-xl focus:border-white flex-grow flex items-center justify-center touch-none transition-all duration-100"
         :class="[
           letter === centreLetter
-            ? 'bg-yellow-300 text-black'
-            : 'text-white',
+            ? 'bg-yellow-300 text-black active:bg-yellow-400'
+            : 'text-white active:bg-[#555]',
         ]"
-        @click="() => word += letter"
+        @click="() => addLetter(letter)"
       >
         {{ letter }}
       </button>
     </li>
     <li class="sm:hidden list-none flex items-center items-stretch aspect-square min-w-11 w-full col-start-5 row-start-1">
       <button
-        class="border-2 border-transparent border-solid text-xl text-white border-white border-opacity-30 active:border-black focus:border-white flex-grow flex items-center justify-center bg-transparent touch-none"
-        @click="() => word = word.slice(0, -1)"
+        class="border-2 border-transparent border-solid text-xl text-white border-white border-opacity-30 focus:border-white flex-grow flex items-center justify-center bg-transparent touch-none transition-all duration-100 active:bg-white active:bg-opacity-10"
+        @click="deleteLetter"
       >
         <span aria-hidden="true">⌫</span>
         <span class="sr-only">Delete character</span>
@@ -42,8 +54,8 @@ const word = useWord()
     </li>
     <li class="sm:hidden list-none flex items-center items-stretch min-w-11 w-full col-start-4 col-end-6 row-start-2">
       <button
-        class="border-2 border-transparent border-solid text-xl text-white border-white border-opacity-30 active:border-black focus:border-white flex-grow flex items-center justify-center bg-transparent touch-none"
-        @click="() => word += '\n'"
+        class="border-2 border-transparent border-solid text-xl text-white border-white border-opacity-30 focus:border-white flex-grow flex items-center justify-center bg-transparent touch-none transition-all duration-100 active:bg-white active:bg-opacity-10"
+        @click="submitWord"
       >
         <span aria-hidden="true">⏎</span>
         <span class="sr-only">Submit word</span>
