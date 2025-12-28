@@ -20,7 +20,7 @@ const word = useWord()
       ]"
     >
       <button
-        class="border-2 border-transparent border-solid bg-[#444] font-mono font-bold text-xl active:border-black focus:border-white flex-grow flex items-center justify-center"
+        class="border-2 border-transparent border-solid bg-[#444] font-mono font-bold text-xl active:border-black focus:border-white flex-grow flex items-center justify-center touch-none"
         :class="[
           letter === centreLetter
             ? 'bg-yellow-300 text-black'
@@ -33,7 +33,7 @@ const word = useWord()
     </li>
     <li class="sm:hidden list-none flex items-center items-stretch aspect-square min-w-11 w-full col-start-5 row-start-1">
       <button
-        class="border-2 border-transparent border-solid text-xl text-white border-white border-opacity-30 active:border-black focus:border-white flex-grow flex items-center justify-center bg-transparent"
+        class="border-2 border-transparent border-solid text-xl text-white border-white border-opacity-30 active:border-black focus:border-white flex-grow flex items-center justify-center bg-transparent touch-none"
         @click="() => word = word.slice(0, -1)"
       >
         <span aria-hidden="true">⌫</span>
@@ -42,7 +42,7 @@ const word = useWord()
     </li>
     <li class="sm:hidden list-none flex items-center items-stretch min-w-11 w-full col-start-4 col-end-6 row-start-2">
       <button
-        class="border-2 border-transparent border-solid text-xl text-white border-white border-opacity-30 active:border-black focus:border-white flex-grow flex items-center justify-center bg-transparent"
+        class="border-2 border-transparent border-solid text-xl text-white border-white border-opacity-30 active:border-black focus:border-white flex-grow flex items-center justify-center bg-transparent touch-none"
         @click="() => word += '\n'"
       >
         <span aria-hidden="true">⏎</span>
