@@ -75,7 +75,7 @@ const pairsRemaining = computed(() => {
       </tbody>
     </table>
     <dl
-      class="grid font-mono items-center text-sm grid-cols-[1.75rem_1fr_1.75rem_1fr] gap-row-2"
+      class="grid font-mono items-center text-sm gap-row-2 grid-cols-[1.75rem_1fr_1.75rem_1fr_1.75rem_1fr] sm:grid-cols-[repeat(6,1.75rem_1fr)] md:grid-cols-[repeat(8,1.75rem_1fr)] lg:grid-cols-[repeat(10,1.75rem_1fr)]"
     >
       <template
         v-for="(count, prefix) in pairs"
