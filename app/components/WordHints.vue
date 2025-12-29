@@ -14,6 +14,8 @@ const foundPangrams = computed(() =>
   [...props.words].filter(w => props.letters.every(l => w.includes(l))).length,
 )
 
+const slideLabels = ['Word grid showing counts by prefix and length', 'Two-letter pairs grid', 'Found words list']
+
 function updateActiveSlide() {
   if (!carousel.value) return
   const scrollLeft = carousel.value.scrollLeft
@@ -116,7 +118,7 @@ function closeModal() {
       role="region"
       aria-label="Word hints carousel"
       aria-live="polite"
-      :aria-roledescription="`Slide ${activeSlide + 1} of 3`"
+      :aria-roledescription="`${slideLabels[activeSlide]} (panel ${activeSlide + 1} of 3)`"
       tabindex="0"
       @scroll="updateActiveSlide"
       @keydown="handleKeydown"
