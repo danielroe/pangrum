@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { data } = useFetch('/api/words')
+const { data, refresh } = useFetch('/api/words')
 
 const letters = computed(() => data.value?.letters || [])
 const centreLetter = computed(() => data.value?.letters[2] || '')
@@ -7,6 +7,7 @@ const hashes = computed(() => data.value?.hashes || [])
 const validWords = computed(() => data.value?.words || [])
 const pairs = computed(() => data.value?.pairs || {})
 const totalPangrams = computed(() => data.value?.pangrams || 0)
+const puzzleDate = computed(() => data.value?.date || '')
 
 const words = useLocalStorage<Set<string>>(() => `glypher-${letters.value.join('')}`, new Set(), {
   initOnMounted: true,
@@ -15,6 +16,32 @@ const words = useLocalStorage<Set<string>>(() => `glypher-${letters.value.join('
     write: (v: Set<string>) => JSON.stringify([...v]),
   },
 })
+
+const showDateMismatchModal = ref(false)
+
+function checkDateMismatch() {
+  if (!puzzleDate.value) return
+
+  const today = new Date().toISOString().slice(0, 10)
+  if (puzzleDate.value !== today) {
+    showDateMismatchModal.value = true
+  }
+}
+
+function closeDateMismatchModal() {
+  pause()
+  showDateMismatchModal.value = false
+  window.removeEventListener('focus', checkDateMismatch)
+}
+
+// Check when loaded + every minute thereafter
+onNuxtReady(checkDateMismatch)
+const { pause } = useIntervalFn(checkDateMismatch, 60000)
+
+// ... as well as when window regains focus)
+if (import.meta.client) {
+  window.addEventListener('focus', checkDateMismatch)
+}
 </script>
 
 <template>
@@ -53,6 +80,12 @@ const words = useLocalStorage<Set<string>>(() => `glypher-${letters.value.join('
       />
     </div>
   </div>
+  <DateMismatchModal
+    v-if="showDateMismatchModal"
+    :puzzle-date="puzzleDate"
+    :on-refresh="refresh"
+    @close="closeDateMismatchModal"
+  />
 </template>
 
 <style>

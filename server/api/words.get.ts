@@ -35,6 +35,7 @@ export default defineEventHandler(async (event) => {
     hashes: validWords.map(w => hash(w)),
     letters,
     pangrams: validWords.filter(word => letters.every(letter => word.includes(letter))).length,
+    date: new Date().toISOString().slice(0, 10),
   }
 
   event.waitUntil(storage.setItem(key, response))
