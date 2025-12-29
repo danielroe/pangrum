@@ -10,12 +10,27 @@ const emit = defineEmits<{
   close: []
 }>()
 
-const remainingWords = computed(() =>
-  props.totalWords.filter(w => !props.foundWords.includes(w)),
-)
+function redactWord(word: string): string {
+  return word.split('').map((char, i) => i === 0 || i === word.length - 1 ? char : '_').join('')
+}
+
+const remainingCount = computed(() => props.totalWords.length - props.foundWords.length)
 
 const sortedFoundWords = computed(() => [...props.foundWords].sort())
-const sortedRemainingWords = computed(() => [...remainingWords.value].sort())
+
+const sortedRemainingWords = computed(() => {
+  const remaining = [...props.totalWords]
+
+  for (const foundWord of props.foundWords) {
+    const redacted = redactWord(foundWord)
+    const index = remaining.indexOf(redacted)
+    if (index !== -1) {
+      remaining.splice(index, 1)
+    }
+  }
+
+  return remaining.sort()
+})
 
 const dialogRef = useTemplateRef<HTMLDialogElement>('dialog')
 
@@ -68,7 +83,7 @@ function handleClick(event: MouseEvent) {
           </h4>
           <ul class="p-0 grid grid-cols-[repeat(auto-fill,minmax(8rem,1fr))] gap-1 text-sm text-white m-0">
             <li
-              v-for="word in foundWords"
+              v-for="word in sortedFoundWords"
               :key="word"
               class="list-none font-mono px-2 py-1 border-1 border-solid border-primary bg-primary bg-opacity-20 transition-colors"
             >
@@ -77,11 +92,14 @@ function handleClick(event: MouseEvent) {
           </ul>
         </div>
 
-        <div v-if="showRemaining && remainingWords.length > 0">
+        <div v-if="showRemaining && remainingCount > 0">
           <h4 class="text-white text-opacity-50 font-mono text-sm mb-2">
-            Remaining ({{ remainingWords.length }})
+            Remaining ({{ remainingCount }})
           </h4>
-          <ul class="p-0 grid grid-cols-[repeat(auto-fill,minmax(8rem,1fr))] gap-1 text-sm text-white m-0">
+          <ul
+            v-if="sortedRemainingWords.length > 0"
+            class="p-0 grid grid-cols-[repeat(auto-fill,minmax(8rem,1fr))] gap-1 text-sm text-white m-0"
+          >
             <li
               v-for="word in sortedRemainingWords"
               :key="word"
