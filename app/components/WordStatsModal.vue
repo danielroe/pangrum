@@ -63,14 +63,14 @@ function handleClick(event: MouseEvent) {
 
       <div class="space-y-4">
         <div v-if="foundWords.length > 0">
-          <h4 class="text-yellow font-mono text-sm mb-2">
+          <h4 class="text-yellow-300 font-mono text-sm mb-2">
             Found ({{ foundWords.length }})
           </h4>
           <ul class="p-0 grid grid-cols-[repeat(auto-fill,minmax(8rem,1fr))] gap-1 text-sm text-white m-0">
             <li
               v-for="word in sortedFoundWords"
               :key="word"
-              class="list-none font-mono px-2 py-1 border-1 border-solid border-yellow bg-yellow bg-opacity-20 transition-colors"
+              class="list-none font-mono px-2 py-1 border-1 border-solid border-yellow-300 bg-yellow-300 bg-opacity-20 transition-colors"
             >
               {{ word.toLowerCase() }}
             </li>

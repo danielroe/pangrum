@@ -6,6 +6,7 @@ const centreLetter = computed(() => data.value?.letters[2] || '')
 const hashes = computed(() => data.value?.hashes || [])
 const validWords = computed(() => data.value?.words || [])
 const pairs = computed(() => data.value?.pairs || {})
+const totalPangrams = computed(() => data.value?.pangrams || 0)
 
 const words = useLocalStorage<Set<string>>(() => `glypher-${letters.value.join('')}`, new Set(), {
   initOnMounted: true,
@@ -48,6 +49,7 @@ const words = useLocalStorage<Set<string>>(() => `glypher-${letters.value.join('
         :words="words"
         :valid-words="validWords"
         :letters="letters"
+        :total-pangrams="totalPangrams"
       />
     </div>
   </div>

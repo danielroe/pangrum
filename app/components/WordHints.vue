@@ -4,6 +4,7 @@ const props = defineProps<{
   words: Set<string>
   pairs: Record<string, number>
   letters: string[]
+  totalPangrams: number
 }>()
 
 const longestWordLength = computed(() => props.validWords.reduce((acc, w) => w.length > acc ? w.length : acc, 0))
@@ -42,6 +43,10 @@ const pairsRemaining = computed(() => {
 const sortedWords = computed(() => [...props.words].sort())
 const carousel = useTemplateRef('carousel')
 const activeSlide = ref(0)
+
+const foundPangrams = computed(() =>
+  [...props.words].filter(w => props.letters.every(l => w.includes(l))).length,
+)
 
 function updateActiveSlide() {
   if (!carousel.value) return
@@ -110,6 +115,15 @@ function closeModal() {
 <template>
   <div class="select-none h-full min-h-0 flex flex-col">
     <div
+      v-if="totalPangrams > 0"
+      class="text-xs sm:text-sm font-mono flex items-center gap-2 px-2 py-1 border-1 border-solid border-yellow-300 border-opacity-30 bg-yellow-300 bg-opacity-10 flex-shrink-0 mb-2"
+    >
+      <span class="text-yellow-300">🌟</span>
+      <span>
+        Pangrams: <span class="font-bold text-yellow-300">{{ foundPangrams }}</span> / {{ totalPangrams }}
+      </span>
+    </div>
+    <div
       ref="carousel"
       class="hints-container flex-1 min-h-0"
       @scroll="updateActiveSlide"
@@ -144,7 +158,7 @@ function closeModal() {
               <td
                 v-for="l of longestWordLength - 3"
                 :key="`cell-${prefix}-${l + 3}`"
-                class="w-3 h-3 text-xs sm:text-sm lg:h-5 lg:w-5 text-center px-1 font-mono border-white border-opacity-10 border-1 border-solid transition-colors"
+                class="w-5 h-5 text-xs sm:text-sm lg:h-5 lg:w-5 text-center px-1 font-mono border-white border-opacity-10 border-1 border-solid transition-colors"
                 :class="{
                   'bg-white bg-opacity-10 cursor-pointer hover:bg-opacity-20': counts[l + 3] !== undefined && counts[l + 3]! > 0,
                   'bg-yellow-300 text-black cursor-pointer hover:bg-yellow-400': counts[l + 3] === 0,
@@ -172,7 +186,7 @@ function closeModal() {
             <dd
               class="border-1 border-solid text-center aspect-square inline-block h-7 w-7 place-content-center !m-0 overflow-hidden cursor-pointer transition-all"
               :class="[
-                pairsRemaining[prefix] ? 'border-white border-opacity-10 bg-white bg-opacity-10': 'border-yellow bg-yellow text-black',
+                pairsRemaining[prefix] ? 'border-white border-opacity-10 bg-white bg-opacity-10': 'border-yellow-300 bg-yellow-300 text-black',
               ]"
               :aria-label="`${prefix}: ${pairsRemaining[prefix]} ${pairsRemaining[prefix] === 1 ? 'word' : 'words'} remaining`"
               @click="showPairStats(prefix)"
@@ -190,7 +204,7 @@ function closeModal() {
             <dt
               class="h-7 w-auto leading-none pl-2 place-content-center relative after:border-b-1 after:border-b-solid after:content-[''] after:inline-block after:absolute after:left-0.5 -after:bottom-0.25 after:w-12 after:h-0 cursor-pointer transition-opacity"
               :class="[
-                pairsRemaining[prefix] ? 'after:border-white after:border-opacity-10 after:bg-white after:bg-opacity-10': 'after:border-yellow',
+                pairsRemaining[prefix] ? 'after:border-white after:border-opacity-10 after:bg-white after:bg-opacity-10': 'after:border-yellow-300',
               ]"
               @click="showPairStats(prefix)"
             >
@@ -217,11 +231,12 @@ function closeModal() {
           <li
             v-for="word of sortedWords"
             :key="word"
-            class="list-none font-mono px-2 py-1 border-1 border-solid border-white border-opacity-10 transition-colors"
+            class="list-none font-mono px-2 py-1 border-1 border-solid transition-colors"
             :class="{
-              'bg-yellow-300 bg-opacity-20 border-yellow': letters.every(l => word.includes(l)),
-              'bg-white bg-opacity-5': !letters.every(l => word.includes(l)),
+              'bg-yellow-300 bg-opacity-40 border-yellow-300 font-bold': letters.every(l => word.includes(l)),
+              'bg-white bg-opacity-5 border-white border-opacity-10': !letters.every(l => word.includes(l)),
             }"
+            :title="letters.every(l => word.includes(l)) ? 'Pangram!' : ''"
           >
             {{ word.toLowerCase() }}
           </li>
@@ -286,8 +301,8 @@ dd:has(+ dt:hover) {
   background-color: rgba(255, 255, 255, 0.2);
 }
 
-dd.bg-yellow:hover,
-dd.bg-yellow:has(+ dt:hover) {
+dd.bg-yellow-300:hover,
+dd.bg-yellow-300:has(+ dt:hover) {
   background-color: rgb(252, 211, 77);
 }
 
