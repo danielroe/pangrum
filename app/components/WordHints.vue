@@ -49,6 +49,62 @@ function updateActiveSlide() {
   const slideWidth = carousel.value.offsetWidth
   activeSlide.value = Math.round(scrollLeft / slideWidth) % 3
 }
+
+const modalState = ref<{
+  category: string
+  foundWords: string[]
+  totalWords: string[]
+  showRemaining: boolean
+} | null>(null)
+
+function showGridStats(prefix: string, length: number) {
+  const allWords = props.validWords.filter(w => w.startsWith(prefix) && w.length === length)
+  const found = [...props.words].filter(w => w.startsWith(prefix) && w.length === length)
+  modalState.value = {
+    category: `${prefix.toUpperCase()} - ${length} letters`,
+    foundWords: found,
+    totalWords: allWords,
+    showRemaining: false,
+  }
+}
+
+function showPrefixStats(prefix: string) {
+  const allWords = props.validWords.filter(w => w.startsWith(prefix))
+  const found = [...props.words].filter(w => w.startsWith(prefix))
+  modalState.value = {
+    category: `${prefix.toUpperCase()} - all lengths`,
+    foundWords: found,
+    totalWords: allWords,
+    showRemaining: true,
+  }
+}
+
+function showLengthStats(length: number) {
+  const allWords = props.validWords.filter(w => w.length === length)
+  const found = [...props.words].filter(w => w.length === length)
+  modalState.value = {
+    category: `${length} letters - all prefixes`,
+    foundWords: found,
+    totalWords: allWords,
+    showRemaining: true,
+  }
+}
+
+function showPairStats(prefix: string) {
+  if (!(prefix in props.pairs)) return
+  const found = [...props.words].filter(w => w.startsWith(prefix))
+  const total = props.pairs[prefix]
+  modalState.value = {
+    category: `${prefix.toUpperCase()}`,
+    foundWords: found,
+    totalWords: new Array(total).fill(''),
+    showRemaining: false,
+  }
+}
+
+function closeModal() {
+  modalState.value = null
+}
 </script>
 
 <template>
@@ -69,7 +125,8 @@ function updateActiveSlide() {
               <td
                 v-for="i of longestWordLength - 3"
                 :key="`header-${i + 3}`"
-                class="font-mono pb-3"
+                class="font-mono pb-3 cursor-pointer hover:bg-white hover:bg-opacity-10 transition-colors"
+                @click="showLengthStats(i + 3)"
               >
                 {{ i + 3 }}
               </td>
@@ -78,7 +135,10 @@ function updateActiveSlide() {
               v-for="(counts, prefix) in remainingWords"
               :key="`row-${prefix}`"
             >
-              <td class="uppercase font-mono h-5 w-5 pr-4 tracking-widest text-right">
+              <td
+                class="uppercase font-mono h-5 w-5 pr-4 tracking-widest text-right cursor-pointer hover:bg-white hover:bg-opacity-10 transition-colors"
+                @click="showPrefixStats(prefix)"
+              >
                 {{ prefix }}
               </td>
               <td
@@ -86,9 +146,10 @@ function updateActiveSlide() {
                 :key="`cell-${prefix}-${l + 3}`"
                 class="w-3 h-3 text-xs sm:text-sm lg:h-5 lg:w-5 text-center px-1 font-mono border-white border-opacity-10 border-1 border-solid transition-colors"
                 :class="{
-                  'bg-white bg-opacity-10': counts[l + 3] !== undefined && counts[l + 3]! > 0,
-                  'bg-yellow-300 text-black': counts[l + 3] === 0,
+                  'bg-white bg-opacity-10 cursor-pointer hover:bg-opacity-20': counts[l + 3] !== undefined && counts[l + 3]! > 0,
+                  'bg-yellow-300 text-black cursor-pointer hover:bg-yellow-400': counts[l + 3] === 0,
                 }"
+                @click="counts[l + 3] !== undefined ? showGridStats(prefix, l + 3) : null"
               >
                 {{ counts[l + 3] === undefined ? '' : counts[l + 3] === 0 ? '✔︎' : counts[l + 3] }}
               </td>
@@ -109,11 +170,12 @@ function updateActiveSlide() {
             :key="prefix"
           >
             <dd
-              class="border-1 border-solid text-center aspect-square inline-block h-7 w-7 place-content-center !m-0 overflow-hidden"
+              class="border-1 border-solid text-center aspect-square inline-block h-7 w-7 place-content-center !m-0 overflow-hidden cursor-pointer transition-all"
               :class="[
-                pairsRemaining[prefix] ? 'border-white border-opacity-10 bg-white bg-opacity-10': 'border-yellow-300 bg-yellow-300 text-black',
+                pairsRemaining[prefix] ? 'border-white border-opacity-10 bg-white bg-opacity-10': 'border-yellow bg-yellow text-black',
               ]"
               :aria-label="`${prefix}: ${pairsRemaining[prefix]} ${pairsRemaining[prefix] === 1 ? 'word' : 'words'} remaining`"
+              @click="showPairStats(prefix)"
             >
               <span
                 v-if="!pairsRemaining[prefix]"
@@ -126,10 +188,11 @@ function updateActiveSlide() {
               >{{ pairsRemaining[prefix] }}</span>
             </dd>
             <dt
-              class="h-7 w-auto leading-none pl-2 place-content-center relative after:border-b-1 after:border-b-solid after:content-[''] after:inline-block after:absolute after:left-0.5 -after:bottom-0.25 after:w-12 after:h-0"
+              class="h-7 w-auto leading-none pl-2 place-content-center relative after:border-b-1 after:border-b-solid after:content-[''] after:inline-block after:absolute after:left-0.5 -after:bottom-0.25 after:w-12 after:h-0 cursor-pointer transition-opacity"
               :class="[
                 pairsRemaining[prefix] ? 'after:border-white after:border-opacity-10 after:bg-white after:bg-opacity-10': 'after:border-yellow',
               ]"
+              @click="showPairStats(prefix)"
             >
               {{ prefix }}
             </dt>
@@ -141,7 +204,16 @@ function updateActiveSlide() {
         class="hint-panel hint-words"
         style="grid-area: word-list"
       >
-        <ul class="p-0 grid grid-cols-[repeat(auto-fill,minmax(8rem,1fr))] gap-1 text-xs sm:text-sm text-white m-0 w-full">
+        <div
+          v-if="sortedWords.length === 0"
+          class="flex items-center justify-center h-full text-white text-opacity-50 font-mono text-sm text-center px-4"
+        >
+          Make a guess to get started!
+        </div>
+        <ul
+          v-else
+          class="p-0 grid grid-cols-[repeat(auto-fill,minmax(8rem,1fr))] gap-1 text-xs sm:text-sm text-white m-0 w-full"
+        >
           <li
             v-for="word of sortedWords"
             :key="word"
@@ -172,6 +244,14 @@ function updateActiveSlide() {
         @click="carousel?.scrollTo({ left: (i - 1) * carousel.offsetWidth, behavior: 'smooth' })"
       />
     </div>
+    <WordStatsModal
+      v-if="modalState"
+      :category="modalState.category"
+      :found-words="modalState.foundWords"
+      :total-words="modalState.totalWords"
+      :show-remaining="modalState.showRemaining"
+      @close="closeModal"
+    />
   </div>
 </template>
 
@@ -199,6 +279,21 @@ function updateActiveSlide() {
 .hint-pairs {
   padding-left: 1rem;
   padding-right: 1rem;
+}
+
+dd:hover,
+dd:has(+ dt:hover) {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+dd.bg-yellow:hover,
+dd.bg-yellow:has(+ dt:hover) {
+  background-color: rgb(252, 211, 77);
+}
+
+dt:hover,
+dd:hover + dt {
+  opacity: 0.7;
 }
 
 @media (min-width: 1024px) {
