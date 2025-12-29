@@ -11,7 +11,7 @@ const emit = defineEmits<{
 }>()
 
 function redactWord(word: string): string {
-  return word.split('').map((char, i) => i === 0 || i === word.length - 1 ? char : '_').join('')
+  return word.split('').map((char, i) => i === 0 ? char : '_').join('')
 }
 
 const remainingCount = computed(() => props.totalWords.length - props.foundWords.length)
