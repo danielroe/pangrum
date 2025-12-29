@@ -10,6 +10,18 @@ const props = defineProps<{
 
 const words = defineModel<Set<string>>('words')
 
+const incorrectGuesses = useLocalStorage<Record<string, string>>(
+  () => `glypher-incorrect-${props.letters.join('')}`,
+  {},
+  {
+    initOnMounted: true,
+    serializer: {
+      read: (v: string) => JSON.parse(v),
+      write: (v: Record<string, string>) => JSON.stringify(v),
+    },
+  },
+)
+
 const word = useWord()
 const input = useTemplateRef('wordInput')
 
@@ -17,6 +29,15 @@ const matchingWords = computed(() => {
   if (!word.value || word.value.length < 2) return []
   const currentWord = word.value.toUpperCase()
   return [...(words.value || [])].filter(w => w.startsWith(currentWord)).sort()
+})
+
+const matchingIncorrect = computed(() => {
+  if (!word.value || word.value.length < 2) return []
+  const currentWord = word.value.toUpperCase()
+  return Object.keys(incorrectGuesses.value)
+    .filter(w => w.startsWith(currentWord))
+    .sort()
+    .slice(0, 10) // Limit to 10 incorrect guesses
 })
 
 watch(word, (letters) => {
@@ -82,6 +103,12 @@ function addWord() {
     if (message === 'No word') {
       return
     }
+
+    // Track incorrect guesses (excluding 'already guessed')
+    if (normalisedWord && message !== 'Already guessed') {
+      incorrectGuesses.value[normalisedWord] = message
+    }
+
     addToast({
       message: (err as Error).toString().replace('TypeError: ', ''),
       type: 'error',
@@ -142,6 +169,7 @@ function addWord() {
     <WordFilterOverlay
       :current-word="word"
       :matching-words="matchingWords"
+      :matching-incorrect="matchingIncorrect"
     />
   </form>
 </template>
