@@ -111,7 +111,7 @@ function updateActiveSlide() {
             <dd
               class="border-1 border-solid text-center aspect-square inline-block h-7 w-7 place-content-center !m-0 overflow-hidden"
               :class="[
-                pairsRemaining[prefix] ? 'border-white border-opacity-10 bg-white bg-opacity-10': 'border-yellow bg-yellow text-black',
+                pairsRemaining[prefix] ? 'border-white border-opacity-10 bg-white bg-opacity-10': 'border-yellow-300 bg-yellow-300 text-black',
               ]"
               :aria-label="`${prefix}: ${pairsRemaining[prefix]} ${pairsRemaining[prefix] === 1 ? 'word' : 'words'} remaining`"
             >
@@ -147,7 +147,7 @@ function updateActiveSlide() {
             :key="word"
             class="list-none font-mono px-2 py-1 border-1 border-solid border-white border-opacity-10 transition-colors"
             :class="{
-              'bg-yellow bg-opacity-20 border-yellow': letters.every(l => word.includes(l)),
+              'bg-yellow-300 bg-opacity-20 border-yellow': letters.every(l => word.includes(l)),
               'bg-white bg-opacity-5': !letters.every(l => word.includes(l)),
             }"
           >
@@ -165,7 +165,7 @@ function updateActiveSlide() {
         class="border-0 outline-0 rounded-full transition-all duration-300 ease-out"
         :class="[
           activeSlide === i - 1
-            ? 'w-6 h-2 bg-yellow scale-110'
+            ? 'w-6 h-2 bg-yellow-300 scale-110'
             : 'w-2 h-2 bg-white bg-opacity-30 hover:bg-opacity-50 hover:scale-125',
         ]"
         :aria-label="`Go to slide ${i}`"
