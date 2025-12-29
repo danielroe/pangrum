@@ -55,6 +55,27 @@ function updateActiveSlide() {
   activeSlide.value = Math.round(scrollLeft / slideWidth) % 3
 }
 
+function handleKeydown(event: KeyboardEvent) {
+  if (!carousel.value) return
+
+  if (event.key === 'ArrowLeft' && activeSlide.value > 0) {
+    event.preventDefault()
+    goToSlide(activeSlide.value - 1)
+  }
+  else if (event.key === 'ArrowRight' && activeSlide.value < 2) {
+    event.preventDefault()
+    goToSlide(activeSlide.value + 1)
+  }
+}
+
+function goToSlide(index: number) {
+  if (!carousel.value) return
+  carousel.value.scrollTo({
+    left: index * carousel.value.offsetWidth,
+    behavior: 'smooth',
+  })
+}
+
 const modalState = ref<{
   category: string
   foundWords: string[]
@@ -126,11 +147,19 @@ function closeModal() {
     <div
       ref="carousel"
       class="hints-container flex-1 min-h-0"
+      role="region"
+      aria-label="Word hints carousel"
+      aria-live="polite"
+      :aria-roledescription="`Slide ${activeSlide + 1} of 3`"
+      tabindex="0"
       @scroll="updateActiveSlide"
+      @keydown="handleKeydown"
     >
       <div
         class="hint-panel hint-grid"
         style="grid-area: word-grid"
+        :inert="activeSlide !== 0 || undefined"
+        :aria-hidden="activeSlide !== 0"
       >
         <table class="text-white p-2 text-center tabular-nums">
           <tbody>
@@ -175,6 +204,8 @@ function closeModal() {
       <div
         class="hint-panel hint-pairs"
         style="grid-area: pairs-grid"
+        :inert="activeSlide !== 1 || undefined"
+        :aria-hidden="activeSlide !== 1"
       >
         <dl
           class="grid font-mono items-center text-sm gap-row-2 grid-cols-[1.75rem_1fr_1.75rem_1fr_1.75rem_1fr] md:grid-cols-[1.75rem_1fr_1.75rem_1fr_1.75rem_1fr_1.75rem_1fr] lg:grid-cols-[1.75rem_1fr_1.75rem_1fr_1.75rem_1fr_1.75rem_1fr_1.75rem_1fr_1.75rem_1fr]"
@@ -217,6 +248,8 @@ function closeModal() {
       <div
         class="hint-panel hint-words"
         style="grid-area: word-list"
+        :inert="activeSlide !== 2 || undefined"
+        :aria-hidden="activeSlide !== 2"
       >
         <div
           v-if="sortedWords.length === 0"
@@ -244,19 +277,26 @@ function closeModal() {
       </div>
     </div>
 
-    <div class="flex justify-center gap-2 mt-3 mb-2 flex-shrink-0 lg:hidden">
+    <div
+      class="flex justify-center gap-2 mt-3 mb-2 flex-shrink-0 lg:hidden"
+      role="tablist"
+      aria-label="Carousel navigation"
+    >
       <button
         v-for="i in 3"
         :key="i"
         type="button"
+        role="tab"
+        :aria-selected="activeSlide === i - 1"
+        :aria-current="activeSlide === i - 1 ? 'true' : undefined"
         class="border-0 outline-0 rounded-full transition-all duration-300 ease-out"
         :class="[
           activeSlide === i - 1
             ? 'w-6 h-2 bg-yellow-300 scale-110'
             : 'w-2 h-2 bg-white bg-opacity-30 hover:bg-opacity-50 hover:scale-125',
         ]"
-        :aria-label="`Go to slide ${i}`"
-        @click="carousel?.scrollTo({ left: (i - 1) * carousel.offsetWidth, behavior: 'smooth' })"
+        :aria-label="`Go to ${i === 1 ? 'word grid' : i === 2 ? 'two-letter pairs' : 'word list'}`"
+        @click="goToSlide(i - 1)"
       />
     </div>
     <WordStatsModal
@@ -276,6 +316,13 @@ function closeModal() {
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hints-container {
+    scroll-behavior: auto;
+  }
 }
 
 .hint-panel {
