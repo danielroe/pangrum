@@ -10,20 +10,21 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "@nuxt/eslint": "1.11.0",
+    "@nuxt/eslint": "1.12.1",
     "@nuxt/fonts": "0.12.1",
-    "@unocss/nuxt": "^66.5.9",
+    "@unocss/nuxt": "^66.5.11",
+    "@unocss/transformer-directives": "^66.5.11",
     "@vercel/kv": "^3.0.0",
-    "@vueuse/nuxt": "14.0.0",
-    "nuxt": "^4.2.1",
+    "@vueuse/nuxt": "14.1.0",
+    "nuxt": "^4.2.2",
     "ohash": "^2.0.11",
-    "unocss": "^66.5.10",
-    "vue": "^3.5.25",
-    "vue-router": "^4.6.3",
+    "unocss": "^66.5.11",
+    "vue": "^3.5.26",
+    "vue-router": "^4.6.4",
     "wordlist-js": "^2.0.0"
   },
   "devDependencies": {
-    "eslint": "^9.39.1",
+    "eslint": "^9.39.2",
     "typescript": "^5.9.3"
   }
 }

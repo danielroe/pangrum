@@ -56,7 +56,7 @@ const pointsToGo = computed(() => Math.ceil((nextThreshold.value.threshold / 100
 <template>
   <div class="flex flex-col gap-4 items-stretch">
     <div class="tabular-nums flex flex-row items-baseline gap-2 overflow-hidden max-w-full">
-      <span class="text-4xl text-yellow-300 font-bold font-mono">
+      <span class="text-4xl text-primary font-bold font-mono">
         {{ score }}
       </span>
       <span class="inline-block flex-shrink-0">
@@ -77,7 +77,7 @@ const pointsToGo = computed(() => Math.ceil((nextThreshold.value.threshold / 100
         <div
           v-if="label !== 'queen bee'"
           class="border border-solid border-2 w-2 h-2 rounded-full"
-          :class="{ 'bg-yellow-300': percentage > threshold, 'bg-gray-600': percentage <= threshold }"
+          :class="{ 'bg-primary': percentage > threshold, 'bg-progress-inactive': percentage <= threshold }"
         />
         <div
           v-if="label !== 'queen bee' && label !=='genius'"
@@ -87,10 +87,10 @@ const pointsToGo = computed(() => Math.ceil((nextThreshold.value.threshold / 100
           <div
             class="absolute border-1 -z-1 w-full"
             :class="{
-              'border-yellow-300': percentage > threshold,
+              'border-primary': percentage > threshold,
               'border-dashed': status === label,
               'border-solid': status !== label,
-              'border-gray-600': percentage <= threshold,
+              'border-progress-inactive': percentage <= threshold,
             }"
           />
         </div>

@@ -32,11 +32,11 @@ function submitWord() {
       ]"
     >
       <button
-        class="border-2 border-transparent border-solid bg-[#444] font-mono font-bold text-xl focus:border-white flex-grow flex items-center justify-center touch-none transition-all duration-100"
+        class="border-2 border-transparent border-solid font-mono font-bold text-xl focus:border-white flex-grow flex items-center justify-center touch-none transition-all duration-100"
         :class="[
           letter === centreLetter
-            ? 'bg-yellow-300 text-black active:bg-yellow-400'
-            : 'text-white active:bg-[#555]',
+            ? 'bg-primary text-black active:bg-primary-hover'
+            : 'bg-surface-hover text-white active:bg-surface-active',
         ]"
         @click="() => addLetter(letter)"
       >

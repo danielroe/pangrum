@@ -57,7 +57,7 @@ const words = useLocalStorage<Set<string>>(() => `glypher-${letters.value.join('
 
 <style>
 :root {
-  background-color: #333;
+  --at-apply: bg-surface;
   font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 

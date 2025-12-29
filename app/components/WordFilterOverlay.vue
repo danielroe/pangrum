@@ -49,7 +49,7 @@ defineProps<{
             :key="incorrectWord"
             class="text-sm font-mono lowercase opacity-40 line-through"
           >
-            <span class="text-red-400">{{ currentWord.toLowerCase() }}</span><span class="text-white">{{ incorrectWord.slice(currentWord.length).toLowerCase() }}</span>
+            <span class="text-error-light">{{ currentWord.toLowerCase() }}</span><span class="text-white">{{ incorrectWord.slice(currentWord.length).toLowerCase() }}</span>
           </li>
         </ul>
       </div>

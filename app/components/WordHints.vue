@@ -137,11 +137,11 @@ function closeModal() {
   <div class="select-none h-full min-h-0 flex flex-col">
     <div
       v-if="totalPangrams > 0"
-      class="text-xs sm:text-sm font-mono flex items-center gap-2 px-2 py-1 border-1 border-solid border-yellow-300 border-opacity-30 bg-yellow-300 bg-opacity-10 flex-shrink-0 mb-2"
+      class="text-xs sm:text-sm font-mono flex items-center gap-2 px-2 py-1 border-1 border-solid border-primary border-opacity-30 bg-primary bg-opacity-10 flex-shrink-0 mb-2"
     >
-      <span class="text-yellow-300">🌟</span>
+      <span class="text-primary">🌟</span>
       <span>
-        Pangrams: <span class="font-bold text-yellow-300">{{ foundPangrams }}</span> / {{ totalPangrams }}
+        Pangrams: <span class="font-bold text-primary">{{ foundPangrams }}</span> / {{ totalPangrams }}
       </span>
     </div>
     <div
@@ -190,7 +190,7 @@ function closeModal() {
                 class="w-5 h-5 text-xs sm:text-sm lg:h-5 lg:w-5 text-center px-1 font-mono border-white border-opacity-10 border-1 border-solid transition-colors"
                 :class="{
                   'bg-white bg-opacity-10 cursor-pointer hover:bg-opacity-20': counts[l + 3] !== undefined && counts[l + 3]! > 0,
-                  'bg-yellow-300 text-black cursor-pointer hover:bg-yellow-400': counts[l + 3] === 0,
+                  'bg-primary text-black cursor-pointer hover:bg-primary-hover': counts[l + 3] === 0,
                 }"
                 @click="counts[l + 3] !== undefined ? showGridStats(prefix, l + 3) : null"
               >
@@ -217,7 +217,7 @@ function closeModal() {
             <dd
               class="border-1 border-solid text-center aspect-square inline-block h-7 w-7 place-content-center !m-0 overflow-hidden cursor-pointer transition-all"
               :class="[
-                pairsRemaining[prefix] ? 'border-white border-opacity-10 bg-white bg-opacity-10': 'border-yellow-300 bg-yellow-300 text-black',
+                pairsRemaining[prefix] ? 'border-white border-opacity-10 bg-white bg-opacity-10': 'border-primary bg-primary text-black',
               ]"
               :aria-label="`${prefix}: ${pairsRemaining[prefix]} ${pairsRemaining[prefix] === 1 ? 'word' : 'words'} remaining`"
               @click="showPairStats(prefix)"
@@ -235,7 +235,7 @@ function closeModal() {
             <dt
               class="h-7 w-auto leading-none pl-2 place-content-center relative after:border-b-1 after:border-b-solid after:content-[''] after:inline-block after:absolute after:left-0.5 -after:bottom-0.25 after:w-12 after:h-0 cursor-pointer transition-opacity"
               :class="[
-                pairsRemaining[prefix] ? 'after:border-white after:border-opacity-10 after:bg-white after:bg-opacity-10': 'after:border-yellow-300',
+                pairsRemaining[prefix] ? 'after:border-white after:border-opacity-10 after:bg-white after:bg-opacity-10': 'after:border-primary',
               ]"
               @click="showPairStats(prefix)"
             >
@@ -266,7 +266,7 @@ function closeModal() {
             :key="word"
             class="list-none font-mono px-2 py-1 border-1 border-solid transition-colors"
             :class="{
-              'bg-yellow-300 bg-opacity-40 border-yellow-300 font-bold': letters.every(l => word.includes(l)),
+              'bg-primary bg-opacity-40 border-primary font-bold': letters.every(l => word.includes(l)),
               'bg-white bg-opacity-5 border-white border-opacity-10': !letters.every(l => word.includes(l)),
             }"
             :title="letters.every(l => word.includes(l)) ? 'Pangram!' : ''"
@@ -292,7 +292,7 @@ function closeModal() {
         class="border-0 outline-0 rounded-full transition-all duration-300 ease-out"
         :class="[
           activeSlide === i - 1
-            ? 'w-6 h-2 bg-yellow-300 scale-110'
+            ? 'w-6 h-2 bg-primary scale-110'
             : 'w-2 h-2 bg-white bg-opacity-30 hover:bg-opacity-50 hover:scale-125',
         ]"
         :aria-label="`Go to ${i === 1 ? 'word grid' : i === 2 ? 'two-letter pairs' : 'word list'}`"
@@ -348,9 +348,9 @@ dd:has(+ dt:hover) {
   background-color: rgba(255, 255, 255, 0.2);
 }
 
-dd.bg-yellow-300:hover,
-dd.bg-yellow-300:has(+ dt:hover) {
-  background-color: rgb(252, 211, 77);
+dd.bg-primary:hover,
+dd.bg-primary:has(+ dt:hover) {
+  background-color: rgb(251, 191, 36);
 }
 
 dt:hover,

@@ -40,7 +40,7 @@ function handleClick(event: MouseEvent) {
 <template>
   <dialog
     ref="dialog"
-    class="bg-[#333] border-2 border-white border-opacity-20 w-full sm:w-auto sm:min-w-96 sm:max-w-2xl max-h-[80vh] sm:max-h-[70vh] flex flex-col overflow-hidden p-0 bottom-0 sm:top-1/2 sm:left-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2"
+    class="bg-surface border-2 border-white border-opacity-20 w-full sm:w-auto sm:min-w-96 sm:max-w-2xl max-h-[80vh] sm:max-h-[70vh] flex flex-col overflow-hidden p-0 bottom-0 sm:top-1/2 sm:left-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2"
     @close="emit('close')"
     @click="handleClick"
   >
@@ -63,14 +63,14 @@ function handleClick(event: MouseEvent) {
 
       <div class="space-y-4">
         <div v-if="foundWords.length > 0">
-          <h4 class="text-yellow-300 font-mono text-sm mb-2">
+          <h4 class="text-primary font-mono text-sm mb-2">
             Found ({{ foundWords.length }})
           </h4>
           <ul class="p-0 grid grid-cols-[repeat(auto-fill,minmax(8rem,1fr))] gap-1 text-sm text-white m-0">
             <li
-              v-for="word in sortedFoundWords"
+              v-for="word in foundWords"
               :key="word"
-              class="list-none font-mono px-2 py-1 border-1 border-solid border-yellow-300 bg-yellow-300 bg-opacity-20 transition-colors"
+              class="list-none font-mono px-2 py-1 border-1 border-solid border-primary bg-primary bg-opacity-20 transition-colors"
             >
               {{ word.toLowerCase() }}
             </li>
