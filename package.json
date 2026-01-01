@@ -15,6 +15,7 @@
     "@unocss/nuxt": "^66.5.11",
     "@unocss/transformer-directives": "^66.5.11",
     "@vercel/kv": "^3.0.0",
+    "@vite-pwa/nuxt": "1.1.0",
     "@vueuse/nuxt": "14.1.0",
     "nuxt": "^4.2.2",
     "ohash": "^2.0.11",

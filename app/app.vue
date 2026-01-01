@@ -1,5 +1,11 @@
 <script setup lang="ts">
-const { data, refresh } = useFetch('/api/words')
+const today = ref(new Date().toISOString().slice(0, 10))
+const { data } = useFetch(() => `/api/words/${today.value}`)
+const isOnline = useOnline()
+
+function updateDate() {
+  today.value = new Date().toISOString().slice(0, 10)
+}
 
 const letters = computed(() => data.value?.letters || [])
 const centreLetter = computed(() => data.value?.letters[2] || '')
@@ -50,6 +56,12 @@ if (import.meta.client) {
     <div class="flex flex-col h-full gap-2 sm:gap-4 text-white px-2 sm:px-6 py-2 sm:py-8">
       <h2 class="text-sm absolute top-0 right-4 leading-tight mt-1 opacity-40 font-normal sm:font-bold sm:text-2xl sm:relative sm:opacity-100 sm:right-0 flex-shrink-0">
         glypher
+        <span
+          v-if="!isOnline"
+          class="text-xs opacity-60"
+        >
+          offline
+        </span>
       </h2>
       <div class="mt-3 sm:mt-0 flex flex-col-reverse sm:flex-row justify-start gap-8 sm:gap-12 items:start sm:items-end flex-shrink-0">
         <LetterGrid
@@ -83,7 +95,7 @@ if (import.meta.client) {
   <DateMismatchModal
     v-if="showDateMismatchModal"
     :puzzle-date="puzzleDate"
-    :on-refresh="refresh"
+    :on-refresh="updateDate"
     @close="closeDateMismatchModal"
   />
 </template>

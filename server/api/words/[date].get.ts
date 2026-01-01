@@ -6,16 +6,18 @@ import { hash } from 'ohash'
 const pangrams = _pangrams as string[]
 const words = _words as string[]
 
-export default defineEventHandler(async (event) => {
-  const storage = useStorage('words')
-  const key = new Date().toISOString().slice(0, 10) + '.json'
+export default defineCachedEventHandler(async (event) => {
+  const date = getRouterParam(event, 'date')
 
-  if (await storage.hasItem(key)) {
-    return storage.getItem(key) as never
+  // Validate date format (YYYY-MM-DD)
+  if (!date || !/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: 'Invalid date format. Expected YYYY-MM-DD',
+    })
   }
 
-  const query = new Set((getQuery(event).letters as string | undefined)?.toUpperCase().split('') || [])
-  const letters = query.size === 7 ? [...query] : pangrams[Math.floor(Math.random() * pangrams.length)].split('').sort(() => Math.random() - 0.5)
+  const letters = pangrams[Math.floor(Math.random() * pangrams.length)].split('').sort(() => Math.random() - 0.5)
 
   const validWords = words.filter((word) => {
     const chars = word.split('')
@@ -29,16 +31,18 @@ export default defineEventHandler(async (event) => {
     pairs[prefix] = (pairs[prefix] || 0) + 1
   }
 
-  const response = {
+  return {
     words: validWords.map(w => w.replace(/^(.)(.*)/, (_, first, rest) => first + rest.replace(/./g, '_'))).sort(),
     pairs: Object.fromEntries(Object.entries(pairs).sort((a, b) => a[0].localeCompare(b[0]))),
     hashes: validWords.map(w => hash(w)),
     letters,
     pangrams: validWords.filter(word => letters.every(letter => word.includes(letter))).length,
-    date: new Date().toISOString().slice(0, 10),
+    date,
   }
-
-  event.waitUntil(storage.setItem(key, response))
-
-  return response
+}, {
+  maxAge: 60 * 60 * 24 * 7,
+  base: 'words',
+  getKey: (event) => {
+    return getRouterParam(event, 'date')!
+  },
 })
