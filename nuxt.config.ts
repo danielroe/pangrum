@@ -31,14 +31,6 @@ export default defineNuxtConfig({
       },
     },
   },
-  typescript: {
-    hoist: [
-      'workbox-precaching',
-      'workbox-core',
-      'workbox-strategies',
-      'workbox-routing',
-    ],
-  },
   eslint: {
     config: {
       stylistic: true,
@@ -47,24 +39,10 @@ export default defineNuxtConfig({
   pwa: {
     registerType: 'autoUpdate',
     manifest: {
-      name: 'Spelling Bee',
-      short_name: 'Spelling Bee',
+      name: 'Glypher',
+      short_name: 'Glypher',
       description: 'Daily word puzzle game',
-      theme_color: '#ffffff',
-      background_color: '#ffffff',
       display: 'standalone',
-      icons: [
-        {
-          src: '/icon-192.png',
-          sizes: '192x192',
-          type: 'image/png',
-        },
-        {
-          src: '/icon-512.png',
-          sizes: '512x512',
-          type: 'image/png',
-        },
-      ],
     },
     strategies: 'injectManifest',
     srcDir: '.',
@@ -72,6 +50,7 @@ export default defineNuxtConfig({
     injectManifest: {
       globPatterns: ['**/*.{js,css,html,png,svg,ico}'],
     },
+    injectRegister: 'auto',
     client: {
       installPrompt: true,
       periodicSyncForUpdates: 3600, // Check for updates every hour

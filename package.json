@@ -22,7 +22,11 @@
     "unocss": "^66.5.11",
     "vue": "^3.5.26",
     "vue-router": "^4.6.4",
-    "wordlist-js": "^2.0.0"
+    "wordlist-js": "^2.0.0",
+    "workbox-core": "^7.4.0",
+    "workbox-precaching": "^7.4.0",
+    "workbox-routing": "^7.4.0",
+    "workbox-strategies": "^7.4.0"
   },
   "devDependencies": {
     "eslint": "^9.39.2",

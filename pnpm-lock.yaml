@@ -47,6 +47,18 @@ importers:
       wordlist-js:
         specifier: ^2.0.0
         version: 2.0.0
+      workbox-core:
+        specifier: ^7.4.0
+        version: 7.4.0
+      workbox-precaching:
+        specifier: ^7.4.0
+        version: 7.4.0
+      workbox-routing:
+        specifier: ^7.4.0
+        version: 7.4.0
+      workbox-strategies:
+        specifier: ^7.4.0
+        version: 7.4.0
     devDependencies:
       eslint:
         specifier: ^9.39.2
