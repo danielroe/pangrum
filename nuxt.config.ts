@@ -43,6 +43,12 @@ export default defineNuxtConfig({
       short_name: 'Glypher',
       description: 'Daily word puzzle game',
       display: 'standalone',
+      theme_color: '#333333',
+      background_color: '#333333',
+      start_url: '/',
+      scope: '/',
+      orientation: 'portrait',
+      categories: ['games', 'entertainment'],
     },
     strategies: 'injectManifest',
     srcDir: '.',
@@ -58,6 +64,10 @@ export default defineNuxtConfig({
     devOptions: {
       enabled: true,
       type: 'module',
+    },
+    workbox: {
+      navigateFallback: '/',
+      cleanupOutdatedCaches: true,
     },
   },
 })

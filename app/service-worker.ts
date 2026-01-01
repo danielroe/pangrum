@@ -1,7 +1,7 @@
 import { cleanupOutdatedCaches, precacheAndRoute } from 'workbox-precaching'
 import { clientsClaim } from 'workbox-core'
 import { NetworkFirst } from 'workbox-strategies'
-import { registerRoute } from 'workbox-routing'
+import { NavigationRoute, registerRoute } from 'workbox-routing'
 
 declare let self: ServiceWorkerGlobalScope
 
@@ -14,7 +14,6 @@ cleanupOutdatedCaches()
 // Precache all assets
 precacheAndRoute(self.__WB_MANIFEST)
 
-// Cache strategy for words API
 registerRoute(
   ({ url }) => url.pathname.startsWith('/api/words/'),
   new NetworkFirst({
@@ -22,6 +21,14 @@ registerRoute(
     networkTimeoutSeconds: 5,
   }),
 )
+
+const navigationRoute = new NavigationRoute(
+  new NetworkFirst({
+    cacheName: 'pages-cache',
+    networkTimeoutSeconds: 3,
+  }),
+)
+registerRoute(navigationRoute)
 
 // Prefetch upcoming word lists on install
 self.addEventListener('install', (event) => {
