@@ -17,7 +17,10 @@ const thresholds = {
   'amazing': 50,
   'genius': 70,
   'queen bee': 100,
-}
+} as const
+
+const thresholdsReversed = Object.entries(thresholds).reverse()
+const thresholdsForward = Object.entries(thresholds)
 
 // const icons = {
 //   beginner: '👶',
@@ -33,7 +36,7 @@ const thresholds = {
 // }
 
 const status = computed(() => {
-  for (const [label, threshold] of Object.entries(thresholds).reverse()) {
+  for (const [label, threshold] of thresholdsReversed) {
     if (threshold <= percentage.value) {
       return label
     }
@@ -42,7 +45,7 @@ const status = computed(() => {
 })
 
 const nextThreshold = computed(() => {
-  for (const [label, threshold] of Object.entries(thresholds)) {
+  for (const [label, threshold] of thresholdsForward) {
     if (threshold > percentage.value) {
       return { label, threshold }
     }

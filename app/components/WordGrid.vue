@@ -13,7 +13,13 @@ const emit = defineEmits<{
 
 const longestWordLength = computed(() => props.validWords.reduce((acc, w) => w.length > acc ? w.length : acc, 0))
 
-const prefixes = computed(() => new Set(props.validWords.map(m => m.replace(/_/g, ''))))
+const prefixes = computed(() => {
+  const set = new Set<string>()
+  for (const word of props.validWords) {
+    set.add(word.slice(0, 2))
+  }
+  return set
+})
 const remainingWords = computed(() => {
   const r: Record<string, Record<string, number>> = {}
   for (const prefix of prefixes.value) {

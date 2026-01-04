@@ -33,6 +33,7 @@ function submitWord() {
     >
       <button
         class="border-2 border-transparent border-solid font-mono font-bold text-xl focus:border-white flex-grow flex items-center justify-center touch-none transition-all duration-100"
+        style="will-change: background-color;"
         :class="[
           letter === centreLetter
             ? 'bg-primary text-black active:bg-primary-hover'

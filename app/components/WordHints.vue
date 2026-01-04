@@ -120,7 +120,7 @@ function closeModal() {
       aria-live="polite"
       :aria-roledescription="`${slideLabels[activeSlide]} (panel ${activeSlide + 1} of 3)`"
       tabindex="0"
-      @scroll="updateActiveSlide"
+      @scroll.passive="updateActiveSlide"
       @keydown="handleKeydown"
     >
       <div
@@ -218,6 +218,7 @@ function closeModal() {
   scroll-snap-align: center;
   overflow-y: auto;
   padding: 0.5rem;
+  contain: layout style paint;
 }
 
 .hint-grid {

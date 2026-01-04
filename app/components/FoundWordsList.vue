@@ -22,6 +22,7 @@ const sortedWords = computed(() => [...props.words].sort())
       v-for="word of sortedWords"
       :key="word"
       class="list-none font-mono px-2 py-1 border-1 border-solid transition-colors"
+      style="contain: layout style;"
       :class="{
         'bg-primary bg-opacity-40 border-primary font-bold': letters.every(l => word.includes(l)),
         'bg-white bg-opacity-5 border-white border-opacity-10': !letters.every(l => word.includes(l)),

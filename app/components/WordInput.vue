@@ -40,6 +40,8 @@ const matchingIncorrect = computed(() => {
     .slice(0, 10) // Limit to 10 incorrect guesses
 })
 
+const wordLetters = computed(() => word.value.toUpperCase().split(''))
+
 watch(word, (letters) => {
   word.value = letters.replace(/\W/g, '')
 
@@ -146,7 +148,7 @@ function addWord() {
           class="absolute px-2 pt-2 pb-1 rounded-none border-none font-mono font-bold text-xl uppercase tracking-[0.5rem] pointer-events-none flex"
         >
           <span
-            v-for="letter, i of word.toUpperCase().split('')"
+            v-for="letter, i of wordLetters"
             :key="i"
             class="inline-block"
             :class="{
