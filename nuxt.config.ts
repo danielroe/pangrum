@@ -21,7 +21,7 @@ export default defineNuxtConfig({
     },
   },
   routeRules: {
-    '/': { isr: 60 },
+    '/': { prerender: true },
   },
   compatibilityDate: '2025-07-15',
   nitro: {

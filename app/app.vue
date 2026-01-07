@@ -1,6 +1,9 @@
 <script setup lang="ts">
+const language = useLanguage()
 const today = ref(new Date().toISOString().slice(0, 10))
-const { data } = useFetch(() => `/api/words/${today.value}`)
+const { data } = useFetch(() => `/api/words/${language.value}/${today.value}`, {
+  server: false,
+})
 const isOnline = useOnline()
 
 function updateDate() {
@@ -15,7 +18,7 @@ const pairs = computed(() => data.value?.pairs || {})
 const totalPangrams = computed(() => data.value?.pangrams || 0)
 const puzzleDate = computed(() => data.value?.date || '')
 
-const words = useLocalStorage<Set<string>>(() => `glypher-${letters.value.join('')}`, new Set(), {
+const words = useLocalStorage<Set<string>>(() => `glypher-${language.value}-${letters.value.join('')}`, new Set(), {
   initOnMounted: true,
   serializer: {
     read: (v: string) => new Set(JSON.parse(v)),
@@ -54,16 +57,22 @@ if (import.meta.client) {
   <TheToast />
   <div class="h-dvh overflow-hidden">
     <div class="flex flex-col h-full gap-2 sm:gap-4 text-white px-2 sm:px-6 py-2 sm:py-8">
-      <h2 class="text-sm absolute top-0 right-4 leading-tight mt-1 opacity-40 font-normal sm:font-bold sm:text-2xl sm:relative sm:opacity-100 sm:right-0 flex-shrink-0">
-        glypher
-        <span
-          v-if="!isOnline"
-          class="text-xs opacity-60"
-        >
-          offline
-        </span>
-      </h2>
-      <div class="mt-3 sm:mt-0 flex flex-col-reverse sm:flex-row justify-start gap-8 sm:gap-12 items:start sm:items-end flex-shrink-0">
+      <div class="flex items-start justify-between gap-4 flex-shrink-0">
+        <h2 class="text-sm leading-tight mt-1 opacity-40 font-normal sm:font-bold sm:text-2xl sm:opacity-100 flex-shrink-0">
+          glypher
+          <span
+            v-if="!isOnline"
+            class="text-xs opacity-60"
+          >
+            offline
+          </span>
+        </h2>
+        <LanguageSelector class="flex-shrink-0" />
+      </div>
+      <div
+        v-if="data"
+        class="mt-3 sm:mt-0 flex flex-col-reverse sm:flex-row justify-start gap-8 sm:gap-12 items:start sm:items-end flex-shrink-0"
+      >
         <LetterGrid
           :letters="letters"
           :centre-letter="centreLetter"
@@ -75,6 +84,7 @@ if (import.meta.client) {
         />
       </div>
       <WordInput
+        v-if="data"
         v-model:words="words"
         :hashes="hashes"
         :letters="letters"
@@ -83,6 +93,7 @@ if (import.meta.client) {
         class="flex-shrink-0"
       />
       <WordHints
+        v-if="data"
         class="max-w-full min-h-0 flex-grow"
         :pairs="pairs"
         :words="words"
@@ -93,7 +104,7 @@ if (import.meta.client) {
     </div>
   </div>
   <DateMismatchModal
-    v-if="showDateMismatchModal"
+    v-if="data && showDateMismatchModal"
     :puzzle-date="puzzleDate"
     :on-refresh="updateDate"
     @close="closeDateMismatchModal"

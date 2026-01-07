@@ -35,12 +35,15 @@ self.addEventListener('install', (event) => {
   const prefetchUpcomingDays = async () => {
     const today = new Date()
     const urls: string[] = []
+    const languages = ['en', 'en-gb', 'de', 'nl', 'fr', 'es']
 
-    for (let i = 0; i <= 7; i++) {
-      const date = new Date(today)
-      date.setDate(today.getDate() + i)
-      const dateStr = date.toISOString().slice(0, 10)
-      urls.push(`/api/words/${dateStr}`)
+    for (const lang of languages) {
+      for (let i = 1; i <= 7; i++) {
+        const date = new Date(today)
+        date.setDate(today.getDate() + i)
+        const dateStr = date.toISOString().slice(0, 10)
+        urls.push(`/api/words/${lang}/${dateStr}`)
+      }
     }
 
     const cache = await caches.open('words-api-cache')
@@ -69,12 +72,15 @@ self.addEventListener('activate', (event) => {
   const prefetchUpcomingDays = async () => {
     const today = new Date()
     const urls: string[] = []
+    const languages = ['en', 'en-gb', 'de', 'nl', 'fr', 'es']
 
-    for (let i = 1; i <= 7; i++) {
-      const date = new Date(today)
-      date.setDate(today.getDate() + i)
-      const dateStr = date.toISOString().slice(0, 10)
-      urls.push(`/api/words/${dateStr}`)
+    for (const lang of languages) {
+      for (let i = 0; i <= 7; i++) {
+        const date = new Date(today)
+        date.setDate(today.getDate() + i)
+        const dateStr = date.toISOString().slice(0, 10)
+        urls.push(`/api/words/${lang}/${dateStr}`)
+      }
     }
 
     const cache = await caches.open('words-api-cache')
@@ -88,7 +94,7 @@ self.addEventListener('activate', (event) => {
           }
         }
         catch {
-          // Silently fail
+          // silently fail
         }
       }),
     )

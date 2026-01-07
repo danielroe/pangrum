@@ -1,8 +1,36 @@
 import { addServerTemplate, defineNuxtModule } from 'nuxt/kit'
-import english from 'wordlist-js/dist/english'
-import british from 'wordlist-js/dist/british'
+import { loadDictionary } from 'language-packages'
+import { unmunch } from './utils/unmunch'
 
 const WORD_LENGTH = 7
+const MIN_WORD_LENGTH = 4
+
+const LANGUAGES: Record<string, { locale: string, alphabet: string }> = {
+  'en': {
+    locale: 'en-US',
+    alphabet: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+  },
+  'en-gb': {
+    locale: 'en-GB',
+    alphabet: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+  },
+  'de': {
+    locale: 'de-DE',
+    alphabet: 'ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜẞ',
+  },
+  'nl': {
+    locale: 'nl',
+    alphabet: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+  },
+  'fr': {
+    locale: 'fr',
+    alphabet: 'ABCDEFGHIJKLMNOPQRSTUVWXYZÀÂÆÇÉÈÊËÎÏÔŒÙÛÜŸ',
+  },
+  'es': {
+    locale: 'es',
+    alphabet: 'ABCDEFGHIJKLMNÑOPQRSTUVWXYZÁÉÍÓÚÜ',
+  },
+}
 
 export default defineNuxtModule({
   meta: {
@@ -13,62 +41,96 @@ export default defineNuxtModule({
       return
     }
 
-    const allWords = new Set<string>()
-    const words = new Set<string>()
-    const pangrams = new Set<string>()
+    const languageData: Record<string, { words: Set<string>, pangrams: Set<string> }> = {}
 
     addServerTemplate({
       filename: '#words.mjs',
-      getContents: () =>
+      getContents: () => {
+        const exports = Object.entries(languageData).map(([lang, data]) => {
+          return `export const ${lang.replace(/-/g, '_')}_pangrams = ${JSON.stringify([...data.pangrams])}
+export const ${lang.replace(/-/g, '_')}_words = ${JSON.stringify([...data.words])}`
+        }).join('\n')
+
+        return `
+${exports}
+
+export const languages = ${JSON.stringify(Object.keys(languageData))}
         `
-        export const pangrams = ${JSON.stringify([...pangrams])}
-        export const words = ${JSON.stringify([...words])}
-        `,
+      },
     })
 
     nuxt.hook('nitro:init', async (nitro) => {
-      const sets = [10, 20, 35, 40, 50, 55, 60] as const
+      console.log('🔤 Extracting word lists for multiple languages...')
 
-      const key = sets.join('-') + '.json'
-      const cachedData = await nitro.storage.getItem<{ pangrams: string[], words: string[] }>('words:list-' + key)
-      if (cachedData) {
-        for (const word of cachedData.words) {
-          words.add(word)
+      for (const [langKey, langConfig] of Object.entries(LANGUAGES)) {
+        const { locale, alphabet } = langConfig
+        console.log(`  Processing ${langKey} (${locale})...`)
+
+        const cacheKey = `words:list-${langKey}`
+        const cachedData = await nitro.storage.getItem<{ pangrams: string[], words: string[] }>(cacheKey)
+
+        if (cachedData) {
+          console.log(`    ✓ Loaded from cache (${cachedData.words.length} words, ${cachedData.pangrams.length} pangrams)`)
+          languageData[langKey] = {
+            words: new Set(cachedData.words),
+            pangrams: new Set(cachedData.pangrams),
+          }
+          continue
         }
-        for (const pangram of cachedData.pangrams) {
-          pangrams.add(pangram)
-        }
-      }
 
-      for (const set of sets) {
-        for (const wordChunk of [english[`english${set}Unfiltered`], british[`british${set}Unfiltered`]]) {
-          for (const word of wordChunk) {
-            if (word.length < 4) {
-              continue
-            }
+        const words = new Set<string>()
+        const pangrams = new Set<string>()
 
-            const uppercasedWord = word.toUpperCase()
-            words.add(uppercasedWord)
+        try {
+          const dictionary = await loadDictionary(locale, { strict: true })
+          if (!dictionary) {
+            console.log(`    ✗ Dictionary not found for ${locale}`)
+            continue
+          }
 
-            const choice = new Set(uppercasedWord.split(''))
-            if (choice.size === WORD_LENGTH) {
-              pangrams.add([...choice].sort().join(''))
+          const alphabetArray = alphabet.split('')
+
+          console.log(`    Expanding dictionary...`)
+
+          try {
+            const expandedWords = await unmunch(dictionary.dic, dictionary.aff)
+
+            console.log(`    Processing ${expandedWords.length} expanded words...`)
+
+            for (const word of expandedWords) {
+              const trimmed = word.trim().toUpperCase()
+              if (!trimmed || trimmed.length < MIN_WORD_LENGTH) continue
+
+              const wordChars = new Set(trimmed.split(''))
+
+              if (![...wordChars].every(c => alphabetArray.includes(c))) continue
+
+              words.add(trimmed)
+
+              if (wordChars.size === WORD_LENGTH) {
+                pangrams.add([...wordChars].sort().join(''))
+              }
             }
           }
-        }
-      }
-
-      // find words that fit the pangrams
-      for (const pangram of pangrams) {
-        const letters = pangram.split('')
-        for (const word of allWords) {
-          if (letters.every(letter => word.includes(letter))) {
-            words.add(word)
+          catch (error) {
+            console.error(`    ✗ Failed to expand dictionary: ${error}`)
+            continue
           }
+
+          console.log(`    ✓ Extracted ${words.size} words, ${pangrams.size} pangrams`)
+
+          languageData[langKey] = { words, pangrams }
+
+          await nitro.storage.setItem(cacheKey, {
+            pangrams: [...pangrams],
+            words: [...words],
+          })
+        }
+        catch (error) {
+          console.error(`    ✗ Error processing ${locale}:`, error)
+          languageData[langKey] = { words: new Set(), pangrams: new Set() }
         }
       }
-
-      await nitro.storage.setItem('words:list-' + key, { pangrams: [...pangrams], words: [...words] })
     })
   },
 })

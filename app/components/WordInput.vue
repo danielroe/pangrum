@@ -10,8 +10,10 @@ const props = defineProps<{
 
 const words = defineModel<Set<string>>('words')
 
+const language = useLanguage()
+
 const incorrectGuesses = useLocalStorage<Record<string, string>>(
-  () => `glypher-incorrect-${props.letters.join('')}`,
+  () => `glypher-${language.value}-incorrect-${props.letters.join('')}`,
   {},
   {
     initOnMounted: true,

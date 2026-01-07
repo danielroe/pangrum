@@ -16,7 +16,7 @@ const longestWordLength = computed(() => props.validWords.reduce((acc, w) => w.l
 const prefixes = computed(() => {
   const set = new Set<string>()
   for (const word of props.validWords) {
-    set.add(word.slice(0, 2))
+    set.add(word.slice(0, 1))
   }
   return set
 })
