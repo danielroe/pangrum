@@ -8,7 +8,7 @@ const { maxScore, score, percentage } = useScore(() => props.words, () => props.
 
 const thresholds = {
   'beginner': 0,
-  'good start': 2.5,
+  'novice': 2.5,
   'moving up': 5,
   'good': 8,
   'solid': 15,
@@ -16,24 +16,11 @@ const thresholds = {
   'great': 40,
   'amazing': 50,
   'genius': 70,
-  'queen bee': 100,
+  'perfect': 100,
 } as const
 
 const thresholdsReversed = Object.entries(thresholds).reverse()
 const thresholdsForward = Object.entries(thresholds)
-
-// const icons = {
-//   beginner: '👶',
-//   'good start': 2.5,
-//   'moving up': 5,
-//   'good': 8,
-//   'solid': 15,
-//   'nice': 25,
-//   'great': 40,
-//   amazing: 50,
-//   genius: 70,
-//   'queen bee': 100,
-// }
 
 const status = computed(() => {
   for (const [label, threshold] of thresholdsReversed) {
@@ -66,7 +53,7 @@ const pointsToGo = computed(() => Math.ceil((nextThreshold.value.threshold / 100
         {{ status }}
       </span>
       <div
-        v-if="status !== 'queen bee'"
+        v-if="status !== 'perfect'"
         class="opacity-40 text-sm line-clamp-1"
       >
         (<span class="font-mono">{{ pointsToGo }}</span> more to '{{ nextThreshold.label }}')
@@ -78,12 +65,12 @@ const pointsToGo = computed(() => Math.ceil((nextThreshold.value.threshold / 100
         :key="`${label}-dot`"
       >
         <div
-          v-if="label !== 'queen bee'"
+          v-if="label !== 'perfect'"
           class="border border-solid border-2 w-2 h-2 rounded-full"
           :class="{ 'bg-primary': percentage > threshold, 'bg-progress-inactive': percentage <= threshold }"
         />
         <div
-          v-if="label !== 'queen bee' && label !=='genius'"
+          v-if="label !== 'perfect' && label !== 'genius'"
           :key="`${label}-status`"
           class="flex-grow relative flex  justify-center items-center"
         >
