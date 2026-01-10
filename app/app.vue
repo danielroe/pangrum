@@ -67,7 +67,8 @@ if (import.meta.client) {
             offline
           </span>
         </h2>
-        <div class="flex gap-2 flex-shrink-0">
+        <div class="flex gap-2 items-center flex-shrink-0">
+          <NotificationToggle />
           <ThemeSelector />
           <LanguageSelector />
         </div>

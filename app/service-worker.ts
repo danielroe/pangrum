@@ -102,3 +102,47 @@ self.addEventListener('activate', (event) => {
 
   event.waitUntil(prefetchUpcomingDays())
 })
+
+self.addEventListener('periodicsync', (event: Event) => {
+  const syncEvent = event as ExtendableEvent & { tag: string }
+  if (syncEvent.tag === 'daily-puzzle-reminder') {
+    syncEvent.waitUntil(showDailyReminder())
+  }
+})
+
+async function showDailyReminder() {
+  const clients = await self.clients.matchAll({ type: 'window' })
+
+  if (clients.length > 0) {
+    return
+  }
+
+  await self.registration.showNotification('Glypher', {
+    body: 'New puzzle available!',
+    icon: '/icon-192x192.png',
+    badge: '/icon-192x192.png',
+    tag: 'glypher-daily',
+    data: {
+      url: '/',
+    },
+  })
+}
+
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close()
+
+  const urlToOpen = event.notification.data?.url || '/'
+
+  event.waitUntil(
+    self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
+      for (const client of clientList) {
+        if ('focus' in client) {
+          return client.focus()
+        }
+      }
+      if (self.clients.openWindow) {
+        return self.clients.openWindow(urlToOpen)
+      }
+    }),
+  )
+})
