@@ -12,6 +12,7 @@
   "dependencies": {
     "@nuxt/eslint": "1.12.1",
     "@nuxt/fonts": "0.12.1",
+    "@nuxtjs/color-mode": "^4.0.0",
     "@unocss/nuxt": "^66.5.11",
     "@unocss/transformer-directives": "^66.5.11",
     "@vercel/kv": "^3.0.0",

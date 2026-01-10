@@ -105,11 +105,11 @@ function closeModal() {
   <div class="select-none h-full min-h-0 flex flex-col">
     <div
       v-if="totalPangrams > 0"
-      class="text-xs sm:text-sm font-mono flex items-center gap-2 px-2 py-1 border-1 border-solid border-primary border-opacity-30 bg-primary bg-opacity-10 flex-shrink-0 mb-2"
+      class="text-xs sm:text-sm font-mono flex items-center gap-2 px-2 py-1 border-1 border-solid border-primary-border bg-primary-subtle flex-shrink-0 mb-2"
     >
-      <span class="text-primary">🌟</span>
+      <span>🌟</span>
       <span>
-        Pangrams: <span class="font-bold text-primary">{{ foundPangrams }}</span> / {{ totalPangrams }}
+        Pangrams: <span class="font-bold">{{ foundPangrams }}</span> / {{ totalPangrams }}
       </span>
     </div>
     <div
@@ -181,7 +181,7 @@ function closeModal() {
         :class="[
           activeSlide === i - 1
             ? 'w-6 h-2 bg-primary scale-110'
-            : 'w-2 h-2 bg-white bg-opacity-30 hover:bg-opacity-50 hover:scale-125',
+            : 'w-2 h-2 bg-muted hover:bg-muted-foreground hover:scale-125',
         ]"
         :aria-label="`Go to ${i === 1 ? 'word grid' : i === 2 ? 'two-letter pairs' : 'word list'}`"
         @click="goToSlide(i - 1)"

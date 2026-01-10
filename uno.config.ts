@@ -7,35 +7,47 @@ export default defineConfig({
   ],
   theme: {
     colors: {
-      primary: {
-        DEFAULT: '#fcd34d',
-        hover: '#fbbf24',
+      'primary': {
+        DEFAULT: 'var(--color-primary)',
+        hover: 'var(--color-primary-hover)',
+        muted: 'var(--color-primary-muted)',
+        subtle: 'var(--color-primary-subtle)',
+        border: 'var(--color-primary-border)',
       },
 
-      success: {
-        DEFAULT: '#f59e0b',
-        bg: '#b45309',
+      'success': {
+        DEFAULT: 'var(--color-success)',
+        bg: 'var(--color-success-bg)',
       },
 
-      error: {
-        DEFAULT: '#ef4444',
-        light: '#f87171',
-        bg: '#b91c1c',
+      'error': {
+        DEFAULT: 'var(--color-error)',
+        light: 'var(--color-error-light)',
+        bg: 'var(--color-error-bg)',
       },
 
-      celebration: {
-        DEFAULT: '#22c55e',
-        bg: '#15803d',
+      'celebration': {
+        DEFAULT: 'var(--color-celebration)',
+        bg: 'var(--color-celebration-bg)',
       },
 
-      surface: {
-        DEFAULT: '#333',
-        hover: '#444',
-        active: '#555',
+      'surface': {
+        DEFAULT: 'var(--color-surface)',
+        hover: 'var(--color-surface-hover)',
+        active: 'var(--color-surface-active)',
       },
 
-      progress: {
-        inactive: '#4b5563',
+      'progress': {
+        inactive: 'var(--color-progress-inactive)',
+      },
+
+      // Semantic text/foreground color
+      'on-surface': 'var(--color-on-surface)',
+
+      // Muted colors for subtle UI elements
+      'muted': {
+        DEFAULT: 'var(--color-muted)',
+        foreground: 'var(--color-muted-foreground)',
       },
     },
   },

@@ -17,10 +17,10 @@ defineProps<{
   >
     <div
       v-if="matchingWords.length > 0 || matchingIncorrect.length > 0"
-      class="absolute left-0 top-full mt-2 bg-black bg-opacity-90 backdrop-blur-sm border border-white border-opacity-20 border-1 border-solid px-4 py-3 z-20 max-h-48 overflow-y-auto min-w-64"
+      class="absolute left-0 top-full mt-2 bg-surface bg-opacity-90 backdrop-blur-sm border border-muted border-1 border-solid px-4 py-3 z-20 max-h-48 overflow-y-auto min-w-64"
     >
       <div v-if="matchingWords.length > 0">
-        <div class="text-xs text-white text-opacity-60 mb-2 font-mono uppercase tracking-wider">
+        <div class="text-xs text-muted-foreground mb-2 font-mono uppercase tracking-wider">
           Already found:
         </div>
         <ul
@@ -32,12 +32,12 @@ defineProps<{
             :key="matchWord"
             class="text-sm font-mono lowercase"
           >
-            <span class="text-yellow-300">{{ currentWord.toLowerCase() }}</span><span class="text-white text-opacity-60">{{ matchWord.slice(currentWord.length).toLowerCase() }}</span>
+            <span class="text-yellow-300">{{ currentWord.toLowerCase() }}</span><span class="text-muted-foreground">{{ matchWord.slice(currentWord.length).toLowerCase() }}</span>
           </li>
         </ul>
       </div>
       <div v-if="matchingIncorrect.length > 0">
-        <div class="text-xs text-white text-opacity-60 mb-2 font-mono uppercase tracking-wider">
+        <div class="text-xs text-muted-foreground mb-2 font-mono uppercase tracking-wider">
           Incorrect:
         </div>
         <ul
@@ -49,7 +49,7 @@ defineProps<{
             :key="incorrectWord"
             class="text-sm font-mono lowercase opacity-40 line-through"
           >
-            <span class="text-error-light">{{ currentWord.toLowerCase() }}</span><span class="text-white">{{ incorrectWord.slice(currentWord.length).toLowerCase() }}</span>
+            <span class="text-error-light">{{ currentWord.toLowerCase() }}</span><span class="text-on-surface">{{ incorrectWord.slice(currentWord.length).toLowerCase() }}</span>
           </li>
         </ul>
       </div>

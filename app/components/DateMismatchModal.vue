@@ -55,16 +55,16 @@ function handleRefresh() {
 <template>
   <dialog
     ref="dialog"
-    class="bg-surface border-2 border-white border-opacity-20 w-full sm:w-auto sm:min-w-96 sm:max-w-md max-h-[80vh] sm:max-h-[70vh] flex flex-col overflow-hidden p-0 bottom-0 sm:top-1/2 sm:left-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2"
+    class="bg-surface border-2 border-muted w-full sm:w-auto sm:min-w-96 sm:max-w-md max-h-[80vh] sm:max-h-[70vh] flex flex-col overflow-hidden p-0 bottom-0 sm:top-1/2 sm:left-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2"
     @close="emit('close')"
     @click="handleClick"
   >
-    <div class="flex justify-between items-center p-4 border-b-2 border-white border-opacity-20">
-      <h3 class="text-white font-mono font-bold text-lg m-0">
+    <div class="flex justify-between items-center p-4 border-b-2 border-muted">
+      <h3 class="text-on-surface font-mono font-bold text-lg m-0">
         Different date
       </h3>
       <button
-        class="text-white text-2xl leading-none border-0 bg-transparent cursor-pointer p-2 -m-2 hover:opacity-70 transition-opacity"
+        class="text-on-surface text-2xl leading-none border-0 bg-transparent cursor-pointer p-2 -m-2 hover:opacity-70 transition-opacity"
         @click="emit('close')"
       >
         ×
@@ -72,23 +72,23 @@ function handleRefresh() {
     </div>
 
     <div class="p-6 flex-grow flex flex-col gap-4">
-      <p class="text-white font-mono text-base m-0">
+      <p class="text-on-surface font-mono text-base m-0">
         This is the puzzle from <span class="text-primary font-bold">{{ relativeDate }}</span>.
       </p>
 
-      <p class="text-white text-opacity-70 font-mono text-sm m-0">
+      <p class="text-muted-foreground font-mono text-sm m-0">
         Would you like to load today's puzzle instead?
       </p>
 
       <div class="flex gap-3 mt-2">
         <button
-          class="flex-1 px-4 py-3 font-mono text-sm border-2 border-solid border-primary bg-primary bg-opacity-20 hover:bg-opacity-30 text-white cursor-pointer transition-colors"
+          class="flex-1 px-4 py-3 font-mono text-sm border-2 border-solid border-primary bg-primary bg-opacity-20 hover:bg-opacity-30 text-on-surface cursor-pointer transition-colors"
           @click="handleRefresh"
         >
           Load today's puzzle
         </button>
         <button
-          class="flex-1 px-4 py-3 font-mono text-sm border-2 border-solid border-white border-opacity-20 bg-white bg-opacity-5 hover:bg-opacity-10 text-white cursor-pointer transition-colors"
+          class="flex-1 px-4 py-3 font-mono text-sm border-2 border-solid border-muted bg-muted hover:bg-muted-foreground text-on-surface cursor-pointer transition-colors"
           @click="emit('close')"
         >
           Keep playing

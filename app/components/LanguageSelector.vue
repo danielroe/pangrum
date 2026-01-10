@@ -11,7 +11,7 @@ function handleChange(event: Event) {
   <div class="relative inline-block">
     <select
       :value="language"
-      class="language-select text-white px-3 py-1 text-sm font-mono border-1 border-solid border-white border-opacity-20 bg-white bg-opacity-5 hover:bg-opacity-10 transition-colors appearance-none pr-8 cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50"
+      class="language-select text-on-surface px-3 py-1 text-sm font-mono border-1 border-solid border-muted bg-surface hover:bg-surface-hover transition-colors appearance-none pr-8 cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50"
       aria-label="Select language"
       @change="handleChange"
     >

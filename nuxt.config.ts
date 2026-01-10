@@ -1,6 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  modules: ['@unocss/nuxt', '@vueuse/nuxt', '@nuxt/eslint', '@vite-pwa/nuxt'],
+  modules: ['@unocss/nuxt', '@vueuse/nuxt', '@nuxt/eslint', '@vite-pwa/nuxt', '@nuxtjs/color-mode'],
   $development: {
     nitro: {
       storage: {
@@ -19,6 +19,12 @@ export default defineNuxtConfig({
     head: {
       viewport: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no',
     },
+  },
+  colorMode: {
+    preference: 'system',
+    fallback: 'dark',
+    dataValue: 'theme',
+    storageKey: 'glypher-theme',
   },
   routeRules: {
     '/': { prerender: true },

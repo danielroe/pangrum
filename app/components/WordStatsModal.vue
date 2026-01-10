@@ -55,16 +55,16 @@ function handleClick(event: MouseEvent) {
 <template>
   <dialog
     ref="dialog"
-    class="bg-surface border-2 border-white border-opacity-20 w-full sm:w-auto sm:min-w-96 sm:max-w-2xl max-h-[80vh] sm:max-h-[70vh] flex flex-col overflow-hidden p-0 bottom-0 sm:top-1/2 sm:left-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2"
+    class="bg-surface border-2 border-muted w-full sm:w-auto sm:min-w-96 sm:max-w-2xl max-h-[80vh] sm:max-h-[70vh] flex flex-col overflow-hidden p-0 bottom-0 sm:top-1/2 sm:left-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2"
     @close="emit('close')"
     @click="handleClick"
   >
-    <div class="flex justify-between items-center p-4 border-b-2 border-white border-opacity-20">
-      <h3 class="text-white font-mono font-bold text-lg m-0">
+    <div class="flex justify-between items-center p-4 border-b-2 border-muted">
+      <h3 class="text-on-surface font-mono font-bold text-lg m-0">
         {{ category }}
       </h3>
       <button
-        class="text-white text-2xl leading-none border-0 bg-transparent cursor-pointer p-2 -m-2 hover:opacity-70 transition-opacity"
+        class="text-on-surface text-2xl leading-none border-0 bg-transparent cursor-pointer p-2 -m-2 hover:opacity-70 transition-opacity"
         @click="emit('close')"
       >
         ×
@@ -72,7 +72,7 @@ function handleClick(event: MouseEvent) {
     </div>
 
     <div class="p-4 overflow-y-auto flex-grow">
-      <p class="text-white font-mono text-sm mb-4">
+      <p class="text-on-surface font-mono text-sm mb-4">
         {{ foundWords.length }} / {{ totalWords.length }} words found
       </p>
 
@@ -81,7 +81,7 @@ function handleClick(event: MouseEvent) {
           <h4 class="text-primary font-mono text-sm mb-2">
             Found ({{ foundWords.length }})
           </h4>
-          <ul class="p-0 grid grid-cols-[repeat(auto-fill,minmax(8rem,1fr))] gap-1 text-sm text-white m-0">
+          <ul class="p-0 grid grid-cols-[repeat(auto-fill,minmax(8rem,1fr))] gap-1 text-sm text-on-surface m-0">
             <li
               v-for="word in sortedFoundWords"
               :key="word"
@@ -93,17 +93,17 @@ function handleClick(event: MouseEvent) {
         </div>
 
         <div v-if="showRemaining && remainingCount > 0">
-          <h4 class="text-white text-opacity-50 font-mono text-sm mb-2">
+          <h4 class="text-muted-foreground font-mono text-sm mb-2">
             Remaining ({{ remainingCount }})
           </h4>
           <ul
             v-if="sortedRemainingWords.length > 0"
-            class="p-0 grid grid-cols-[repeat(auto-fill,minmax(8rem,1fr))] gap-1 text-sm text-white m-0"
+            class="p-0 grid grid-cols-[repeat(auto-fill,minmax(8rem,1fr))] gap-1 text-sm text-on-surface m-0"
           >
             <li
               v-for="word in sortedRemainingWords"
               :key="word"
-              class="list-none font-mono px-2 py-1 border-1 border-solid border-white border-opacity-10 bg-white bg-opacity-5 transition-colors"
+              class="list-none font-mono px-2 py-1 border-1 border-solid border-muted bg-muted transition-colors"
             >
               {{ word.replace(/_/g, '-').toLowerCase() }}
             </li>

@@ -142,7 +142,7 @@ function addWord() {
           name="word"
           autofocus
           type="text"
-          class="p-2 rounded-none border-none font-mono font-bold text-xl uppercase tracking-[0.5rem] h-6 bg-transparent outline-none border-b-2 border-b-solid border-white border-opacity-10 border-opacity-20 focus:border-opacity-100 focus:border-yellow-300 text-transparent caret-yellow-300"
+          class="p-2 rounded-none border-none font-mono font-bold text-xl uppercase tracking-[0.5rem] h-6 bg-transparent outline-none border-b-2 border-b-solid border-muted focus:border-yellow-300 text-transparent caret-yellow-300"
         >
         <div
           v-if="word"
@@ -155,7 +155,7 @@ function addWord() {
             class="inline-block"
             :class="{
               'text-yellow-500': centreLetter === letter,
-              'text-white': centreLetter !== letter && letters.includes(letter),
+              'text-on-surface': centreLetter !== letter && letters.includes(letter),
               'text-gray-500': !letters.includes(letter),
             }"
           >{{ letter }}</span>

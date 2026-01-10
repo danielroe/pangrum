@@ -31,7 +31,7 @@ const pairsRemaining = computed(() => {
       <dd
         class="border-1 border-solid text-center aspect-square inline-block h-7 w-7 place-content-center !m-0 overflow-hidden cursor-pointer transition-all"
         :class="[
-          pairsRemaining[prefix] ? 'border-white border-opacity-10 bg-white bg-opacity-10': 'border-primary bg-primary text-black',
+          pairsRemaining[prefix] ? 'border-muted bg-muted': 'border-primary bg-primary text-black',
         ]"
         :aria-label="`${prefix}: ${pairsRemaining[prefix]} ${pairsRemaining[prefix] === 1 ? 'word' : 'words'} remaining`"
         @click="emit('showPairStats', prefix)"
@@ -49,7 +49,7 @@ const pairsRemaining = computed(() => {
       <dt
         class="h-7 w-auto leading-none pl-2 place-content-center relative after:border-b-1 after:border-b-solid after:content-[''] after:inline-block after:absolute after:left-0.5 -after:bottom-0.25 after:w-12 after:h-0 cursor-pointer transition-opacity"
         :class="[
-          pairsRemaining[prefix] ? 'after:border-white after:border-opacity-10 after:bg-white after:bg-opacity-10': 'after:border-primary',
+          pairsRemaining[prefix] ? 'after:border-muted after:bg-muted': 'after:border-primary',
         ]"
         @click="emit('showPairStats', prefix)"
       >
@@ -62,12 +62,12 @@ const pairsRemaining = computed(() => {
 <style scoped>
 dd:hover,
 dd:has(+ dt:hover) {
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: var(--color-muted-foreground);
 }
 
 dd.bg-primary:hover,
 dd.bg-primary:has(+ dt:hover) {
-  background-color: rgb(251, 191, 36);
+  background-color: var(--color-primary-hover);
 }
 
 dt:hover,

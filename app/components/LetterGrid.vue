@@ -32,12 +32,12 @@ function submitWord() {
       ]"
     >
       <button
-        class="border-2 border-transparent border-solid font-mono font-bold text-xl focus:border-white flex-grow flex items-center justify-center touch-none transition-all duration-100"
+        class="border-2 border-transparent border-solid font-mono font-bold text-xl focus:border-on-surface flex-grow flex items-center justify-center touch-none transition-all duration-100"
         style="will-change: background-color;"
         :class="[
           letter === centreLetter
             ? 'bg-primary text-black active:bg-primary-hover'
-            : 'bg-surface-hover text-white active:bg-surface-active',
+            : 'bg-surface-hover text-on-surface active:bg-surface-active',
         ]"
         @click="() => addLetter(letter)"
       >
@@ -46,7 +46,7 @@ function submitWord() {
     </li>
     <li class="sm:hidden list-none flex items-center items-stretch aspect-square min-w-11 w-full col-start-5 row-start-1">
       <button
-        class="border-2 border-transparent border-solid text-xl text-white border-white border-opacity-30 focus:border-white flex-grow flex items-center justify-center bg-transparent touch-none transition-all duration-100 active:bg-white active:bg-opacity-10"
+        class="border-2 border-solid text-xl text-on-surface border-muted-foreground focus:border-on-surface flex-grow flex items-center justify-center bg-transparent touch-none transition-all duration-100 active:bg-muted"
         @click="deleteLetter"
       >
         <span aria-hidden="true">⌫</span>
@@ -55,7 +55,7 @@ function submitWord() {
     </li>
     <li class="sm:hidden list-none flex items-center items-stretch min-w-11 w-full col-start-4 col-end-6 row-start-2">
       <button
-        class="border-2 border-transparent border-solid text-xl text-white border-white border-opacity-30 focus:border-white flex-grow flex items-center justify-center bg-transparent touch-none transition-all duration-100 active:bg-white active:bg-opacity-10"
+        class="border-2 border-solid text-xl text-on-surface border-muted-foreground focus:border-on-surface flex-grow flex items-center justify-center bg-transparent touch-none transition-all duration-100 active:bg-muted"
         @click="submitWord"
       >
         <span aria-hidden="true">⏎</span>
