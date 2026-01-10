@@ -5,6 +5,7 @@ const { data } = useFetch(() => `/api/words/${language.value}/${today.value}`, {
   server: false,
 })
 const isOnline = useOnline()
+const { hintsEnabled } = useHints()
 
 function updateDate() {
   today.value = new Date().toISOString().slice(0, 10)
@@ -68,6 +69,7 @@ if (import.meta.client) {
           </span>
         </h2>
         <div class="flex gap-2 items-center flex-shrink-0">
+          <HintsToggle />
           <NotificationToggle />
           <ThemeSelector />
           <LanguageSelector />
@@ -97,7 +99,7 @@ if (import.meta.client) {
         class="flex-shrink-0"
       />
       <WordHints
-        v-if="data"
+        v-if="data && hintsEnabled"
         class="max-w-full min-h-0 flex-grow"
         :pairs="pairs"
         :words="words"
@@ -105,6 +107,15 @@ if (import.meta.client) {
         :letters="letters"
         :total-pangrams="totalPangrams"
       />
+      <div
+        v-else-if="data && !hintsEnabled"
+        class="max-w-full min-h-0 flex-grow overflow-y-auto px-2"
+      >
+        <FoundWordsList
+          :words="words"
+          :letters="letters"
+        />
+      </div>
     </div>
   </div>
   <DateMismatchModal
