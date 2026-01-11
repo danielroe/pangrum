@@ -8,6 +8,7 @@ const { data } = useFetch(() => `/api/words/${language.value}/${selectedDate.val
 })
 const isOnline = useOnline()
 const { hintsEnabled } = useHints()
+const { showTutorial, checkFirstVisit } = useTutorial()
 
 const todayDate = computed(() => new Date().toISOString().slice(0, 10))
 const isViewingToday = computed(() => selectedDate.value === todayDate.value)
@@ -55,6 +56,8 @@ function closeDateMismatchModal() {
 onNuxtReady(checkDateMismatch)
 const { pause } = useIntervalFn(checkDateMismatch, 60000)
 
+onNuxtReady(checkFirstVisit)
+
 // ... as well as when window regains focus)
 if (import.meta.client) {
   window.addEventListener('focus', checkDateMismatch)
@@ -90,6 +93,7 @@ const shareData = computed(() => scoreRef.value?.getShareData())
               <div class="date-picker-fallback" />
             </template>
           </ClientOnly>
+          <TutorialButton />
           <HintsToggle />
           <NotificationToggle />
           <ThemeSelector />
@@ -155,6 +159,10 @@ const shareData = computed(() => scoreRef.value?.getShareData())
     v-if="showShareModal && shareData"
     :data="shareData"
     @close="showShareModal = false"
+  />
+  <TutorialModal
+    v-if="showTutorial"
+    @close="showTutorial = false"
   />
 </template>
 

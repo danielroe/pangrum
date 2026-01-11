@@ -153,7 +153,7 @@ function closeModal() {
     </div>
 
     <div
-      class="flex justify-center gap-2 mt-3 mb-2 shrink-0 lg:hidden"
+      class="flex justify-center gap-2 mt-3 mb-8 shrink-0 lg:hidden"
       role="tablist"
       aria-label="Carousel navigation"
     >
