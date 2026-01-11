@@ -38,7 +38,7 @@ defineProps<{
       </div>
       <div
         v-if="matchingIncorrect.length > 0"
-        class="mt-3 pt-3 border-t-1 border-solid border-muted"
+        class="mt-3 pt-3 border-t-1 border-x-0 border-y-0 border-solid border-muted"
       >
         <div class="text-xs font-mono uppercase tracking-wide text-muted-foreground mb-2">
           Incorrect:
