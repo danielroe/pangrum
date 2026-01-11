@@ -38,6 +38,11 @@ function handleSkip() {
   emit('close')
 }
 
+function handleDialogClose() {
+  skipTutorial()
+  emit('close')
+}
+
 function handleNext() {
   if (isLastStep.value) {
     completeTutorial()
@@ -64,7 +69,7 @@ onKeyStroke('Escape', handleSkip)
   <dialog
     ref="dialog"
     class="tutorial-modal bg-surface border-2 border-solid border-muted w-full sm:w-auto sm:min-w-md sm:max-w-lg max-h-[90vh] sm:max-h-[80vh] flex flex-col overflow-hidden p-0"
-    @close="emit('close')"
+    @close="handleDialogClose"
     @click="handleClick"
   >
     <div class="flex justify-between items-center p-4 border-b-2 border-solid border-muted">

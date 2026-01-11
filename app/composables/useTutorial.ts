@@ -43,10 +43,24 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
   },
 ]
 
+const STORAGE_KEY = 'pangrum-tutorial-seen'
+
+function markTutorialSeen() {
+  if (import.meta.client) {
+    localStorage.setItem(STORAGE_KEY, 'true')
+  }
+}
+
+function hasSeen() {
+  if (import.meta.client) {
+    return localStorage.getItem(STORAGE_KEY) === 'true'
+  }
+  return false
+}
+
 export function useTutorial() {
-  const hasSeenTutorial = useLocalStorage('pangrum-tutorial-seen', false)
-  const showTutorial = ref(false)
-  const currentStep = ref(0)
+  const showTutorial = useState('tutorial-show', () => false)
+  const currentStep = useState('tutorial-step', () => 0)
 
   function startTutorial() {
     currentStep.value = 0
@@ -69,24 +83,23 @@ export function useTutorial() {
   }
 
   function completeTutorial() {
-    hasSeenTutorial.value = true
+    markTutorialSeen()
     showTutorial.value = false
   }
 
   function skipTutorial() {
-    hasSeenTutorial.value = true
+    markTutorialSeen()
     showTutorial.value = false
   }
 
   // Auto-show for first-time visitors
   function checkFirstVisit() {
-    if (!hasSeenTutorial.value) {
+    if (!hasSeen()) {
       startTutorial()
     }
   }
 
   return {
-    hasSeenTutorial,
     showTutorial,
     currentStep,
     currentStepData: computed(() => TUTORIAL_STEPS[currentStep.value]),
