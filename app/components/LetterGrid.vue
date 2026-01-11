@@ -6,6 +6,7 @@ const props = defineProps<{
 
 const word = useWord()
 const pressedLetter = ref<string | null>(null)
+const shuffleOrder = ref([0, 1, 2, 3, 4, 5])
 
 function addLetter(letter: string) {
   word.value += letter
@@ -17,6 +18,16 @@ function deleteLetter() {
 
 function submitWord() {
   word.value += '\n'
+}
+
+// Fisher-Yates shuffle
+function shuffleLetters() {
+  const newOrder = [...shuffleOrder.value]
+  for (let i = newOrder.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[newOrder[i], newOrder[j]] = [newOrder[j]!, newOrder[i]!]
+  }
+  shuffleOrder.value = newOrder
 }
 
 // Visual indication only
@@ -44,7 +55,8 @@ onUnmounted(() => {
   window.removeEventListener('keyup', handleKeyUp)
 })
 
-const outerLetters = computed(() => props.letters.filter(l => l !== props.centreLetter))
+const baseOuterLetters = computed(() => props.letters.filter(l => l !== props.centreLetter))
+const outerLetters = computed(() => shuffleOrder.value.map(i => baseOuterLetters.value[i]!))
 
 const letterPositions = [
   { x: -0.88, y: -0.84, z: 1, rotate: -3, delay: 0 }, // top-left
@@ -61,36 +73,115 @@ const letterPositions = [
     class="flex items-center justify-center sm:justify-start gap-4 select-none"
     style="perspective: 800px"
   >
-    <div class="letter-cluster">
-      <button
-        class="letter-button centre-letter"
-        :class="{ 'is-pressed': pressedLetter === centreLetter }"
-        @click="() => addLetter(centreLetter)"
-      >
-        {{ centreLetter }}
-      </button>
+    <div class="flex flex-col items-center gap-3">
+      <div class="letter-cluster">
+        <button
+          class="letter-button centre-letter"
+          :class="{ 'is-pressed': pressedLetter === centreLetter }"
+          @click="() => addLetter(centreLetter)"
+        >
+          {{ centreLetter }}
+        </button>
 
+        <button
+          v-for="(letter, index) in outerLetters"
+          :key="letter"
+          class="letter-button outer-letter"
+          :class="{ 'is-pressed': pressedLetter === letter }"
+          :style="{
+            '--pos-x': letterPositions[index]?.x ?? 0,
+            '--pos-y': letterPositions[index]?.y ?? 0,
+            '--pos-z': letterPositions[index]?.z ?? 1,
+            '--rotate': `${letterPositions[index]?.rotate ?? 0}deg`,
+            '--delay': `${letterPositions[index]?.delay ?? 0}s`,
+          }"
+          @click="() => addLetter(letter)"
+        >
+          {{ letter }}
+        </button>
+      </div>
       <button
-        v-for="(letter, index) in outerLetters"
-        :key="letter"
-        class="letter-button outer-letter"
-        :class="{ 'is-pressed': pressedLetter === letter }"
-        :style="{
-          '--pos-x': letterPositions[index]?.x ?? 0,
-          '--pos-y': letterPositions[index]?.y ?? 0,
-          '--pos-z': letterPositions[index]?.z ?? 1,
-          '--rotate': `${letterPositions[index]?.rotate ?? 0}deg`,
-          '--delay': `${letterPositions[index]?.delay ?? 0}s`,
-        }"
-        @click="() => addLetter(letter)"
+        class="hidden sm:flex items-center gap-2 px-4 py-2 bg-transparent text-muted-foreground border-1.5 border-solid border-muted rounded-lg cursor-pointer transition-colors duration-150 hover:bg-muted hover:border-muted-foreground hover:text-on-surface active:bg-surface-active active:scale-95 focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
+        @click="shuffleLetters"
       >
-        {{ letter }}
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <polyline points="16 3 21 3 21 8" />
+          <line
+            x1="4"
+            y1="20"
+            x2="21"
+            y2="3"
+          />
+          <polyline points="21 16 21 21 16 21" />
+          <line
+            x1="15"
+            y1="15"
+            x2="21"
+            y2="21"
+          />
+          <line
+            x1="4"
+            y1="4"
+            x2="9"
+            y2="9"
+          />
+        </svg>
+        <span class="text-sm font-mono">Shuffle</span>
       </button>
     </div>
 
     <div class="flex flex-col gap-2 sm:hidden">
       <button
-        class="w-11 h-11 flex items-center justify-center bg-transparent text-muted-foreground border-1.5 border-muted rounded-lg cursor-pointer transition-colors duration-150 hover:bg-muted hover:border-muted-foreground hover:text-on-surface active:bg-surface-active active:scale-95 focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
+        class="w-11 h-11 flex items-center justify-center bg-transparent text-muted-foreground border-1.5 border-solid border-muted rounded-lg cursor-pointer transition-colors duration-150 hover:bg-muted hover:border-muted-foreground hover:text-on-surface active:bg-surface-active active:scale-95 focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
+        style="-webkit-tap-highlight-color: transparent"
+        @click="shuffleLetters"
+      >
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <polyline points="16 3 21 3 21 8" />
+          <line
+            x1="4"
+            y1="20"
+            x2="21"
+            y2="3"
+          />
+          <polyline points="21 16 21 21 16 21" />
+          <line
+            x1="15"
+            y1="15"
+            x2="21"
+            y2="21"
+          />
+          <line
+            x1="4"
+            y1="4"
+            x2="9"
+            y2="9"
+          />
+        </svg>
+        <span class="sr-only">Shuffle letters</span>
+      </button>
+      <button
+        class="w-11 h-11 flex items-center justify-center bg-transparent text-muted-foreground border-1.5 border-solid border-muted rounded-lg cursor-pointer transition-colors duration-150 hover:bg-muted hover:border-muted-foreground hover:text-on-surface active:bg-surface-active active:scale-95 focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
         style="-webkit-tap-highlight-color: transparent"
         @click="deleteLetter"
       >
@@ -122,7 +213,7 @@ const letterPositions = [
         <span class="sr-only">Delete character</span>
       </button>
       <button
-        class="w-11 h-11 flex items-center justify-center bg-transparent text-muted-foreground border-1.5 border-muted rounded-lg cursor-pointer transition-colors duration-150 hover:bg-muted hover:border-muted-foreground hover:text-on-surface active:bg-surface-active active:scale-95 focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
+        class="w-11 h-11 flex items-center justify-center bg-transparent text-muted-foreground border-1.5 border-solid border-muted rounded-lg cursor-pointer transition-colors duration-150 hover:bg-muted hover:border-muted-foreground hover:text-on-surface active:bg-surface-active active:scale-95 focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
         style="-webkit-tap-highlight-color: transparent"
         @click="submitWord"
       >
