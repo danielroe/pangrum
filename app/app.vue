@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { TheScore } from '#components'
+
 const language = useLanguage()
 const selectedDate = ref(new Date().toISOString().slice(0, 10))
 const { data } = useFetch(() => `/api/words/${language.value}/${selectedDate.value}`, {
@@ -31,6 +33,8 @@ const words = useLocalStorage<Set<string>>(() => `pangrum-${language.value}-${le
 })
 
 const showDateMismatchModal = ref(false)
+const showShareModal = ref(false)
+const scoreRef = useTemplateRef<InstanceType<typeof TheScore>>('score')
 
 function checkDateMismatch() {
   if (!puzzleDate.value) return
@@ -55,6 +59,12 @@ const { pause } = useIntervalFn(checkDateMismatch, 60000)
 if (import.meta.client) {
   window.addEventListener('focus', checkDateMismatch)
 }
+
+function openShareModal() {
+  showShareModal.value = true
+}
+
+const shareData = computed(() => scoreRef.value?.getShareData())
 </script>
 
 <template>
@@ -97,11 +107,14 @@ if (import.meta.client) {
             :centre-letter="centreLetter"
           />
           <TheScore
+            ref="score"
             class="score-section"
             :words="words"
             :valid-words="validWords"
             :total-pangrams="totalPangrams"
             :letters="letters"
+            :date="selectedDate"
+            @share="openShareModal"
           />
         </div>
 
@@ -137,6 +150,11 @@ if (import.meta.client) {
     :puzzle-date="puzzleDate"
     :on-refresh="goToToday"
     @close="closeDateMismatchModal"
+  />
+  <ShareResultsModal
+    v-if="showShareModal && shareData"
+    :data="shareData"
+    @close="showShareModal = false"
   />
 </template>
 

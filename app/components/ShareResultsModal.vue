@@ -1,0 +1,308 @@
+<script setup lang="ts">
+import type { ShareData } from '~/composables/useShare'
+
+const props = defineProps<{
+  data: ShareData
+}>()
+
+const emit = defineEmits<{
+  close: []
+}>()
+
+const { generateShareImage, shareResults, downloadImage, copyTextToClipboard, copyImageToClipboard, isShareSupported } = useShare()
+
+const dialogRef = useTemplateRef<HTMLDialogElement>('dialog')
+const previewUrl = ref<string | null>(null)
+const generatedBlob = ref<Blob | null>(null)
+const isGenerating = ref(false)
+const shareStatus = ref<'idle' | 'sharing' | 'copied' | 'copied-image' | 'downloaded' | 'shared' | 'error'>('idle')
+
+onMounted(async () => {
+  dialogRef.value?.showModal()
+
+  // Generate preview image
+  isGenerating.value = true
+  try {
+    const blob = await generateShareImage(props.data)
+    generatedBlob.value = blob
+    previewUrl.value = URL.createObjectURL(blob)
+  }
+  catch {
+    // Preview failed, not critical
+  }
+  finally {
+    isGenerating.value = false
+  }
+})
+
+onBeforeUnmount(() => {
+  if (dialogRef.value?.open) {
+    dialogRef.value.close()
+  }
+  if (previewUrl.value) {
+    URL.revokeObjectURL(previewUrl.value)
+  }
+})
+
+function handleClick(event: MouseEvent) {
+  if (event.target === dialogRef.value) {
+    emit('close')
+  }
+}
+
+async function handleShare() {
+  shareStatus.value = 'sharing'
+  try {
+    const result = await shareResults(props.data)
+    if (result.shared) {
+      shareStatus.value = 'shared'
+      setTimeout(() => emit('close'), 1000)
+    }
+    else if (result.blob) {
+      // Native share not available, download instead
+      await downloadImage(result.blob, `pangrum-${props.data.date}.png`)
+      shareStatus.value = 'downloaded'
+    }
+  }
+  catch {
+    shareStatus.value = 'error'
+  }
+}
+
+async function handleCopyText() {
+  try {
+    await copyTextToClipboard(props.data)
+    shareStatus.value = 'copied'
+  }
+  catch {
+    shareStatus.value = 'error'
+  }
+}
+
+async function handleCopyImage() {
+  shareStatus.value = 'sharing'
+  try {
+    const blob = generatedBlob.value || await generateShareImage(props.data)
+    const success = await copyImageToClipboard(blob)
+    if (success) {
+      shareStatus.value = 'copied-image'
+    }
+    else {
+      // Fallback to download if clipboard doesn't support images
+      await downloadImage(blob, `pangrum-${props.data.date}.png`)
+      shareStatus.value = 'downloaded'
+    }
+  }
+  catch {
+    shareStatus.value = 'error'
+  }
+}
+
+const statusMessage = computed(() => {
+  switch (shareStatus.value) {
+    case 'sharing': return 'Preparing...'
+    case 'copied': return 'Text copied!'
+    case 'copied-image': return 'Image copied!'
+    case 'downloaded': return 'Image downloaded!'
+    case 'shared': return 'Shared!'
+    case 'error': return 'Something went wrong'
+    default: return ''
+  }
+})
+</script>
+
+<template>
+  <dialog
+    ref="dialog"
+    class="dialog-modal bg-surface border-2 border-solid border-muted w-full sm:w-auto sm:min-w-96 sm:max-w-lg max-h-[90vh] sm:max-h-[80vh] flex flex-col overflow-hidden p-0"
+    @close="emit('close')"
+    @click="handleClick"
+  >
+    <div class="flex justify-between items-center p-4 border-b-2 border-solid border-muted">
+      <h3 class="text-on-surface font-mono font-bold text-lg m-0">
+        Share Results
+      </h3>
+      <button
+        class="text-on-surface text-2xl leading-none border-0 bg-transparent cursor-pointer p-2 -m-2 hover:opacity-70 transition-opacity duration-150"
+        @click="emit('close')"
+      >
+        ×
+      </button>
+    </div>
+
+    <div class="p-4 flex-grow flex flex-col gap-4 overflow-y-auto">
+      <!-- Preview -->
+      <div class="relative aspect-[3/2] bg-surface-elevated rounded-lg overflow-hidden border-1 border-solid border-muted">
+        <img
+          v-if="previewUrl"
+          :src="previewUrl"
+          alt="Share preview"
+          class="w-full h-full object-contain"
+        >
+        <div
+          v-else-if="isGenerating"
+          class="absolute inset-0 flex items-center justify-center text-muted-foreground"
+        >
+          Generating preview...
+        </div>
+        <div
+          v-else
+          class="absolute inset-0 flex items-center justify-center text-muted-foreground"
+        >
+          Preview unavailable
+        </div>
+      </div>
+
+      <!-- Stats summary -->
+      <div
+        v-if="data"
+        class="text-center text-sm text-muted-foreground font-mono"
+      >
+        <span class="text-primary font-bold">{{ data.score }}</span> points
+        <span class="mx-2">·</span>
+        {{ data.wordsFound }}/{{ data.totalWords }} words
+        <template v-if="data.totalPangrams > 0">
+          <span class="mx-2">·</span>
+          {{ data.pangrams }}/{{ data.totalPangrams }} pangrams
+        </template>
+      </div>
+
+      <!-- Status message -->
+      <div
+        v-if="statusMessage"
+        class="text-center text-sm font-medium"
+        :class="shareStatus === 'error' ? 'text-error' : 'text-primary'"
+      >
+        {{ statusMessage }}
+      </div>
+
+      <!-- Action buttons -->
+      <div class="flex flex-col gap-2">
+        <button
+          v-if="isShareSupported"
+          type="button"
+          class="w-full px-4 py-3 font-mono text-sm border-2 border-solid border-primary bg-primary text-dark cursor-pointer transition-all duration-150 hover:bg-primary-hover disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+          :disabled="shareStatus === 'sharing'"
+          @click="handleShare"
+        >
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle
+              cx="18"
+              cy="5"
+              r="3"
+            />
+            <circle
+              cx="6"
+              cy="12"
+              r="3"
+            />
+            <circle
+              cx="18"
+              cy="19"
+              r="3"
+            />
+            <line
+              x1="8.59"
+              y1="13.51"
+              x2="15.42"
+              y2="17.49"
+            />
+            <line
+              x1="15.41"
+              y1="6.51"
+              x2="8.59"
+              y2="10.49"
+            />
+          </svg>
+          Share
+        </button>
+
+        <div class="flex gap-2">
+          <!-- Copy Image button (primary action on desktop) -->
+          <button
+            type="button"
+            class="flex-1 px-4 py-3 font-mono text-sm border-2 border-solid border-muted bg-surface-elevated text-on-surface cursor-pointer transition-all duration-150 hover:bg-surface-hover disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            :disabled="shareStatus === 'sharing'"
+            @click="handleCopyImage"
+          >
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <rect
+                x="9"
+                y="9"
+                width="13"
+                height="13"
+                rx="2"
+                ry="2"
+              />
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+            </svg>
+            Copy Image
+          </button>
+
+          <!-- Copy Text button -->
+          <button
+            type="button"
+            class="flex-1 px-4 py-3 font-mono text-sm border-2 border-solid border-muted bg-surface-elevated text-on-surface cursor-pointer transition-all duration-150 hover:bg-surface-hover disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            :disabled="shareStatus === 'sharing'"
+            @click="handleCopyText"
+          >
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M4 6h16" />
+              <path d="M4 12h16" />
+              <path d="M4 18h12" />
+            </svg>
+            Copy Text
+          </button>
+        </div>
+      </div>
+    </div>
+  </dialog>
+</template>
+
+<style scoped>
+/* Dialog positioning - can't be done with inline classes */
+.dialog-modal::backdrop {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.dialog-modal {
+  position: fixed;
+  inset: auto 0 0 0;
+  margin: 0;
+  max-width: 100%;
+}
+
+@media (min-width: 640px) {
+  .dialog-modal {
+    inset: 50% auto auto 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+</style>
