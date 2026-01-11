@@ -22,7 +22,7 @@ function shuffle<T>(array: T[], random: () => number): T[] {
   const result = [...array]
   for (let i = result.length - 1; i > 0; i--) {
     const j = Math.floor(random() * (i + 1));
-    [result[i], result[j]] = [result[j], result[i]]
+    [result[i], result[j]] = [result[j]!, result[i]!]
   }
   return result
 }
@@ -81,14 +81,14 @@ export default defineCachedEventHandler(async (event) => {
 
   // Select pangram deterministically
   const pangramIndex = Math.floor(random() * pangrams.length)
-  const pangram = pangrams[pangramIndex]
+  const pangram = pangrams[pangramIndex]!
 
   // Shuffle letters deterministically
   const letters = shuffle(pangram.split(''), random)
 
   const validWords = words.filter((word) => {
     const chars = word.split('')
-    return chars.includes(letters[2]) && chars.every(letter => letters.includes(letter))
+    return chars.includes(letters[2]!) && chars.every(letter => letters.includes(letter))
   })
 
   const pairs: Record<string, number> = {}

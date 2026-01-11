@@ -7,7 +7,9 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "simple-git-hooks && nuxt prepare",
+    "lint": "eslint",
+    "test:types": "vue-tsc -b --noEmit"
   },
   "dependencies": {
     "@nuxt/eslint": "1.12.1",
@@ -33,6 +35,18 @@
   "devDependencies": {
     "@vite-pwa/assets-generator": "^1.0.2",
     "eslint": "^9.39.2",
-    "typescript": "^5.9.3"
+    "lint-staged": "^16.2.7",
+    "nano-staged": "^0.9.0",
+    "simple-git-hooks": "^2.13.1",
+    "typescript": "^5.9.3",
+    "vue-tsc": "^3.2.2"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "npx lint-staged"
+  },
+  "lint-staged": {
+    "*.{js,ts,md,vue,json}": [
+      "eslint --fix"
+    ]
   }
 }

@@ -1,6 +1,19 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  modules: ['@unocss/nuxt', '@vueuse/nuxt', '@nuxt/eslint', '@vite-pwa/nuxt', '@nuxtjs/color-mode'],
+  modules: [
+    function (_, nuxt) {
+      if (nuxt.options._prepare) {
+        nuxt.options.pwa ||= {}
+        nuxt.options.pwa.pwaAssets ||= {}
+        nuxt.options.pwa.pwaAssets.disabled = true
+      }
+    },
+    '@unocss/nuxt',
+    '@vueuse/nuxt',
+    '@nuxt/eslint',
+    '@vite-pwa/nuxt',
+    '@nuxtjs/color-mode',
+  ],
   $development: {
     nitro: {
       storage: {
