@@ -41,14 +41,14 @@ const remainingWords = computed(() => {
 </script>
 
 <template>
-  <table class="text-on-surface p-2 text-center tabular-nums">
+  <table class="text-on-surface text-center tabular-nums border-collapse">
     <tbody>
       <tr>
         <td />
         <td
           v-for="i of longestWordLength - 3"
           :key="`header-${i + 3}`"
-          class="font-mono pb-3 cursor-pointer hover:bg-muted transition-colors"
+          class="font-mono text-xs text-muted-foreground pb-2 cursor-pointer hover:text-on-surface transition-colors duration-150"
           @click="emit('showLengthStats', i + 3)"
         >
           {{ i + 3 }}
@@ -59,7 +59,7 @@ const remainingWords = computed(() => {
         :key="`row-${prefix}`"
       >
         <td
-          class="uppercase font-mono h-5 w-5 pr-4 tracking-widest text-right cursor-pointer hover:bg-muted transition-colors"
+          class="uppercase font-mono text-xs text-muted-foreground pr-3 tracking-widest text-right cursor-pointer hover:text-on-surface transition-colors duration-150"
           @click="emit('showPrefixStats', prefix)"
         >
           {{ prefix }}
@@ -67,16 +67,44 @@ const remainingWords = computed(() => {
         <td
           v-for="l of longestWordLength - 3"
           :key="`cell-${prefix}-${l + 3}`"
-          class="w-5 h-5 text-xs sm:text-sm lg:h-5 lg:w-5 text-center px-1 font-mono border-muted border-1 border-solid transition-colors"
+          class="grid-cell w-7 h-7 relative text-xs sm:text-sm font-mono transition-colors duration-150"
           :class="{
-            'bg-muted cursor-pointer hover:bg-muted-foreground': counts[l + 3] !== undefined && counts[l + 3]! > 0,
-            'bg-primary text-black cursor-pointer hover:bg-primary-hover': counts[l + 3] === 0,
+            'cell-remaining cursor-pointer text-on-surface': counts[l + 3] !== undefined && counts[l + 3]! > 0,
+            'cell-complete cursor-pointer text-primary': counts[l + 3] === 0,
+            'text-muted cursor-default': counts[l + 3] === undefined,
           }"
           @click="counts[l + 3] !== undefined ? emit('showGridStats', prefix, l + 3) : null"
         >
-          {{ counts[l + 3] === undefined ? '' : counts[l + 3] === 0 ? '✔︎' : counts[l + 3] }}
+          {{ counts[l + 3] === undefined ? '' : counts[l + 3] === 0 ? '✓' : counts[l + 3] }}
         </td>
       </tr>
     </tbody>
   </table>
 </template>
+
+<style scoped>
+.grid-cell::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-right: 1px solid color-mix(in oklch, var(--color-muted) 50%, transparent);
+  border-bottom: 1px solid color-mix(in oklch, var(--color-muted) 50%, transparent);
+}
+
+tr td:nth-child(2).grid-cell::after {
+  border-left: 1px solid color-mix(in oklch, var(--color-muted) 50%, transparent);
+}
+
+tbody tr:first-child + tr .grid-cell::after {
+  border-top: 1px solid color-mix(in oklch, var(--color-muted) 50%, transparent);
+}
+
+.cell-remaining:hover {
+  background: color-mix(in oklch, var(--color-primary) 10%, transparent);
+}
+
+.cell-complete:hover {
+  background: color-mix(in oklch, var(--color-primary) 15%, transparent);
+}
+</style>

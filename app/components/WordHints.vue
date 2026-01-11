@@ -4,15 +4,10 @@ const props = defineProps<{
   words: Set<string>
   pairs: Record<string, number>
   letters: string[]
-  totalPangrams: number
 }>()
 
 const carousel = useTemplateRef('carousel')
 const activeSlide = ref(0)
-
-const foundPangrams = computed(() =>
-  [...props.words].filter(w => props.letters.every(l => w.includes(l))).length,
-)
 
 const slideLabels = ['Word grid showing counts by prefix and length', 'Two-letter pairs grid', 'Found words list']
 
@@ -104,17 +99,9 @@ function closeModal() {
 <template>
   <div class="select-none h-full min-h-0 flex flex-col">
     <div
-      v-if="totalPangrams > 0"
-      class="text-xs sm:text-sm font-mono flex items-center gap-2 px-2 py-1 border-1 border-solid border-primary-border bg-primary-subtle flex-shrink-0 mb-2"
-    >
-      <span>🌟</span>
-      <span>
-        Pangrams: <span class="font-bold">{{ foundPangrams }}</span> / {{ totalPangrams }}
-      </span>
-    </div>
-    <div
       ref="carousel"
-      class="hints-container flex-1 min-h-0"
+      class="flex-1 min-h-0 flex overflow-x-auto snap-x snap-mandatory scroll-smooth touch-pan-x lg:grid lg:grid-cols-2 lg:gap-8 lg:overflow-x-visible lg:overflow-y-auto lg:snap-none motion-reduce:scroll-auto"
+      style="grid-template-areas: 'word-grid pairs-grid' 'word-list word-list'"
       role="region"
       aria-label="Word hints carousel"
       aria-live="polite"
@@ -124,7 +111,7 @@ function closeModal() {
       @keydown="handleKeydown"
     >
       <div
-        class="hint-panel hint-grid"
+        class="hint-panel min-w-full snap-center overflow-y-auto p-2 lg:min-w-0 lg:snap-align-none lg:p-0 flex justify-center items-start"
         style="grid-area: word-grid"
         :inert="activeSlide !== 0 || undefined"
         :aria-hidden="activeSlide !== 0"
@@ -140,7 +127,7 @@ function closeModal() {
       </div>
 
       <div
-        class="hint-panel hint-pairs"
+        class="hint-panel min-w-full snap-center overflow-y-auto p-2 px-4 lg:min-w-0 lg:snap-align-none lg:p-0"
         style="grid-area: pairs-grid"
         :inert="activeSlide !== 1 || undefined"
         :aria-hidden="activeSlide !== 1"
@@ -153,7 +140,7 @@ function closeModal() {
       </div>
 
       <div
-        class="hint-panel hint-words"
+        class="hint-panel min-w-full snap-center overflow-y-auto p-2 lg:min-w-0 lg:snap-align-none lg:p-0"
         style="grid-area: word-list"
         :inert="activeSlide !== 2 || undefined"
         :aria-hidden="activeSlide !== 2"
@@ -166,7 +153,7 @@ function closeModal() {
     </div>
 
     <div
-      class="flex justify-center gap-2 mt-3 mb-2 flex-shrink-0 lg:hidden"
+      class="flex justify-center gap-2 mt-3 mb-2 shrink-0 lg:hidden"
       role="tablist"
       aria-label="Carousel navigation"
     >
@@ -197,63 +184,3 @@ function closeModal() {
     />
   </div>
 </template>
-
-<style scoped>
-.hints-container {
-  display: flex;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scroll-behavior: smooth;
-  -webkit-overflow-scrolling: touch;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .hints-container {
-    scroll-behavior: auto;
-  }
-}
-
-.hint-panel {
-  min-width: 100%;
-  scroll-snap-align: center;
-  overflow-y: auto;
-  padding: 0.5rem;
-  contain: layout style paint;
-}
-
-.hint-grid {
-  display: flex;
-  justify-content: center;
-  align-items: start;
-}
-
-.hint-pairs {
-  padding-left: 1rem;
-  padding-right: 1rem;
-}
-
-@media (min-width: 1024px) {
-  .hints-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-areas:
-      "word-grid pairs-grid"
-      "word-list word-list";
-    gap: 2rem;
-    overflow-x: visible;
-    overflow-y: auto;
-    scroll-snap-type: none;
-  }
-
-  .hint-panel {
-    min-width: 0;
-    scroll-snap-align: none;
-    padding: 0;
-  }
-
-  .hint-pairs {
-    padding-left: 0;
-    padding-right: 0;
-  }
-}
-</style>

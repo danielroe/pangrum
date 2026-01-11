@@ -55,16 +55,16 @@ function handleClick(event: MouseEvent) {
 <template>
   <dialog
     ref="dialog"
-    class="bg-surface border-2 border-muted w-full sm:w-auto sm:min-w-96 sm:max-w-2xl max-h-[80vh] sm:max-h-[70vh] flex flex-col overflow-hidden p-0 bottom-0 sm:top-1/2 sm:left-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2"
+    class="bg-surface border-2 border-solid border-muted w-full sm:w-auto sm:min-w-96 sm:max-w-2xl max-h-[80vh] sm:max-h-[70vh] flex flex-col overflow-hidden p-0"
     @close="emit('close')"
     @click="handleClick"
   >
-    <div class="flex justify-between items-center p-4 border-b-2 border-muted">
+    <div class="flex justify-between items-center p-4 border-b-2 border-solid border-muted">
       <h3 class="text-on-surface font-mono font-bold text-lg m-0">
         {{ category }}
       </h3>
       <button
-        class="text-on-surface text-2xl leading-none border-0 bg-transparent cursor-pointer p-2 -m-2 hover:opacity-70 transition-opacity"
+        class="text-on-surface text-2xl leading-none border-0 bg-transparent cursor-pointer p-2 -m-2 hover:opacity-70 transition-opacity duration-150"
         @click="emit('close')"
       >
         ×
@@ -85,7 +85,7 @@ function handleClick(event: MouseEvent) {
             <li
               v-for="word in sortedFoundWords"
               :key="word"
-              class="list-none font-mono px-2 py-1 border-1 border-solid border-primary bg-primary bg-opacity-20 transition-colors"
+              class="list-none font-mono px-2 py-1 border-1 border-solid border-primary bg-primary/20 transition-colors duration-150"
             >
               {{ word.toLowerCase() }}
             </li>
@@ -103,7 +103,7 @@ function handleClick(event: MouseEvent) {
             <li
               v-for="word in sortedRemainingWords"
               :key="word"
-              class="list-none font-mono px-2 py-1 border-1 border-solid border-muted bg-muted transition-colors"
+              class="list-none font-mono px-2 py-1 border-1 border-solid border-muted bg-muted transition-colors duration-150"
             >
               {{ word.replace(/_/g, '-').toLowerCase() }}
             </li>
@@ -128,10 +128,8 @@ dialog {
 
 @media (min-width: 640px) {
   dialog {
-    position: fixed;
     inset: 50% auto auto 50%;
     transform: translate(-50%, -50%);
-    margin: 0;
   }
 }
 </style>

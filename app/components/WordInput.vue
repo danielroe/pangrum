@@ -13,7 +13,7 @@ const words = defineModel<Set<string>>('words')
 const language = useLanguage()
 
 const incorrectGuesses = useLocalStorage<Record<string, string>>(
-  () => `glypher-${language.value}-incorrect-${props.letters.join('')}`,
+  () => `pangrum-${language.value}-incorrect-${props.letters.join('')}`,
   {},
   {
     initOnMounted: true,
@@ -26,6 +26,7 @@ const incorrectGuesses = useLocalStorage<Record<string, string>>(
 
 const word = useWord()
 const input = useTemplateRef('wordInput')
+const { triggerCelebration } = useParticles()
 
 const matchingWords = computed(() => {
   if (!word.value || word.value.length < 2) return []
@@ -84,20 +85,21 @@ function addWord() {
     const points = scoreWord(normalisedWord)
 
     if (isPangram) {
+      triggerCelebration()
       addToast({
-        message: `🌟 PANGRAM! +${points} points! 🌟`,
+        message: `PANGRAM! +${points}`,
         type: 'celebration',
       })
     }
     else if (points >= 10) {
       addToast({
-        message: `✨ Amazing! +${points} points!`,
+        message: `Amazing! +${points}`,
         type: 'success',
       })
     }
     else {
       addToast({
-        message: `🎉 +${points} points!`,
+        message: `+${points}`,
         type: 'success',
       })
     }
@@ -130,11 +132,11 @@ function addWord() {
 
 <template>
   <form
-    class="flex flex-row items-end gap-2xl relative"
+    class="flex flex-row items-end gap-4 relative"
     @submit.prevent="addWord"
   >
-    <label class="flex flex-col gap-2 max-w-full items-stretch overflow-hidden">
-      <span class="hidden sm:block">enter your word</span>
+    <label class="flex flex-col gap-2 max-w-full overflow-hidden">
+      <span class="hidden sm:block text-sm text-muted-foreground">enter your word</span>
       <div class="relative flex flex-col">
         <input
           ref="wordInput"
@@ -142,29 +144,30 @@ function addWord() {
           name="word"
           autofocus
           type="text"
-          class="p-2 rounded-none border-none font-mono font-bold text-xl uppercase tracking-[0.5rem] h-6 bg-transparent outline-none border-b-2 border-b-solid border-muted focus:border-yellow-300 text-transparent caret-yellow-300"
+          class="word-input p-2 border-none rounded-none font-mono font-bold text-xl uppercase tracking-widest h-6 bg-transparent outline-none text-transparent caret-primary"
         >
         <div
           v-if="word"
           aria-hidden="true"
-          class="absolute px-2 pt-2 pb-1 rounded-none border-none font-mono font-bold text-xl uppercase tracking-[0.5rem] pointer-events-none flex"
+          class="absolute p-2 font-mono font-bold text-xl uppercase tracking-widest pointer-events-none flex"
         >
           <span
             v-for="letter, i of wordLetters"
             :key="i"
-            class="inline-block"
+            class="inline-block transition-colors duration-150"
             :class="{
-              'text-yellow-500': centreLetter === letter,
-              'text-on-surface': centreLetter !== letter && letters.includes(letter),
-              'text-gray-500': !letters.includes(letter),
+              'text-letter-centre': centreLetter === letter,
+              'text-letter-valid': centreLetter !== letter && letters.includes(letter),
+              'text-letter-invalid': !letters.includes(letter),
             }"
           >{{ letter }}</span>
         </div>
+        <div class="word-input-underline h-0.5 bg-muted transition-all duration-200" />
       </div>
     </label>
     <button
       type="submit"
-      class="hidden sm:block bg-yellow-300 text-black border-0 px-3 py-2 transition-all duration-100 active:bg-yellow-400 focus:outline focus:outline-2 focus:outline-yellow-500 focus:outline-offset-2"
+      class="submit-button hidden sm:block py-2 px-3 text-lg bg-primary text-dark border-none rounded-lg cursor-pointer transition-all duration-150 hover:bg-primary-hover hover:shadow-lg active:scale-95 focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
       aria-label="Submit word"
     >
       <span aria-hidden="true">⏎</span>
@@ -177,3 +180,30 @@ function addWord() {
     />
   </form>
 </template>
+
+<style scoped>
+.word-input::selection {
+  background: var(--color-primary-muted);
+}
+
+.word-input:focus ~ .word-input-underline {
+  background: var(--color-primary);
+  box-shadow: 0 2px 8px var(--color-primary-glow);
+}
+
+.submit-button:hover {
+  box-shadow: 0 4px 12px var(--color-primary-glow);
+}
+
+.text-letter-centre {
+  color: var(--color-letter-centre);
+}
+
+.text-letter-valid {
+  color: var(--color-letter-valid);
+}
+
+.text-letter-invalid {
+  color: var(--color-letter-invalid);
+}
+</style>

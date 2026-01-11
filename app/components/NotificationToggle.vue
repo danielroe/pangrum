@@ -11,6 +11,7 @@ const {
 const isEnabled = computed(() => settings.value.enabled && permission.value === 'granted')
 
 const icon = computed(() => isEnabled.value ? '🔔' : '🔕')
+const label = computed(() => isEnabled.value ? 'Reminders on' : 'Reminders off')
 
 async function toggleNotifications() {
   if (isEnabled.value) {
@@ -72,40 +73,41 @@ function handleTimeChange(event: Event) {
   <ClientOnly>
     <div
       v-if="isSupported"
-      class="hidden sm:flex items-center gap-3"
+      class="reminders-group hidden sm:flex items-center"
     >
       <button
         type="button"
-        class="relative w-11 h-6 flex-shrink-0 cursor-pointer rounded-full transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-surface"
-        :class="isEnabled ? 'bg-primary' : 'bg-muted-foreground'"
-        role="switch"
-        :aria-checked="isEnabled"
-        aria-label="Enable daily reminder notifications"
+        class="flex items-center gap-2 px-3 py-1 text-sm border-1 border-solid border-muted bg-surface hover:bg-surface-hover transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50"
+        :class="{ 'border-r-0': isEnabled }"
+        :aria-pressed="isEnabled"
         @click="toggleNotifications"
       >
-        <span
-          class="absolute inset-y-0.5 left-0.5 inline-block h-4 w-4 transform rounded-full bg-on-surface shadow transition duration-200 ease-in-out"
-          :class="isEnabled ? 'translate-x-5' : 'translate-x-0'"
-        />
+        <span>{{ icon }}</span>
+        <span class="text-on-surface">{{ label }}</span>
       </button>
-      <span class="text-sm text-on-surface whitespace-nowrap">
-        Reminders
-      </span>
       <input
+        v-if="isEnabled"
         type="time"
         :value="settings.time"
-        :disabled="!isEnabled"
-        class="px-2 py-1 text-sm font-mono border-1 border-solid border-muted bg-surface text-on-surface focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-40 disabled:cursor-not-allowed"
+        class="px-2 py-1 text-sm font-mono border-1 border-solid border-muted bg-surface text-on-surface focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50"
         aria-label="Reminder time"
         @change="handleTimeChange"
       >
     </div>
     <template #fallback>
-      <div class="hidden sm:flex items-center gap-3">
-        <div class="w-11 h-6 rounded-full bg-muted-foreground" />
-        <span class="text-sm text-on-surface whitespace-nowrap">Reminders</span>
-        <div class="w-20 h-7 bg-surface border-1 border-solid border-muted" />
-      </div>
+      <div class="hidden sm:block w-32 h-7 bg-surface border-1 border-solid border-muted" />
     </template>
   </ClientOnly>
 </template>
+
+<style scoped>
+.reminders-group:has(button:focus) input {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 1px rgba(252, 211, 77, 0.5);
+}
+
+.reminders-group:has(input:focus) button {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 1px rgba(252, 211, 77, 0.5);
+}
+</style>

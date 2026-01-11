@@ -10,7 +10,7 @@ export const SUPPORTED_LANGUAGES = {
 export type Language = keyof typeof SUPPORTED_LANGUAGES
 
 export function useLanguage() {
-  return useLocalStorage<Language>('glypher-language', 'en', {
+  return useLocalStorage<Language>('pangrum-language', 'en', {
     initOnMounted: true,
   })
 }

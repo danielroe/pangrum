@@ -9,7 +9,7 @@ const DEFAULT_SETTINGS: NotificationSettings = {
 }
 
 export function useNotificationSettings() {
-  return useLocalStorage<NotificationSettings>('glypher-notifications', DEFAULT_SETTINGS, {
+  return useLocalStorage<NotificationSettings>('pangrum-notifications', DEFAULT_SETTINGS, {
     initOnMounted: true,
   })
 }
@@ -105,7 +105,7 @@ export function useNotifications() {
       await registration.showNotification(title, {
         icon: '/icon-192x192.png',
         badge: '/icon-192x192.png',
-        tag: 'glypher-daily',
+        tag: 'pangrum-daily',
         ...options,
       })
     }
@@ -119,7 +119,7 @@ export function useNotifications() {
   function checkAndNotify() {
     if (!canNotify.value) return
 
-    const lastNotified = localStorage.getItem('glypher-last-notified')
+    const lastNotified = localStorage.getItem('pangrum-last-notified')
     const today = new Date().toISOString().slice(0, 10)
 
     if (lastNotified !== today) {
@@ -131,7 +131,7 @@ export function useNotifications() {
       scheduledTime.setHours(hours, minutes, 0, 0)
 
       if (now >= scheduledTime) {
-        localStorage.setItem('glypher-last-notified', today)
+        localStorage.setItem('pangrum-last-notified', today)
       }
     }
   }

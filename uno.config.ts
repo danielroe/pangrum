@@ -10,6 +10,7 @@ export default defineConfig({
       'primary': {
         DEFAULT: 'var(--color-primary)',
         hover: 'var(--color-primary-hover)',
+        glow: 'var(--color-primary-glow)',
         muted: 'var(--color-primary-muted)',
         subtle: 'var(--color-primary-subtle)',
         border: 'var(--color-primary-border)',
@@ -33,6 +34,7 @@ export default defineConfig({
 
       'surface': {
         DEFAULT: 'var(--color-surface)',
+        elevated: 'var(--color-surface-elevated)',
         hover: 'var(--color-surface-hover)',
         active: 'var(--color-surface-active)',
       },
@@ -49,6 +51,18 @@ export default defineConfig({
         DEFAULT: 'var(--color-muted)',
         foreground: 'var(--color-muted-foreground)',
       },
+
+      // Letter colors for word input
+      'letter': {
+        centre: 'var(--color-letter-centre)',
+        valid: 'var(--color-letter-valid)',
+        invalid: 'var(--color-letter-invalid)',
+      },
     },
+  },
+  shortcuts: {
+    'glow-primary': 'shadow-[0_0_20px_var(--color-primary-glow)]',
+    'glow-primary-sm': 'shadow-[0_0_10px_var(--color-primary-glow)]',
+    'glow-primary-lg': 'shadow-[0_0_30px_var(--color-primary-glow)]',
   },
 })

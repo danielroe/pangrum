@@ -1,5 +1,5 @@
 export function useHints() {
-  const hintsEnabled = useLocalStorage<boolean>('glypher-hints-enabled', false, {
+  const hintsEnabled = useLocalStorage<boolean>('pangrum-hints-enabled', false, {
     initOnMounted: true,
   })
 

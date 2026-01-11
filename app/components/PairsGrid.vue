@@ -22,34 +22,33 @@ const pairsRemaining = computed(() => {
 
 <template>
   <dl
-    class="grid font-mono items-center text-sm gap-row-2 grid-cols-[1.75rem_1fr_1.75rem_1fr_1.75rem_1fr] md:grid-cols-[1.75rem_1fr_1.75rem_1fr_1.75rem_1fr_1.75rem_1fr] lg:grid-cols-[1.75rem_1fr_1.75rem_1fr_1.75rem_1fr_1.75rem_1fr_1.75rem_1fr_1.75rem_1fr]"
+    class="grid font-mono items-center text-sm gap-y-1.5 gap-x-1 grid-cols-[1.5rem_1fr_1.5rem_1fr_1.5rem_1fr] md:grid-cols-[1.5rem_1fr_1.5rem_1fr_1.5rem_1fr_1.5rem_1fr] lg:grid-cols-[1.5rem_1fr_1.5rem_1fr_1.5rem_1fr_1.5rem_1fr_1.5rem_1fr_1.5rem_1fr]"
   >
     <template
       v-for="(count, prefix) in pairs"
       :key="prefix"
     >
       <dd
-        class="border-1 border-solid text-center aspect-square inline-block h-7 w-7 place-content-center !m-0 overflow-hidden cursor-pointer transition-all"
+        class="pair-count text-center h-6 w-6 leading-6 m-0 cursor-pointer transition-colors duration-150 text-xs hover:text-primary"
         :class="[
-          pairsRemaining[prefix] ? 'border-muted bg-muted': 'border-primary bg-primary text-black',
+          pairsRemaining[prefix] ? 'text-on-surface': 'text-primary',
         ]"
         :aria-label="`${prefix}: ${pairsRemaining[prefix]} ${pairsRemaining[prefix] === 1 ? 'word' : 'words'} remaining`"
         @click="emit('showPairStats', prefix)"
       >
         <span
           v-if="!pairsRemaining[prefix]"
-          class="text-lg"
           aria-hidden="true"
-        >✔︎</span>
+        >✓</span>
         <span
           v-else
           aria-hidden="true"
         >{{ pairsRemaining[prefix] }}</span>
       </dd>
       <dt
-        class="h-7 w-auto leading-none pl-2 place-content-center relative after:border-b-1 after:border-b-solid after:content-[''] after:inline-block after:absolute after:left-0.5 -after:bottom-0.25 after:w-12 after:h-0 cursor-pointer transition-opacity"
+        class="pair-label text-xs h-6 leading-6 pl-1 cursor-pointer transition-colors duration-150 hover:text-primary"
         :class="[
-          pairsRemaining[prefix] ? 'after:border-muted after:bg-muted': 'after:border-primary',
+          pairsRemaining[prefix] ? 'text-muted-foreground' : 'text-primary',
         ]"
         @click="emit('showPairStats', prefix)"
       >
@@ -60,18 +59,11 @@ const pairsRemaining = computed(() => {
 </template>
 
 <style scoped>
-dd:hover,
-dd:has(+ dt:hover) {
-  background-color: var(--color-muted-foreground);
+.pair-count:has(+ .pair-label:hover) {
+  color: var(--color-primary);
 }
 
-dd.bg-primary:hover,
-dd.bg-primary:has(+ dt:hover) {
-  background-color: var(--color-primary-hover);
-}
-
-dt:hover,
-dd:hover + dt {
-  opacity: 0.7;
+.pair-count:hover + .pair-label {
+  color: var(--color-primary);
 }
 </style>

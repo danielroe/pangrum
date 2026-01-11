@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <defs>
+    <!-- Glow filter -->
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <!-- Gradient for tiles -->
+    <linearGradient id="tileGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a1a"/>
+      <stop offset="100%" style="stop-color:#262626"/>
+    </linearGradient>
+    <!-- Primary gradient -->
+    <linearGradient id="primaryGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#14b8a6"/>
+      <stop offset="100%" style="stop-color:#0d9488"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="512" height="512" rx="96" fill="#0f0f0f"/>
+  
+  <!-- P shape constructed from tiles -->
+  <!-- The P is made of 8 tiles arranged in a P pattern -->
+  
+  <!-- Tile size: 72x72 with 12px gap -->
+  <!-- Grid starts at x=128, y=88 -->
+  
+  <!-- Column 1 (vertical stem of P) - 5 tiles -->
+  <!-- Tile 1 - top of stem -->
+  <rect x="128" y="88" width="72" height="72" rx="14" fill="url(#tileGradient)" filter="url(#glow)"/>
+  <!-- Tile 2 -->
+  <rect x="128" y="172" width="72" height="72" rx="14" fill="url(#tileGradient)"/>
+  <!-- Tile 3 - center (highlighted - connects to bowl) -->
+  <rect x="128" y="256" width="72" height="72" rx="14" fill="url(#primaryGradient)" filter="url(#glow)"/>
+  <!-- Tile 4 -->
+  <rect x="128" y="340" width="72" height="72" rx="14" fill="url(#tileGradient)"/>
+  <!-- Tile 5 - bottom of stem -->
+  <rect x="128" y="424" width="72" height="72" rx="14" fill="url(#tileGradient)"/>
+  
+  <!-- Column 2 (top and middle of P bowl) - 3 tiles -->
+  <!-- Tile 6 - top of bowl -->
+  <rect x="212" y="88" width="72" height="72" rx="14" fill="url(#tileGradient)"/>
+  <!-- Tile 7 - middle of bowl (highlighted) -->
+  <rect x="212" y="256" width="72" height="72" rx="14" fill="url(#primaryGradient)" filter="url(#glow)"/>
+  
+  <!-- Column 3 (right side of P bowl) - 2 tiles -->
+  <!-- Tile 8 - top right of bowl -->
+  <rect x="296" y="88" width="72" height="72" rx="14" fill="url(#tileGradient)"/>
+  <!-- Tile 9 - middle right of bowl, connecting back -->
+  <rect x="296" y="172" width="72" height="72" rx="14" fill="url(#primaryGradient)" filter="url(#glow)"/>
+</svg>

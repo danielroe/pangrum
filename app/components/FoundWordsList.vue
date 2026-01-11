@@ -5,31 +5,42 @@ const props = defineProps<{
 }>()
 
 const sortedWords = computed(() => [...props.words].sort())
+
+function isPangram(word: string) {
+  return props.letters.every(l => word.includes(l))
+}
 </script>
 
 <template>
   <div
     v-if="sortedWords.length === 0"
-    class="flex items-center justify-center h-full text-muted-foreground font-mono text-sm text-center px-4"
+    class="flex items-center justify-center h-full text-muted-foreground font-mono text-sm text-center p-4"
   >
-    Make a guess to get started!
+    Make a guess to get started
   </div>
   <ul
     v-else
-    class="p-0 grid grid-cols-[repeat(auto-fill,minmax(8rem,1fr))] gap-1 text-xs sm:text-sm text-on-surface m-0 w-full"
+    class="grid grid-cols-[repeat(auto-fill,minmax(8rem,1fr))] gap-2 p-0 m-0 list-none"
   >
     <li
       v-for="word of sortedWords"
       :key="word"
-      class="list-none font-mono px-2 py-1 border-1 border-solid transition-colors"
-      style="contain: layout style;"
-      :class="{
-        'bg-primary-muted border-primary font-bold text-black': letters.every(l => word.includes(l)),
-        'bg-muted border-muted': !letters.every(l => word.includes(l)),
-      }"
-      :title="letters.every(l => word.includes(l)) ? 'Pangram!' : ''"
+      class="word-item font-mono text-sm px-3 py-2 bg-surface-elevated border-1 border-solid border-muted rounded-lg text-on-surface transition-all duration-150 hover:bg-surface-hover hover:-translate-y-px motion-reduce:transition-none"
+      :class="{ 'bg-celebration border-celebration text-celebration font-semibold is-pangram': isPangram(word) }"
+      :title="isPangram(word) ? 'Pangram!' : ''"
     >
       {{ word.toLowerCase() }}
     </li>
   </ul>
 </template>
+
+<style scoped>
+.word-item.is-pangram {
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.15);
+}
+
+.word-item.is-pangram:hover {
+  background: rgba(245, 158, 11, 0.2);
+  box-shadow: 0 0 16px rgba(245, 158, 11, 0.25);
+}
+</style>

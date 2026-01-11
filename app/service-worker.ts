@@ -117,11 +117,11 @@ async function showDailyReminder() {
     return
   }
 
-  await self.registration.showNotification('Glypher', {
+  await self.registration.showNotification('Pangrum', {
     body: 'New puzzle available!',
     icon: '/icon-192x192.png',
     badge: '/icon-192x192.png',
-    tag: 'glypher-daily',
+    tag: 'pangrum-daily',
     data: {
       url: '/',
     },
