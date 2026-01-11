@@ -73,7 +73,7 @@ const letterPositions = [
     class="flex items-center justify-center sm:justify-start gap-4 select-none"
     style="perspective: 800px"
   >
-    <div class="flex flex-col items-center gap-3">
+    <div class="flex flex-col items-end flex-grow gap-3">
       <div class="letter-cluster">
         <button
           class="letter-button centre-letter"
@@ -140,7 +140,7 @@ const letterPositions = [
       </button>
     </div>
 
-    <div class="flex flex-col gap-2 sm:hidden">
+    <div class="flex flex-col gap-2 flex-grow items-center sm:hidden">
       <button
         class="w-11 h-11 flex items-center justify-center bg-transparent text-muted-foreground border-1.5 border-solid border-muted rounded-lg cursor-pointer transition-colors duration-150 hover:bg-muted hover:border-muted-foreground hover:text-on-surface active:bg-surface-active active:scale-95 focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
         style="-webkit-tap-highlight-color: transparent"

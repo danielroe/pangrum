@@ -135,7 +135,7 @@ function addWord() {
     class="flex flex-row items-end gap-4 relative"
     @submit.prevent="addWord"
   >
-    <label class="flex flex-col gap-2 max-w-full overflow-hidden">
+    <label class="flex flex-col gap-2 flex-1 sm:flex-initial max-w-full overflow-hidden">
       <span class="hidden sm:block text-sm text-muted-foreground">enter your word</span>
       <div class="relative flex flex-col">
         <input
