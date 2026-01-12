@@ -305,7 +305,7 @@ const letterPositions = [
 
 .centre-letter:active,
 .centre-letter.is-pressed {
-  transform: translate(-50%, -50%) translateZ(16px) scale(0.95);
+  transform: translate(-50%, -50%) translateZ(16px) scale(0.92);
   box-shadow:
     0 0 20px var(--color-primary-glow),
     0 0 35px var(--color-primary-glow),
@@ -355,11 +355,16 @@ const letterPositions = [
     )
     translateZ(0px)
     rotate(var(--rotate))
-    scale(0.95);
+    scale(0.92);
   box-shadow:
-    0 2px 6px rgba(0, 0, 0, 0.2),
-    0 1px 2px rgba(0, 0, 0, 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    0 1px 4px rgba(0, 0, 0, 0.25),
+    0 1px 2px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  background: linear-gradient(
+    145deg,
+    color-mix(in oklch, var(--color-surface-elevated) 85%, black) 0%,
+    color-mix(in oklch, var(--color-surface-elevated) 75%, black) 100%
+  );
 }
 
 @keyframes centre-glow {
@@ -412,7 +417,7 @@ const letterPositions = [
 
   .centre-letter:active,
   .centre-letter.is-pressed {
-    transform: translate(-50%, -50%) translateZ(20px) scale(0.95);
+    transform: translate(-50%, -50%) translateZ(20px) scale(0.92);
   }
 
   .outer-letter {
@@ -434,7 +439,7 @@ const letterPositions = [
         calc(var(--pos-y) * var(--spread))
       )
       rotate(var(--rotate))
-      scale(0.95);
+      scale(0.92);
   }
 }
 </style>
