@@ -1,13 +1,3 @@
-<script setup lang="ts">
-withDefaults(defineProps<{
-  title?: string
-  description?: string
-}>(), {
-  title: 'pangrum',
-  description: 'Daily word puzzle game',
-})
-</script>
-
 <template>
   <div class="h-full w-full flex flex-col items-center justify-center bg-[#0f0f0f]">
     <div
@@ -62,11 +52,11 @@ withDefaults(defineProps<{
       class="text-white font-semibold mb-4"
       style="font-size: 64px; letter-spacing: 0.1em;"
     >
-      {{ title }}
+      pangrum
     </div>
 
     <div style="font-size: 28px; color: rgba(250, 250, 250, 0.6);">
-      {{ description }}
+      daily word puzzle game
     </div>
   </div>
 </template>
