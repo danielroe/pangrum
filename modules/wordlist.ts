@@ -69,7 +69,7 @@ export const languages = ${JSON.stringify(Object.keys(languageData))}
         const { locale, alphabet } = langConfig
         console.log(`  Processing ${langKey} (${locale})...`)
 
-        const cacheKey = `words:list-${langKey}`
+        const cacheKey = `words:list-${langKey}-v1`
         const cachedData = await nitro.storage.getItem<{ pangrams: string[], words: string[] }>(cacheKey)
 
         if (cachedData) {
