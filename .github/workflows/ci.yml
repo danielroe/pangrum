@@ -55,7 +55,7 @@ jobs:
   browser:
     runs-on: ubuntu-latest
     container:
-      image: mcr.microsoft.com/playwright:v1.56.1-noble
+      image: mcr.microsoft.com/playwright:v1.57.0-noble
 
     steps:
       - uses: actions/checkout@v6
@@ -67,9 +67,6 @@ jobs:
 
       - name: 📦 Install dependencies
         run: pnpm install
-
-      - name: 🚨 Install Playwright browsers
-        run: pnpm playwright install
 
       - name: 🖥️ Test project (browser)
         run: pnpm test:e2e
