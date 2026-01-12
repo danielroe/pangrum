@@ -51,6 +51,10 @@ const invalidChars = computed(() => {
   return new RegExp(`[^${lang.alphabet}]`, 'gi')
 })
 
+watch(language, () => {
+  word.value = ''
+})
+
 watch(word, (letters) => {
   word.value = letters.replace(invalidChars.value, '')
 
