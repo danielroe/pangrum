@@ -1,39 +1,13 @@
 import { addServerTemplate, defineNuxtModule } from 'nuxt/kit'
 import { loadDictionary } from 'language-packages'
 import { unmunch } from './utils/unmunch'
+import { LANGUAGES } from '../shared/languages'
 
 const WORD_LENGTH = 7
 const MIN_WORD_LENGTH = 4
 
 // Languages where all nouns are capitalized (not just proper nouns)
 const CAPITALIZED_NOUN_LANGUAGES = new Set(['de'])
-
-const LANGUAGES: Record<string, { locale: string, alphabet: string }> = {
-  'en': {
-    locale: 'en-US',
-    alphabet: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
-  },
-  'en-gb': {
-    locale: 'en-GB',
-    alphabet: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
-  },
-  'de': {
-    locale: 'de-DE',
-    alphabet: 'ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜẞ',
-  },
-  'nl': {
-    locale: 'nl',
-    alphabet: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
-  },
-  'fr': {
-    locale: 'fr',
-    alphabet: 'ABCDEFGHIJKLMNOPQRSTUVWXYZÀÂÆÇÉÈÊËÎÏÔŒÙÛÜŸ',
-  },
-  'es': {
-    locale: 'es',
-    alphabet: 'ABCDEFGHIJKLMNÑOPQRSTUVWXYZÁÉÍÓÚÜ',
-  },
-}
 
 export default defineNuxtModule({
   meta: {

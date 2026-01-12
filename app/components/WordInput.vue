@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { hash } from 'ohash'
+import { LANGUAGES } from '#shared/languages'
 
 const props = defineProps<{
   centreLetter: string
@@ -45,8 +46,13 @@ const matchingIncorrect = computed(() => {
 
 const wordLetters = computed(() => word.value.toUpperCase().split(''))
 
+const invalidChars = computed(() => {
+  const lang = LANGUAGES[language.value] || LANGUAGES.en!
+  return new RegExp(`[^${lang.alphabet}]`, 'gi')
+})
+
 watch(word, (letters) => {
-  word.value = letters.replace(/\W/g, '')
+  word.value = letters.replace(invalidChars.value, '')
 
   if (letters.at(-1) === '\n') {
     return addWord()
