@@ -73,7 +73,7 @@ const letterPositions = [
     class="flex items-center justify-center sm:justify-start gap-4 select-none"
     style="perspective: 800px"
   >
-    <div class="flex flex-col items-end flex-grow gap-3">
+    <div class="flex flex-col items-center flex-grow sm:flex-grow-0 gap-3">
       <div class="letter-cluster">
         <button
           class="letter-button centre-letter"
