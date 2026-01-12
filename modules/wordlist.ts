@@ -5,6 +5,9 @@ import { unmunch } from './utils/unmunch'
 const WORD_LENGTH = 7
 const MIN_WORD_LENGTH = 4
 
+// Languages where all nouns are capitalized (not just proper nouns)
+const CAPITALIZED_NOUN_LANGUAGES = new Set(['de'])
+
 const LANGUAGES: Record<string, { locale: string, alphabet: string }> = {
   'en': {
     locale: 'en-US',
@@ -97,10 +100,36 @@ export const languages = ${JSON.stringify(Object.keys(languageData))}
 
             console.log(`    Processing ${expandedWords.length} expanded words...`)
 
-            for (const word of expandedWords) {
-              const trimmed = word.trim().toUpperCase()
-              if (!trimmed || trimmed.length < MIN_WORD_LENGTH) continue
+            // For languages with capitalized nouns (like German), we need to track
+            // which words exist in lowercase form to filter out proper nouns
+            const lowercaseWords = CAPITALIZED_NOUN_LANGUAGES.has(langKey)
+              ? new Set(expandedWords.filter(w => w[0] === w[0]?.toLowerCase()).map(w => w.toLowerCase()))
+              : null
 
+            let skippedProperNouns = 0
+
+            for (const word of expandedWords) {
+              const originalWord = word.trim()
+              if (!originalWord || originalWord.length < MIN_WORD_LENGTH) continue
+
+              const firstChar = originalWord[0]
+              const isCapitalized = firstChar !== firstChar?.toLowerCase()
+
+              // Filter out proper nouns (words starting with capital letter)
+              if (isCapitalized) {
+                if (lowercaseWords) {
+                  if (!lowercaseWords.has(originalWord.toLowerCase())) {
+                    skippedProperNouns++
+                    continue
+                  }
+                }
+                else {
+                  skippedProperNouns++
+                  continue
+                }
+              }
+
+              const trimmed = originalWord.toUpperCase()
               const wordChars = new Set(trimmed.split(''))
 
               if (![...wordChars].every(c => alphabetArray.includes(c))) continue
@@ -110,6 +139,10 @@ export const languages = ${JSON.stringify(Object.keys(languageData))}
               if (wordChars.size === WORD_LENGTH) {
                 pangrams.add([...wordChars].sort().join(''))
               }
+            }
+
+            if (skippedProperNouns > 0) {
+              console.log(`    Filtered out ${skippedProperNouns} proper nouns`)
             }
           }
           catch (error) {

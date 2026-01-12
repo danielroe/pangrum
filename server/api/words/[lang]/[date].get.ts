@@ -113,6 +113,6 @@ export default defineCachedEventHandler(async (event) => {
   getKey: (event) => {
     const lang = getRouterParam(event, 'lang')
     const date = getRouterParam(event, 'date')
-    return `${lang}-${date}`
+    return `v0-${lang}-${date}`
   },
 })
