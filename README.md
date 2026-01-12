@@ -1,75 +1,60 @@
-# Nuxt Minimal Starter
+# pangrum
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+> A daily word puzzle game.
 
-## Setup
+[👉 &nbsp;Play now](https://pangrum.com/)
 
-Make sure to install dependencies:
+## Features
+
+- 🏔️ Built on [Nuxt](https://nuxt.com/) and ⚗️ [Nitro](https://nuxt.com/docs/guide/concepts/server-engine#server-engine)
+- 🇺🇸🇬🇧🇩🇪🇳🇱🇫🇷🇪🇸 Play in multiple languages
+- 📲 Use offline (+ install as a PWA) with [`@vite-pwa/nuxt`](https://github.com/vite-pwa/nuxt/)
+- 🌒 Light and dark mode with [`@nuxtjs/color-mode`](https://color-mode.nuxtjs.org/)
+- 🏆 Social sharing of your results!
+- 💾 [Upstash](https://upstash.com/) KV for persistent data
+- ▲ Hosted on [Vercel](https://vercel.com/)
+
+## 🚧 Roadmap
+
+- [ ] Streak tracking
+- [ ] Cross-device progress sync
+- [ ] Keyboard shortcuts
+- [ ] Internationalisation
+
+## Try it out locally
+
+### Setup
 
 ```bash
-# npm
-npm install
-
-# pnpm
+# install dependencies
+corepack enable
 pnpm install
 
-# yarn
-yarn install
-
-# bun
-bun install
-```
-
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
-npm run dev
-
-# pnpm
+# serve in dev mode, with hot reload at localhost:3000
 pnpm dev
 
-# yarn
-yarn dev
-
-# bun
-bun run dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
+# build for production
 pnpm build
 
-# yarn
-yarn build
-
-# bun
-bun run build
+# preview in production mode
+pnpm preview
 ```
 
-Locally preview production build:
+### Testing
 
 ```bash
-# npm
-npm run preview
+# run all tests
+pnpm test
 
-# pnpm
-pnpm preview
+# run tests in watch mode
+pnpm test:watch
 
-# yarn
-yarn preview
-
-# bun
-bun run preview
+# run e2e tests
+pnpm test:e2e
 ```
 
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+## License
+
+Made with ❤️
+
+Published under [MIT License](./LICENSE).
