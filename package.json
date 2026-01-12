@@ -16,7 +16,8 @@
     "test:unit": "vitest --project unit",
     "test:nuxt": "vitest --project nuxt",
     "test:e2e": "playwright test",
-    "test:e2e:ui": "playwright test --ui"
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:update": "docker run --rm --network host -v $(pwd):/work/ -v /tmp/playwright-node-modules:/work/node_modules -w /work/ -it mcr.microsoft.com/playwright:v1.57.0-noble bash -c 'corepack enable && pnpm i && pnpm playwright test tests --update-snapshots'"
   },
   "dependencies": {
     "@nuxt/eslint": "1.12.1",
@@ -28,9 +29,9 @@
     "@vercel/kv": "^3.0.0",
     "@vite-pwa/nuxt": "1.1.0",
     "@vueuse/nuxt": "14.1.0",
-    "hunspell-native": "^1.0.1",
     "language-packages": "^1.0.1",
     "nuxt": "^4.2.2",
+    "nuxt-og-image": "^5.1.13",
     "ohash": "^2.0.11",
     "unocss": "^66.5.11",
     "vue": "^3.5.26",

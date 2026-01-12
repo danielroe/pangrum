@@ -10,6 +10,8 @@ const isOnline = useOnline()
 const { hintsEnabled } = useHints()
 const { showTutorial, checkFirstVisit } = useTutorial()
 
+defineOgImageComponent('Default')
+
 const todayDate = computed(() => new Date().toISOString().slice(0, 10))
 const isViewingToday = computed(() => selectedDate.value === todayDate.value)
 
