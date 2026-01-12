@@ -13,6 +13,7 @@ export default defineNuxtConfig({
     '@nuxt/eslint',
     '@vite-pwa/nuxt',
     '@nuxtjs/color-mode',
+    '@nuxt/test-utils',
   ],
   $development: {
     nitro: {
@@ -21,6 +22,23 @@ export default defineNuxtConfig({
           driver: 'fsLite',
           base: '.nuxt/words',
         },
+      },
+    },
+  },
+  $production: {
+    nitro: {
+      storage: {
+        words: {
+          driver: 'vercel-kv',
+        },
+      },
+    },
+  },
+  $test: {
+    pwa: {
+      disable: true,
+      pwaAssets: {
+        disabled: true,
       },
     },
   },
@@ -43,13 +61,6 @@ export default defineNuxtConfig({
     '/': { prerender: true },
   },
   compatibilityDate: '2025-07-15',
-  nitro: {
-    storage: {
-      words: {
-        driver: 'vercel-kv',
-      },
-    },
-  },
   eslint: {
     config: {
       stylistic: true,
