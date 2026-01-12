@@ -65,5 +65,8 @@ jobs:
       - name: 📦 Install dependencies
         run: pnpm install
 
+      - name: 🚨 Install Playwright browsers
+        run: pnpm playwright install
+
       - name: 🖥️ Test project (browser)
         run: pnpm test:e2e

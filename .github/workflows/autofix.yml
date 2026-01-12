@@ -24,7 +24,7 @@ jobs:
       - name: 📦 Install dependencies
         run: pnpm install
 
-      - name: 📦 Install browsers
+      - name: 🚨 Install Playwright browsers
         run: pnpm playwright install
 
       - name: 🔠 Fix lint errors
