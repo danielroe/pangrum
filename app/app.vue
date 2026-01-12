@@ -76,23 +76,23 @@ const shareData = computed(() => scoreRef.value?.getShareData())
   <NuxtPwaAssets />
   <TheToast />
   <ParticleCanvas />
-  <div class="app-container">
-    <div class="app-content">
-      <header class="app-header">
-        <h1 class="brand">
+  <div class="h-100dvh overflow-hidden">
+    <div class="flex flex-col h-full gap-3 p-3 text-on-surface md:gap-6 p-8">
+      <header class="flex items-start justify-between gap-4 flex-shrink-0">
+        <h1 class="text-sm font-normal tracking-[0.15em] lowercase opacity-40 mx-0 mb-0 mt-1 transition-opacity transition-duration-0.2s md:text-2xl md:font-semibold md:opacity-100 md:tracking-widest hover:opacity-100">
           pangrum
           <span
             v-if="!isOnline"
-            class="offline-badge"
+            class="text-xs opacity-60 ml-2"
           >
             offline
           </span>
         </h1>
-        <div class="header-controls">
+        <div class="flex gap-2 items-center flex-shrink-0">
           <ClientOnly>
             <DatePicker v-model="selectedDate" />
             <template #fallback>
-              <div class="date-picker-fallback" />
+              <div class="w-9 h-9 bg-surface-elevated border-1 border-solid border-muted rounded-lg md:w-24 md:h-7" />
             </template>
           </ClientOnly>
           <TutorialButton />
@@ -105,16 +105,16 @@ const shareData = computed(() => scoreRef.value?.getShareData())
 
       <main
         v-if="data"
-        class="game-area"
+        class="flex flex-col flex-1 min-h-0 gap-4 md:gap-6"
       >
-        <div class="game-controls">
+        <div class="flex flex-col-reverse gap-8 flex-shrink-0 md:flex-row md:items-end md:gap-12">
           <LetterGrid
             :letters="letters"
             :centre-letter="centreLetter"
           />
           <TheScore
             ref="score"
-            class="score-section"
+            class="flex-grow-1"
             :words="words"
             :valid-words="validWords"
             :total-pangrams="totalPangrams"
@@ -130,10 +130,10 @@ const shareData = computed(() => scoreRef.value?.getShareData())
           :letters="letters"
           :centre-letter="centreLetter"
           :valid-words="validWords"
-          class="word-input-section"
+          class="flex-shrink-0"
         />
 
-        <section class="words-section">
+        <section class="flex-1 min-h-0 overflow-y-auto px-0 py-2 md:pb-0 words-section">
           <WordHints
             v-if="hintsEnabled"
             :pairs="pairs"
@@ -276,141 +276,12 @@ input, textarea {
   -webkit-user-select: text;
   user-select: text;
 }
+</style>
 
-/* App Layout */
-.app-container {
-  height: 100dvh;
-  overflow: hidden;
-}
-
-.app-content {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  gap: 0.75rem;
-  padding: 0.75rem;
-  color: var(--color-on-surface);
-}
-
-@media (min-width: 640px) {
-  .app-content {
-    gap: 1.5rem;
-    padding: 2rem;
-  }
-}
-
-/* Header */
-.app-header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 1rem;
-  flex-shrink: 0;
-}
-
-.brand {
-  font-size: 0.875rem;
-  font-weight: 400;
-  letter-spacing: 0.15em;
-  text-transform: lowercase;
-  opacity: 0.4;
-  margin: 0;
-  margin-top: 0.25rem;
-  transition: opacity 0.2s ease;
-}
-
-@media (min-width: 640px) {
-  .brand {
-    font-size: 1.5rem;
-    font-weight: 600;
-    opacity: 1;
-    letter-spacing: 0.1em;
-  }
-}
-
-.brand:hover {
-  opacity: 1;
-}
-
-.offline-badge {
-  font-size: 0.75rem;
-  opacity: 0.6;
-  margin-left: 0.5rem;
-}
-
-.header-controls {
-  display: flex;
-  gap: 0.5rem;
-  align-items: center;
-  flex-shrink: 0;
-}
-
-.date-picker-fallback {
-  width: 2.25rem;
-  height: 2.25rem;
-  background: var(--color-surface-elevated);
-  border: 1px solid var(--color-muted);
-  border-radius: 0.5rem;
-}
-
-@media (min-width: 640px) {
-  .date-picker-fallback {
-    width: 6rem;
-    height: 1.75rem;
-  }
-}
-
-/* Game Area */
-.game-area {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  min-height: 0;
-  gap: 1rem;
-}
-
-@media (min-width: 640px) {
-  .game-area {
-    gap: 1.5rem;
-  }
-}
-
-.game-controls {
-  display: flex;
-  flex-direction: column-reverse;
-  gap: 2rem;
-  flex-shrink: 0;
-}
-
-@media (min-width: 640px) {
-  .game-controls {
-    flex-direction: row;
-    align-items: flex-end;
-    gap: 3rem;
-  }
-}
-
-.score-section {
-  flex-grow: 1;
-}
-
-.word-input-section {
-  flex-shrink: 0;
-}
-
+<style scoped>
 .words-section {
-  flex: 1;
-  min-height: 0;
-  overflow-y: auto;
-  padding: 0 0.5rem;
-  /* Add bottom padding on mobile for safe area */
+  /* flex-1 min-h-0 overflow-y-auto px-0 py-2 md:pb-0 */
   padding-bottom: env(safe-area-inset-bottom, 1rem);
-}
-
-@media (min-width: 640px) {
-  .words-section {
-    padding-bottom: 0;
-  }
 }
 
 /* Reduced motion preferences */

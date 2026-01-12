@@ -114,7 +114,7 @@ const statusMessage = computed(() => {
 <template>
   <dialog
     ref="dialog"
-    class="dialog-modal bg-surface border-2 border-solid border-muted w-full sm:w-auto sm:min-w-96 sm:max-w-lg max-h-[90vh] sm:max-h-[80vh] flex flex-col overflow-hidden p-0"
+    class="dialog-modal fixed m-0 max-w-full bg-surface border-2 border-solid border-muted w-full sm:w-auto sm:min-w-96 sm:max-w-lg max-h-[90vh] sm:max-h-[80vh] flex flex-col overflow-hidden p-0"
     @close="emit('close')"
     @click="handleClick"
   >
@@ -287,16 +287,12 @@ const statusMessage = computed(() => {
 </template>
 
 <style scoped>
-/* Dialog positioning - can't be done with inline classes */
 .dialog-modal::backdrop {
   background-color: rgba(0, 0, 0, 0.5);
 }
 
 .dialog-modal {
-  position: fixed;
   inset: auto 0 0 0;
-  margin: 0;
-  max-width: 100%;
 }
 
 @media (min-width: 640px) {

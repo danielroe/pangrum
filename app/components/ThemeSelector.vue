@@ -61,7 +61,7 @@ function handleChange(event: Event) {
     <div class="relative hidden sm:inline-block">
       <select
         :value="colorMode.preference"
-        class="theme-select px-3 py-1 text-sm font-mono border-1 border-solid appearance-none pr-8 cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 text-on-surface border-muted bg-surface hover:bg-surface-hover transition-colors"
+        class="theme-select bg-none px-3 py-1 text-sm border-1 border-solid appearance-none pr-8 cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 text-on-surface border-muted bg-surface hover:bg-surface-hover transition-colors"
         aria-label="Select theme"
         @change="handleChange"
       >
@@ -85,10 +85,6 @@ function handleChange(event: Event) {
 </template>
 
 <style scoped>
-.theme-select {
-  background-image: none;
-}
-
 .theme-select::-ms-expand {
   display: none;
 }

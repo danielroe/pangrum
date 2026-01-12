@@ -17,9 +17,9 @@ const toasts = useToasts()
         class="toast px-6 py-4 rounded-full text-xl font-medium border-1.5 border-solid backdrop-blur-lg transition-all duration-200"
         :class="{
           'toast-celebration': toasts[0].type === 'celebration',
-          'toast-error': toasts[0].type === 'error',
-          'toast-success': toasts[0].type === 'success',
-          'toast-info': !toasts[0].type || toasts[0].type === 'info',
+          'toast-error border-error text-error': toasts[0].type === 'error',
+          'toast-success border-success text-success': toasts[0].type === 'success',
+          'toast-info border-muted-foreground text-on-surface': !toasts[0].type || toasts[0].type === 'info',
         }"
       >
         {{ toasts[0].message }}
@@ -31,21 +31,15 @@ const toasts = useToasts()
 <style scoped>
 .toast-info {
   background: rgba(26, 26, 26, 0.8);
-  border-color: var(--color-muted-foreground);
-  color: var(--color-on-surface);
 }
 
 .toast-success {
   background: rgba(34, 197, 94, 0.15);
-  border-color: var(--color-success);
-  color: var(--color-success);
   box-shadow: 0 0 20px rgba(34, 197, 94, 0.2);
 }
 
 .toast-error {
   background: rgba(244, 63, 94, 0.15);
-  border-color: var(--color-error);
-  color: var(--color-error);
   box-shadow: 0 0 20px rgba(244, 63, 94, 0.2);
 }
 

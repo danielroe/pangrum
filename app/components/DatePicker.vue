@@ -312,7 +312,3 @@ onKeyStroke('Escape', close)
     </Transition>
   </div>
 </template>
-
-<style scoped>
-/* Styles moved to utility classes */
-</style>

@@ -55,7 +55,7 @@ function handleRefresh() {
 <template>
   <dialog
     ref="dialog"
-    class="bg-surface border-2 border-solid border-muted w-full sm:w-auto sm:min-w-96 sm:max-w-md max-h-[80vh] sm:max-h-[70vh] flex flex-col overflow-hidden p-0"
+    class="fixed m-0 max-w-full bg-surface border-2 border-solid border-muted w-full sm:w-auto sm:min-w-96 sm:max-w-md max-h-[80vh] sm:max-h-[70vh] flex flex-col overflow-hidden p-0"
     @close="emit('close')"
     @click="handleClick"
   >
@@ -104,10 +104,7 @@ dialog::backdrop {
 }
 
 dialog {
-  position: fixed;
   inset: auto 0 0 0;
-  margin: 0;
-  max-width: 100%;
 }
 
 @media (min-width: 640px) {

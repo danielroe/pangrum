@@ -68,7 +68,7 @@ onKeyStroke('Escape', handleSkip)
 <template>
   <dialog
     ref="dialog"
-    class="tutorial-modal bg-surface border-2 border-solid border-muted w-full sm:w-auto sm:min-w-md sm:max-w-lg max-h-[90vh] sm:max-h-[80vh] flex flex-col overflow-hidden p-0"
+    class="tutorial-modal fixed m-0 max-w-full bg-surface border-2 border-solid border-muted w-full sm:w-auto sm:min-w-md sm:max-w-lg max-h-[90vh] sm:max-h-[80vh] flex flex-col overflow-hidden p-0"
     @close="handleDialogClose"
     @click="handleClick"
   >
@@ -244,10 +244,7 @@ onKeyStroke('Escape', handleSkip)
 }
 
 .tutorial-modal {
-  position: fixed;
   inset: auto 0 0 0;
-  margin: 0;
-  max-width: 100%;
 }
 
 @media (min-width: 640px) {

@@ -194,16 +194,4 @@ function addWord() {
 .submit-button:hover {
   box-shadow: 0 4px 12px var(--color-primary-glow);
 }
-
-.text-letter-centre {
-  color: var(--color-letter-centre);
-}
-
-.text-letter-valid {
-  color: var(--color-letter-valid);
-}
-
-.text-letter-invalid {
-  color: var(--color-letter-invalid);
-}
 </style>

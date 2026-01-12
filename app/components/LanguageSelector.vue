@@ -52,7 +52,7 @@ function handleChange(event: Event) {
     <div class="relative hidden sm:inline-block">
       <select
         :value="language"
-        class="language-select text-on-surface px-3 py-1 text-sm font-mono border-1 border-solid border-muted bg-surface hover:bg-surface-hover transition-colors appearance-none pr-8 cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50"
+        class="language-select bg-none text-on-surface px-3 py-1 text-sm border-1 border-solid border-muted bg-surface hover:bg-surface-hover transition-colors appearance-none pr-8 cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50"
         aria-label="Select language"
         @change="handleChange"
       >
@@ -76,10 +76,6 @@ function handleChange(event: Event) {
 </template>
 
 <style scoped>
-.language-select {
-  background-image: none;
-}
-
 .language-select::-ms-expand {
   display: none;
 }
