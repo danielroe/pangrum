@@ -8,10 +8,7 @@ declare let self: ServiceWorkerGlobalScope
 self.skipWaiting()
 clientsClaim()
 
-// Clean up old caches
 cleanupOutdatedCaches()
-
-// Precache all assets
 precacheAndRoute(self.__WB_MANIFEST)
 
 registerRoute(
