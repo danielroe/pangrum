@@ -68,11 +68,11 @@ onKeyStroke('Escape', handleSkip)
 <template>
   <dialog
     ref="dialog"
-    class="tutorial-modal fixed m-0 max-w-full bg-surface border-2 border-solid border-muted w-full sm:w-auto sm:min-w-md sm:max-w-lg max-h-[90vh] sm:max-h-[80vh] flex flex-col overflow-hidden p-0"
+    class="tutorial-modal fixed m-0 max-w-full bg-surface rounded-lg border-1 border-solid border-muted w-full sm:w-auto sm:min-w-md sm:max-w-lg max-h-[90vh] sm:max-h-[80vh] flex flex-col overflow-hidden p-0"
     @close="handleDialogClose"
     @click="handleClick"
   >
-    <div class="flex justify-between items-center p-4 border-b-2 border-solid border-muted">
+    <div class="flex justify-between items-center p-4 border-b-1 border-solid border-muted">
       <div class="flex items-center gap-3">
         <span class="text-primary font-mono text-sm">
           {{ currentStep + 1 }}/{{ totalSteps }}
@@ -83,7 +83,7 @@ onKeyStroke('Escape', handleSkip)
       </div>
       <button
         type="button"
-        class="text-muted-foreground text-sm font-mono border-0 bg-transparent cursor-pointer p-2 -m-2 hover:text-on-surface transition-colors duration-150"
+        class="px-3 py-1 text-sm font-mono rounded-lg border-1 border-solid border-transparent bg-transparent text-muted-foreground cursor-pointer hover:bg-surface-hover hover:text-on-surface transition-colors focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
         @click="handleSkip"
       >
         Skip
@@ -159,11 +159,11 @@ onKeyStroke('Escape', handleSkip)
       </p>
     </div>
 
-    <div class="p-4 border-t-2 border-solid border-muted flex gap-3">
+    <div class="p-4 border-t-1 border-solid border-muted flex gap-3">
       <button
         v-if="!isFirstStep"
         type="button"
-        class="px-4 py-3 font-mono text-sm border-2 border-solid border-muted bg-surface-elevated text-on-surface cursor-pointer transition-colors duration-150 hover:bg-surface-hover flex items-center gap-2"
+        class="px-4 py-3 font-mono text-sm rounded-lg border-1 border-solid border-muted bg-surface text-on-surface cursor-pointer transition-colors hover:bg-surface-hover flex items-center gap-2 focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
         @click="handlePrevious"
       >
         <span
@@ -174,7 +174,7 @@ onKeyStroke('Escape', handleSkip)
       </button>
       <button
         type="button"
-        class="flex-1 px-4 py-3 font-mono text-sm border-2 border-solid border-primary bg-primary text-surface cursor-pointer transition-colors duration-150 hover:bg-primary-hover flex items-center justify-center gap-2"
+        class="flex-1 px-4 py-3 font-mono text-sm rounded-lg border-1 border-solid border-primary bg-primary text-surface cursor-pointer transition-colors hover:bg-primary-hover flex items-center justify-center gap-2 focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
         @click="handleNext"
       >
         {{ isLastStep ? 'Start Playing' : 'Next' }}

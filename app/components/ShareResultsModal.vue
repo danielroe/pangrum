@@ -114,16 +114,18 @@ const statusMessage = computed(() => {
 <template>
   <dialog
     ref="dialog"
-    class="dialog-modal fixed m-0 max-w-full bg-surface border-2 border-solid border-muted w-full sm:w-auto sm:min-w-96 sm:max-w-lg max-h-[90vh] sm:max-h-[80vh] flex flex-col overflow-hidden p-0"
+    class="dialog-modal fixed m-0 max-w-full bg-surface rounded-lg border-1 border-solid border-muted w-full sm:w-auto sm:min-w-96 sm:max-w-lg max-h-[90vh] sm:max-h-[80vh] flex flex-col overflow-hidden p-0"
     @close="emit('close')"
     @click="handleClick"
   >
-    <div class="flex justify-between items-center p-4 border-b-2 border-solid border-muted">
+    <div class="flex justify-between items-center p-4 border-b-1 border-solid border-muted">
       <h3 class="text-on-surface font-mono font-bold text-lg m-0">
         Share Results
       </h3>
       <button
-        class="text-on-surface text-2xl leading-none border-0 bg-transparent cursor-pointer p-2 -m-2 hover:opacity-70 transition-opacity duration-150"
+        type="button"
+        class="w-8 h-8 flex items-center justify-center text-on-surface text-xl leading-none rounded-lg border-1 border-solid border-transparent bg-transparent cursor-pointer hover:bg-surface-hover transition-colors focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
+        aria-label="Close"
         @click="emit('close')"
       >
         ×
@@ -181,7 +183,7 @@ const statusMessage = computed(() => {
         <button
           v-if="isShareSupported"
           type="button"
-          class="w-full px-4 py-3 font-mono text-sm border-2 border-solid border-primary bg-primary text-dark cursor-pointer transition-all duration-150 hover:bg-primary-hover disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+          class="w-full px-4 py-3 font-mono text-sm rounded-lg border-1 border-solid border-primary bg-primary text-dark cursor-pointer transition-colors hover:bg-primary-hover disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
           :disabled="shareStatus === 'sharing'"
           @click="handleShare"
         >
@@ -196,7 +198,7 @@ const statusMessage = computed(() => {
           <!-- Copy Image button (primary action on desktop) -->
           <button
             type="button"
-            class="flex-1 px-4 py-3 font-mono text-sm border-2 border-solid border-muted bg-surface-elevated text-on-surface cursor-pointer transition-all duration-150 hover:bg-surface-hover disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            class="flex-1 px-4 py-3 font-mono text-sm rounded-lg border-1 border-solid border-muted bg-surface text-on-surface cursor-pointer transition-colors hover:bg-surface-hover disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
             :disabled="shareStatus === 'sharing'"
             @click="handleCopyImage"
           >
@@ -210,7 +212,7 @@ const statusMessage = computed(() => {
           <!-- Copy Text button -->
           <button
             type="button"
-            class="flex-1 px-4 py-3 font-mono text-sm border-2 border-solid border-muted bg-surface-elevated text-on-surface cursor-pointer transition-all duration-150 hover:bg-surface-hover disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            class="flex-1 px-4 py-3 font-mono text-sm rounded-lg border-1 border-solid border-muted bg-surface text-on-surface cursor-pointer transition-colors hover:bg-surface-hover disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
             :disabled="shareStatus === 'sharing'"
             @click="handleCopyText"
           >

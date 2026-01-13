@@ -49,7 +49,7 @@ function handleTimeChange(event: Event) {
           </div>
           <button
             type="button"
-            class="flex items-center justify-between gap-3 w-full px-3 py-2 text-sm text-on-surface border-1 border-solid border-muted bg-surface hover:bg-surface-hover transition-colors"
+            class="flex items-center justify-between gap-3 w-full px-3 py-2 text-sm rounded-lg text-on-surface border-1 border-solid border-muted bg-surface hover:bg-surface-hover transition-colors focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
             @click="toggleNotifications"
           >
             <span>{{ isEnabled ? 'Enabled' : 'Disabled' }}</span>
@@ -67,7 +67,7 @@ function handleTimeChange(event: Event) {
             <input
               type="time"
               :value="settings.time"
-              class="px-3 py-2 text-sm font-mono border-1 border-solid border-muted bg-surface text-on-surface focus:outline-none focus:ring-2 focus:ring-primary"
+              class="px-3 py-2 text-sm font-mono rounded-lg border-1 border-solid border-muted bg-surface text-on-surface focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
               aria-label="Reminder time"
               @change="handleTimeChange"
             >
@@ -87,8 +87,8 @@ function handleTimeChange(event: Event) {
     >
       <button
         type="button"
-        class="flex items-center gap-2 px-3 py-1 text-sm border-1 border-solid border-muted bg-surface hover:bg-surface-hover transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50"
-        :class="{ 'border-r-0': isEnabled }"
+        class="flex items-center gap-2 px-3 py-1 text-sm rounded-l-lg border-1 border-solid border-muted bg-surface hover:bg-surface-hover transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
+        :class="[isEnabled ? 'border-r-0' : 'rounded-r-lg']"
         :aria-pressed="isEnabled"
         @click="toggleNotifications"
       >
@@ -103,13 +103,13 @@ function handleTimeChange(event: Event) {
         v-if="isEnabled"
         type="time"
         :value="settings.time"
-        class="px-2 py-1 text-sm font-mono border-1 border-solid border-muted bg-surface text-on-surface focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50"
+        class="px-2 py-1 text-sm font-mono rounded-r-lg border-1 border-solid border-muted bg-surface text-on-surface focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
         aria-label="Reminder time"
         @change="handleTimeChange"
       >
     </div>
     <template #fallback>
-      <div class="hidden sm:block w-32 h-7 bg-surface border-1 border-solid border-muted" />
+      <div class="hidden sm:block w-32 h-7 rounded-lg bg-surface border-1 border-solid border-muted" />
     </template>
   </ClientOnly>
 </template>

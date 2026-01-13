@@ -134,7 +134,7 @@ onKeyStroke('Escape', close)
     <button
       ref="trigger"
       type="button"
-      class="trigger-btn flex sm:hidden items-center justify-center w-9 h-9 rounded-lg bg-surface-elevated border-1 border-solid text-on-surface cursor-pointer transition-all duration-150 hover:bg-surface-hover focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
+      class="trigger-btn flex sm:hidden items-center justify-center w-9 h-9 rounded-lg bg-surface border-1 border-solid text-on-surface cursor-pointer transition-colors hover:bg-surface-hover focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
       :class="isToday ? 'border-muted' : 'border-primary-border'"
       aria-label="Select puzzle date"
       :aria-expanded="isOpen"
@@ -148,7 +148,7 @@ onKeyStroke('Escape', close)
 
     <button
       type="button"
-      class="trigger-btn hidden sm:flex items-center justify-center gap-2 px-3 py-1.5 text-sm rounded-lg bg-surface-elevated border-1 border-solid text-on-surface cursor-pointer transition-all duration-150 hover:bg-surface-hover focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
+      class="trigger-btn hidden sm:flex items-center justify-center gap-2 px-3 py-1 text-sm rounded-lg bg-surface border-1 border-solid text-on-surface cursor-pointer transition-colors hover:bg-surface-hover focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
       :class="isToday ? 'border-muted' : 'border-primary-border'"
       aria-label="Select puzzle date"
       :aria-expanded="isOpen"
@@ -177,7 +177,7 @@ onKeyStroke('Escape', close)
         <div class="flex items-center justify-between mb-3">
           <button
             type="button"
-            class="w-8 h-8 flex items-center justify-center bg-transparent border-1 border-solid border-muted rounded-md text-on-surface cursor-pointer transition-colors duration-150 hover:bg-surface-hover disabled:opacity-30 disabled:cursor-not-allowed"
+            class="w-8 h-8 flex items-center justify-center bg-surface border-1 border-solid border-muted rounded-lg text-on-surface cursor-pointer transition-colors hover:bg-surface-hover disabled:opacity-30 disabled:cursor-not-allowed focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
             aria-label="Previous month"
             :disabled="viewYear <= 2026 && viewMonth <= 0"
             @click="prevMonth"
@@ -190,7 +190,7 @@ onKeyStroke('Escape', close)
           <span class="text-sm font-medium text-on-surface">{{ monthName }}</span>
           <button
             type="button"
-            class="w-8 h-8 flex items-center justify-center bg-transparent border-1 border-solid border-muted rounded-md text-on-surface cursor-pointer transition-colors duration-150 hover:bg-surface-hover disabled:opacity-30 disabled:cursor-not-allowed"
+            class="w-8 h-8 flex items-center justify-center bg-surface border-1 border-solid border-muted rounded-lg text-on-surface cursor-pointer transition-colors hover:bg-surface-hover disabled:opacity-30 disabled:cursor-not-allowed focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
             aria-label="Next month"
             :disabled="viewYear >= new Date(today).getFullYear() && viewMonth >= new Date(today).getMonth()"
             @click="nextMonth"
@@ -217,7 +217,7 @@ onKeyStroke('Escape', close)
             v-for="day in calendarDays"
             :key="day.date"
             type="button"
-            class="day-button aspect-square flex items-center justify-center text-sm bg-transparent border-1 border-solid border-transparent rounded-md cursor-pointer transition-all duration-150"
+            class="day-button aspect-square flex items-center justify-center text-sm bg-transparent border-1 border-solid border-transparent rounded-lg cursor-pointer transition-colors focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-1"
             :class="{
               'bg-primary text-primary font-semibold border-primary': day.isSelected,
               'bg-primary-subtle text-on-surface border-primary-border font-semibold': day.isToday && !day.isSelected,
@@ -235,7 +235,7 @@ onKeyStroke('Escape', close)
         <button
           v-if="!isToday"
           type="button"
-          class="mt-3 w-full p-2 text-sm bg-primary-subtle border-1 border-solid border-primary-border rounded-lg text-on-surface cursor-pointer transition-colors duration-150 hover:bg-primary-muted"
+          class="mt-3 w-full p-2 text-sm bg-primary-subtle border-1 border-solid border-primary-border rounded-lg text-on-surface cursor-pointer transition-colors hover:bg-primary-muted focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
           @click="goToToday"
         >
           Back to today

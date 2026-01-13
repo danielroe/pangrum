@@ -78,7 +78,7 @@ defineExpose({
 
 <template>
   <div class="flex flex-col gap-4">
-    <div class="flex flex-wrap items-baseline gap-2 tabular-nums overflow-hidden">
+    <div class="flex flex-wrap items-baseline gap-2 tabular-nums">
       <span class="score-value font-mono text-4xl font-bold leading-none">
         {{ score }}
       </span>
@@ -110,7 +110,7 @@ defineExpose({
       <button
         v-if="words.size > 0"
         type="button"
-        class="share-btn flex items-center justify-center w-8 h-8 rounded-lg bg-transparent border-1 border-solid border-muted text-muted-foreground cursor-pointer transition-all duration-150 hover:bg-surface-hover hover:text-on-surface hover:border-primary focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
+        class="share-btn flex items-center justify-center w-8 h-8 rounded-lg bg-surface border-1 border-solid border-muted text-muted-foreground cursor-pointer transition-colors hover:bg-surface-hover hover:text-on-surface focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
         :class="{ 'ml-auto': totalPangrams === 0 }"
         aria-label="Share results"
         @click="emit('share')"

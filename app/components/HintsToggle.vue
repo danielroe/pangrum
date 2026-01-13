@@ -23,7 +23,7 @@ const label = computed(() => hintsEnabled.value ? 'Hints on' : 'Hints off')
           </div>
           <button
             type="button"
-            class="flex items-center gap-2 w-full px-3 py-2 text-sm text-left border-1 border-solid transition-colors"
+            class="flex items-center gap-2 w-full px-3 py-2 text-sm text-left rounded-lg border-1 border-solid transition-colors"
             :class="!hintsEnabled
               ? 'bg-primary-subtle border-primary-border text-on-surface'
               : 'bg-surface border-muted hover:bg-surface-hover text-on-surface'"
@@ -33,7 +33,7 @@ const label = computed(() => hintsEnabled.value ? 'Hints on' : 'Hints off')
           </button>
           <button
             type="button"
-            class="flex items-center gap-2 w-full px-3 py-2 text-sm text-left border-1 border-solid transition-colors"
+            class="flex items-center gap-2 w-full px-3 py-2 text-sm text-left rounded-lg border-1 border-solid transition-colors"
             :class="hintsEnabled
               ? 'bg-primary-subtle border-primary-border text-on-surface'
               : 'bg-surface border-muted hover:bg-surface-hover text-on-surface'"
@@ -45,14 +45,14 @@ const label = computed(() => hintsEnabled.value ? 'Hints on' : 'Hints off')
       </template>
     </SettingsPopover>
     <template #fallback>
-      <div class="w-9 h-9 sm:hidden border-1 border-solid border-muted bg-surface" />
+      <div class="w-9 h-9 sm:hidden rounded-lg border-1 border-solid border-muted bg-surface" />
     </template>
   </ClientOnly>
 
   <ClientOnly>
     <button
       type="button"
-      class="hidden sm:flex items-center gap-2 px-3 py-1 text-sm border-1 border-solid border-muted bg-surface hover:bg-surface-hover transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50"
+      class="hidden sm:flex items-center gap-2 px-3 py-1 text-sm rounded-lg border-1 border-solid border-muted bg-surface hover:bg-surface-hover transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
       :aria-pressed="hintsEnabled"
       @click="toggleHints"
     >
@@ -63,7 +63,7 @@ const label = computed(() => hintsEnabled.value ? 'Hints on' : 'Hints off')
       <span class="text-on-surface">{{ label }}</span>
     </button>
     <template #fallback>
-      <div class="hidden sm:block w-24 h-7 bg-surface border-1 border-solid border-muted" />
+      <div class="hidden sm:block w-24 h-7 rounded-lg bg-surface border-1 border-solid border-muted" />
     </template>
   </ClientOnly>
 </template>

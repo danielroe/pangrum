@@ -94,7 +94,7 @@ const shareData = computed(() => scoreRef.value?.getShareData())
           <ClientOnly>
             <DatePicker v-model="selectedDate" />
             <template #fallback>
-              <div class="w-9 h-9 bg-surface-elevated border-1 border-solid border-muted rounded-lg md:w-24 md:h-7" />
+              <div class="w-9 h-9 bg-surface border-1 border-solid border-muted rounded-lg sm:w-24 sm:h-7" />
             </template>
           </ClientOnly>
           <TutorialButton />

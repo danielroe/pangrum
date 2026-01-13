@@ -101,7 +101,7 @@ const letterPositions = [
         </button>
       </div>
       <button
-        class="hidden sm:flex items-center gap-2 px-4 py-2 bg-transparent text-muted-foreground border-1.5 border-solid border-muted rounded-lg cursor-pointer transition-colors duration-150 hover:bg-muted hover:border-muted-foreground hover:text-on-surface active:bg-surface-active active:scale-95 focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
+        class="hidden sm:flex items-center gap-2 px-4 py-2 bg-surface text-muted-foreground border-1 border-solid border-muted rounded-lg cursor-pointer transition-colors hover:bg-surface-hover hover:text-on-surface active:bg-surface-active focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
         @click="shuffleLetters"
       >
         <span
@@ -114,7 +114,7 @@ const letterPositions = [
 
     <div class="flex flex-col gap-2 flex-grow items-center sm:hidden">
       <button
-        class="w-11 h-11 flex items-center justify-center bg-transparent text-muted-foreground border-1.5 border-solid border-muted rounded-lg cursor-pointer transition-colors duration-150 hover:bg-muted hover:border-muted-foreground hover:text-on-surface active:bg-surface-active active:scale-95 focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
+        class="w-11 h-11 flex items-center justify-center bg-surface text-muted-foreground border-1 border-solid border-muted rounded-lg cursor-pointer transition-colors hover:bg-surface-hover hover:text-on-surface active:bg-surface-active focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
         style="-webkit-tap-highlight-color: transparent"
         @click="shuffleLetters"
       >
@@ -125,7 +125,7 @@ const letterPositions = [
         <span class="sr-only">Shuffle letters</span>
       </button>
       <button
-        class="w-11 h-11 flex items-center justify-center bg-transparent text-muted-foreground border-1.5 border-solid border-muted rounded-lg cursor-pointer transition-colors duration-150 hover:bg-muted hover:border-muted-foreground hover:text-on-surface active:bg-surface-active active:scale-95 focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
+        class="w-11 h-11 flex items-center justify-center bg-surface text-muted-foreground border-1 border-solid border-muted rounded-lg cursor-pointer transition-colors hover:bg-surface-hover hover:text-on-surface active:bg-surface-active focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
         style="-webkit-tap-highlight-color: transparent"
         @click="deleteLetter"
       >
@@ -136,7 +136,7 @@ const letterPositions = [
         <span class="sr-only">Delete character</span>
       </button>
       <button
-        class="w-11 h-11 flex items-center justify-center bg-transparent text-muted-foreground border-1.5 border-solid border-muted rounded-lg cursor-pointer transition-colors duration-150 hover:bg-muted hover:border-muted-foreground hover:text-on-surface active:bg-surface-active active:scale-95 focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
+        class="w-11 h-11 flex items-center justify-center bg-surface text-muted-foreground border-1 border-solid border-muted rounded-lg cursor-pointer transition-colors hover:bg-surface-hover hover:text-on-surface active:bg-surface-active focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
         style="-webkit-tap-highlight-color: transparent"
         @click="submitWord"
       >

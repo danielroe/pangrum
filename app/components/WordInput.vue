@@ -177,7 +177,7 @@ function addWord() {
     </label>
     <button
       type="submit"
-      class="submit-button hidden sm:block py-2 px-3 text-lg bg-primary text-dark border-none rounded-lg cursor-pointer transition-all duration-150 hover:bg-primary-hover hover:shadow-lg active:scale-95 focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
+      class="submit-button hidden sm:block py-2 px-3 text-lg bg-primary text-dark border-1 border-solid border-primary rounded-lg cursor-pointer transition-colors hover:bg-primary-hover focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
       aria-label="Submit word"
     >
       <span aria-hidden="true">⏎</span>

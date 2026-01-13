@@ -32,7 +32,7 @@ function handleChange(event: Event) {
             v-for="(label, lang) in SUPPORTED_LANGUAGES"
             :key="lang"
             type="button"
-            class="flex items-center gap-2 w-full px-3 py-2 text-sm text-left border-1 border-solid transition-colors"
+            class="flex items-center gap-2 w-full px-3 py-2 text-sm text-left rounded-lg border-1 border-solid transition-colors"
             :class="language === lang
               ? 'bg-primary-subtle border-primary-border text-on-surface'
               : 'bg-surface border-muted hover:bg-surface-hover text-on-surface'"
@@ -44,7 +44,7 @@ function handleChange(event: Event) {
       </template>
     </SettingsPopover>
     <template #fallback>
-      <div class="w-9 h-9 sm:hidden border-1 border-solid border-muted bg-surface" />
+      <div class="w-9 h-9 sm:hidden rounded-lg border-1 border-solid border-muted bg-surface" />
     </template>
   </ClientOnly>
 
@@ -52,7 +52,7 @@ function handleChange(event: Event) {
     <div class="relative hidden sm:inline-block">
       <select
         :value="language"
-        class="language-select bg-none text-on-surface px-3 py-1 text-sm border-1 border-solid border-muted bg-surface hover:bg-surface-hover transition-colors appearance-none pr-8 cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50"
+        class="language-select bg-none text-on-surface px-3 py-1 text-sm rounded-lg border-1 border-solid border-muted bg-surface hover:bg-surface-hover transition-colors appearance-none pr-8 cursor-pointer focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
         aria-label="Select language"
         @change="handleChange"
       >
@@ -70,7 +70,7 @@ function handleChange(event: Event) {
       />
     </div>
     <template #fallback>
-      <div class="hidden sm:block w-28 h-7 bg-surface border-1 border-solid border-muted" />
+      <div class="hidden sm:block w-28 h-7 rounded-lg bg-surface border-1 border-solid border-muted" />
     </template>
   </ClientOnly>
 </template>
