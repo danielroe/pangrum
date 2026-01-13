@@ -10,7 +10,7 @@ const {
 
 const isEnabled = computed(() => settings.value.enabled && permission.value === 'granted')
 
-const icon = computed(() => isEnabled.value ? '🔔' : '🔕')
+const iconClass = computed(() => isEnabled.value ? 'i-lucide-bell' : 'i-lucide-bell-off')
 const label = computed(() => isEnabled.value ? 'Reminders on' : 'Reminders off')
 
 async function toggleNotifications() {
@@ -32,10 +32,16 @@ function handleTimeChange(event: Event) {
   <ClientOnly>
     <SettingsPopover
       v-if="isSupported"
-      :icon="icon"
       label="Notification settings"
       class="sm:hidden"
     >
+      <template #icon>
+        <span
+          :class="iconClass"
+          class="text-base"
+          aria-hidden="true"
+        />
+      </template>
       <template #default>
         <div class="flex flex-col gap-3">
           <div class="text-sm font-medium text-on-surface">
@@ -47,7 +53,11 @@ function handleTimeChange(event: Event) {
             @click="toggleNotifications"
           >
             <span>{{ isEnabled ? 'Enabled' : 'Disabled' }}</span>
-            <span class="text-lg">{{ icon }}</span>
+            <span
+              :class="iconClass"
+              class="text-lg"
+              aria-hidden="true"
+            />
           </button>
           <div
             v-if="isEnabled"
@@ -82,7 +92,11 @@ function handleTimeChange(event: Event) {
         :aria-pressed="isEnabled"
         @click="toggleNotifications"
       >
-        <span>{{ icon }}</span>
+        <span
+          :class="iconClass"
+          class="text-sm"
+          aria-hidden="true"
+        />
         <span class="text-on-surface">{{ label }}</span>
       </button>
       <input

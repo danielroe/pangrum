@@ -1,6 +1,5 @@
 <script setup lang="ts">
 defineProps<{
-  icon: string
   label: string
 }>()
 
@@ -30,9 +29,7 @@ onKeyStroke('Escape', close)
       :aria-expanded="isOpen"
       @click="toggle"
     >
-      <slot name="icon">
-        {{ icon }}
-      </slot>
+      <slot name="icon" />
     </button>
     <Transition
       enter-active-class="transition duration-150 ease-out"

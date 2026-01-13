@@ -104,38 +104,10 @@ const letterPositions = [
         class="hidden sm:flex items-center gap-2 px-4 py-2 bg-transparent text-muted-foreground border-1.5 border-solid border-muted rounded-lg cursor-pointer transition-colors duration-150 hover:bg-muted hover:border-muted-foreground hover:text-on-surface active:bg-surface-active active:scale-95 focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
         @click="shuffleLetters"
       >
-        <svg
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
+        <span
+          class="i-lucide-shuffle text-base"
           aria-hidden="true"
-        >
-          <polyline points="16 3 21 3 21 8" />
-          <line
-            x1="4"
-            y1="20"
-            x2="21"
-            y2="3"
-          />
-          <polyline points="21 16 21 21 16 21" />
-          <line
-            x1="15"
-            y1="15"
-            x2="21"
-            y2="21"
-          />
-          <line
-            x1="4"
-            y1="4"
-            x2="9"
-            y2="9"
-          />
-        </svg>
+        />
         <span class="text-sm font-mono">Shuffle</span>
       </button>
     </div>
@@ -146,38 +118,10 @@ const letterPositions = [
         style="-webkit-tap-highlight-color: transparent"
         @click="shuffleLetters"
       >
-        <svg
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
+        <span
+          class="i-lucide-shuffle text-xl"
           aria-hidden="true"
-        >
-          <polyline points="16 3 21 3 21 8" />
-          <line
-            x1="4"
-            y1="20"
-            x2="21"
-            y2="3"
-          />
-          <polyline points="21 16 21 21 16 21" />
-          <line
-            x1="15"
-            y1="15"
-            x2="21"
-            y2="21"
-          />
-          <line
-            x1="4"
-            y1="4"
-            x2="9"
-            y2="9"
-          />
-        </svg>
+        />
         <span class="sr-only">Shuffle letters</span>
       </button>
       <button
@@ -185,31 +129,10 @@ const letterPositions = [
         style="-webkit-tap-highlight-color: transparent"
         @click="deleteLetter"
       >
-        <svg
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
+        <span
+          class="i-lucide-delete text-xl"
           aria-hidden="true"
-        >
-          <path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z" />
-          <line
-            x1="18"
-            y1="9"
-            x2="12"
-            y2="15"
-          />
-          <line
-            x1="12"
-            y1="9"
-            x2="18"
-            y2="15"
-          />
-        </svg>
+        />
         <span class="sr-only">Delete character</span>
       </button>
       <button
@@ -217,20 +140,10 @@ const letterPositions = [
         style="-webkit-tap-highlight-color: transparent"
         @click="submitWord"
       >
-        <svg
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
+        <span
+          class="i-lucide-corner-down-left text-xl"
           aria-hidden="true"
-        >
-          <polyline points="9 10 4 15 9 20" />
-          <path d="M20 4v7a4 4 0 0 1-4 4H4" />
-        </svg>
+        />
         <span class="sr-only">Submit word</span>
       </button>
     </div>

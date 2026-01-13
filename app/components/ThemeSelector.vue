@@ -2,16 +2,16 @@
 const colorMode = useColorMode()
 
 const options = {
-  system: { label: 'System', icon: '⚙️' },
-  light: { label: 'Light', icon: '☀️' },
-  dark: { label: 'Dark', icon: '🌙' },
+  system: { label: 'System', iconClass: 'i-lucide-monitor' },
+  light: { label: 'Light', iconClass: 'i-lucide-sun' },
+  dark: { label: 'Dark', iconClass: 'i-lucide-moon' },
 } as const
 
 type ThemeKey = keyof typeof options
 
-const currentIcon = computed(() => {
+const currentIconClass = computed(() => {
   const pref = colorMode.preference as ThemeKey
-  return options[pref]?.icon || '⚙️'
+  return options[pref]?.iconClass || 'i-lucide-monitor'
 })
 
 function setTheme(value: string) {
@@ -27,10 +27,16 @@ function handleChange(event: Event) {
 <template>
   <ClientOnly>
     <SettingsPopover
-      :icon="currentIcon"
       label="Theme settings"
       class="sm:hidden"
     >
+      <template #icon>
+        <span
+          :class="currentIconClass"
+          class="text-base"
+          aria-hidden="true"
+        />
+      </template>
       <template #default="{ close }">
         <div class="flex flex-col gap-2">
           <div class="text-sm font-medium text-on-surface">
@@ -46,7 +52,11 @@ function handleChange(event: Event) {
               : 'bg-surface border-muted hover:bg-surface-hover text-on-surface'"
             @click="() => { setTheme(value); close() }"
           >
-            <span>{{ opt.icon }}</span>
+            <span
+              :class="opt.iconClass"
+              class="text-sm"
+              aria-hidden="true"
+            />
             <span>{{ opt.label }}</span>
           </button>
         </div>
@@ -74,9 +84,9 @@ function handleChange(event: Event) {
         </option>
       </select>
       <span
-        class="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-xs opacity-60"
+        class="i-lucide-chevron-down pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-xs opacity-60"
         aria-hidden="true"
-      >▼</span>
+      />
     </div>
     <template #fallback>
       <div class="hidden sm:block w-20 h-7 bg-surface border-1 border-solid border-muted" />

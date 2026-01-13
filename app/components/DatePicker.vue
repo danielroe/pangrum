@@ -52,7 +52,7 @@ const calendarDays = computed(() => {
 
   // Add days of current month
   for (let d = 1; d <= lastDay.getDate(); d++) {
-    const date = new Date(year, month, d + 1).toISOString().slice(0, 10)
+    const date = new Date(year, month, d).toISOString().slice(0, 10)
     days.push({
       date,
       day: d,
@@ -66,7 +66,7 @@ const calendarDays = computed(() => {
 
   const endPadding = 42 - days.length // 6 rows * 7 days
   for (let d = 1; d <= endPadding; d++) {
-    const date = new Date(year, month + 1, d + 1).toISOString().slice(0, 10)
+    const date = new Date(year, month + 1, d).toISOString().slice(0, 10)
     days.push({
       date,
       day: d,
@@ -140,43 +140,10 @@ onKeyStroke('Escape', close)
       :aria-expanded="isOpen"
       @click="toggle"
     >
-      <svg
-        width="18"
-        height="18"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      >
-        <rect
-          x="3"
-          y="4"
-          width="18"
-          height="18"
-          rx="2"
-          ry="2"
-        />
-        <line
-          x1="16"
-          y1="2"
-          x2="16"
-          y2="6"
-        />
-        <line
-          x1="8"
-          y1="2"
-          x2="8"
-          y2="6"
-        />
-        <line
-          x1="3"
-          y1="10"
-          x2="21"
-          y2="10"
-        />
-      </svg>
+      <span
+        class="i-lucide-calendar text-lg"
+        aria-hidden="true"
+      />
     </button>
 
     <button
@@ -187,43 +154,10 @@ onKeyStroke('Escape', close)
       :aria-expanded="isOpen"
       @click="toggle"
     >
-      <svg
-        width="14"
-        height="14"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      >
-        <rect
-          x="3"
-          y="4"
-          width="18"
-          height="18"
-          rx="2"
-          ry="2"
-        />
-        <line
-          x1="16"
-          y1="2"
-          x2="16"
-          y2="6"
-        />
-        <line
-          x1="8"
-          y1="2"
-          x2="8"
-          y2="6"
-        />
-        <line
-          x1="3"
-          y1="10"
-          x2="21"
-          y2="10"
-        />
-      </svg>
+      <span
+        class="i-lucide-calendar text-sm"
+        aria-hidden="true"
+      />
       <span>{{ displayDate }}</span>
     </button>
 
@@ -248,16 +182,10 @@ onKeyStroke('Escape', close)
             :disabled="viewYear <= 2026 && viewMonth <= 0"
             @click="prevMonth"
           >
-            <svg
-              width="14"
-              height="14"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <polyline points="15 18 9 12 15 6" />
-            </svg>
+            <span
+              class="i-lucide-chevron-left text-sm"
+              aria-hidden="true"
+            />
           </button>
           <span class="text-sm font-medium text-on-surface">{{ monthName }}</span>
           <button
@@ -267,16 +195,10 @@ onKeyStroke('Escape', close)
             :disabled="viewYear >= new Date(today).getFullYear() && viewMonth >= new Date(today).getMonth()"
             @click="nextMonth"
           >
-            <svg
-              width="14"
-              height="14"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <polyline points="9 18 15 12 9 6" />
-            </svg>
+            <span
+              class="i-lucide-chevron-right text-sm"
+              aria-hidden="true"
+            />
           </button>
         </div>
 

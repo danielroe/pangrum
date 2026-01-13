@@ -7,10 +7,15 @@ const label = computed(() => hintsEnabled.value ? 'Hints on' : 'Hints off')
 <template>
   <ClientOnly>
     <SettingsPopover
-      icon="💡"
       label="Hints"
       class="sm:hidden"
     >
+      <template #icon>
+        <span
+          class="i-lucide-lightbulb text-base"
+          aria-hidden="true"
+        />
+      </template>
       <template #default="{ close }">
         <div class="flex flex-col gap-2">
           <div class="text-sm font-medium text-on-surface">
@@ -51,7 +56,10 @@ const label = computed(() => hintsEnabled.value ? 'Hints on' : 'Hints off')
       :aria-pressed="hintsEnabled"
       @click="toggleHints"
     >
-      <span>💡</span>
+      <span
+        class="i-lucide-lightbulb text-sm"
+        aria-hidden="true"
+      />
       <span class="text-on-surface">{{ label }}</span>
     </button>
     <template #fallback>

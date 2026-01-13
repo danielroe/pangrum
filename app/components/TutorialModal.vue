@@ -115,21 +115,10 @@ onKeyStroke('Escape', handleSkip)
             : 'bg-surface-elevated text-on-surface'"
         >
           <template v-if="currentStepData?.id === 'welcome'">
-            <svg
-              width="48"
-              height="48"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              class="text-primary"
-            >
-              <path d="M12 2L2 7l10 5 10-5-10-5z" />
-              <path d="M2 17l10 5 10-5" />
-              <path d="M2 12l10 5 10-5" />
-            </svg>
+            <span
+              class="i-lucide-layers text-5xl text-primary"
+              aria-hidden="true"
+            />
           </template>
           <template v-else-if="currentStepData?.id === 'letters'">
             <div class="flex flex-wrap gap-1 justify-center">
@@ -139,51 +128,28 @@ onKeyStroke('Escape', handleSkip)
             </div>
           </template>
           <template v-else-if="currentStepData?.id === 'centre'">
-            <span class="font-mono font-bold">★</span>
+            <span
+              class="i-lucide-star text-5xl text-primary"
+              aria-hidden="true"
+            />
           </template>
           <template v-else-if="currentStepData?.id === 'scoring'">
-            <svg
-              width="48"
-              height="48"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path d="M12 20V10" />
-              <path d="M18 20V4" />
-              <path d="M6 20v-4" />
-            </svg>
+            <span
+              class="i-lucide-bar-chart-3 text-5xl"
+              aria-hidden="true"
+            />
           </template>
           <template v-else-if="currentStepData?.id === 'pangrams'">
-            <svg
-              width="48"
-              height="48"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              class="text-celebration"
-            >
-              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-            </svg>
+            <span
+              class="i-lucide-star text-5xl text-celebration"
+              aria-hidden="true"
+            />
           </template>
           <template v-else-if="currentStepData?.id === 'hints'">
-            <svg
-              width="48"
-              height="48"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              class="text-primary"
-            >
-              <path d="M9 18h6" />
-              <path d="M10 22h4" />
-              <path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14" />
-            </svg>
+            <span
+              class="i-lucide-lightbulb text-5xl text-primary"
+              aria-hidden="true"
+            />
           </template>
         </div>
       </div>
@@ -200,18 +166,10 @@ onKeyStroke('Escape', handleSkip)
         class="px-4 py-3 font-mono text-sm border-2 border-solid border-muted bg-surface-elevated text-on-surface cursor-pointer transition-colors duration-150 hover:bg-surface-hover flex items-center gap-2"
         @click="handlePrevious"
       >
-        <svg
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <polyline points="15 18 9 12 15 6" />
-        </svg>
+        <span
+          class="i-lucide-chevron-left text-base"
+          aria-hidden="true"
+        />
         Back
       </button>
       <button
@@ -220,19 +178,11 @@ onKeyStroke('Escape', handleSkip)
         @click="handleNext"
       >
         {{ isLastStep ? 'Start Playing' : 'Next' }}
-        <svg
+        <span
           v-if="!isLastStep"
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <polyline points="9 18 15 12 9 6" />
-        </svg>
+          class="i-lucide-chevron-right text-base"
+          aria-hidden="true"
+        />
       </button>
     </div>
   </dialog>

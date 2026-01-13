@@ -99,19 +99,13 @@ defineExpose({
         :aria-label="`${foundPangrams} of ${totalPangrams} pangrams found`"
       >
         <span class="sr-only">{{ foundPangrams }} of {{ totalPangrams }} pangrams found</span>
-        <svg
+        <span
           v-for="i in totalPangrams"
           :key="i"
-          class="star transition-all duration-300"
+          class="i-lucide-star star text-sm transition-all duration-300"
           :class="i <= foundPangrams ? 'filled' : 'text-muted'"
-          width="14"
-          height="14"
-          viewBox="0 0 24 24"
-          fill="currentColor"
           aria-hidden="true"
-        >
-          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-        </svg>
+        />
       </span>
       <button
         v-if="words.size > 0"
@@ -121,44 +115,10 @@ defineExpose({
         aria-label="Share results"
         @click="emit('share')"
       >
-        <svg
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <circle
-            cx="18"
-            cy="5"
-            r="3"
-          />
-          <circle
-            cx="6"
-            cy="12"
-            r="3"
-          />
-          <circle
-            cx="18"
-            cy="19"
-            r="3"
-          />
-          <line
-            x1="8.59"
-            y1="13.51"
-            x2="15.42"
-            y2="17.49"
-          />
-          <line
-            x1="15.41"
-            y1="6.51"
-            x2="8.59"
-            y2="10.49"
-          />
-        </svg>
+        <span
+          class="i-lucide-share-2 text-base"
+          aria-hidden="true"
+        />
       </button>
     </div>
 

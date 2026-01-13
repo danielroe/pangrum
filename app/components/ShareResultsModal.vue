@@ -185,44 +185,10 @@ const statusMessage = computed(() => {
           :disabled="shareStatus === 'sharing'"
           @click="handleShare"
         >
-          <svg
-            width="18"
-            height="18"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <circle
-              cx="18"
-              cy="5"
-              r="3"
-            />
-            <circle
-              cx="6"
-              cy="12"
-              r="3"
-            />
-            <circle
-              cx="18"
-              cy="19"
-              r="3"
-            />
-            <line
-              x1="8.59"
-              y1="13.51"
-              x2="15.42"
-              y2="17.49"
-            />
-            <line
-              x1="15.41"
-              y1="6.51"
-              x2="8.59"
-              y2="10.49"
-            />
-          </svg>
+          <span
+            class="i-lucide-share-2 text-lg"
+            aria-hidden="true"
+          />
           Share
         </button>
 
@@ -234,26 +200,10 @@ const statusMessage = computed(() => {
             :disabled="shareStatus === 'sharing'"
             @click="handleCopyImage"
           >
-            <svg
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <rect
-                x="9"
-                y="9"
-                width="13"
-                height="13"
-                rx="2"
-                ry="2"
-              />
-              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
-            </svg>
+            <span
+              class="i-lucide-copy text-lg"
+              aria-hidden="true"
+            />
             Copy Image
           </button>
 
@@ -264,20 +214,10 @@ const statusMessage = computed(() => {
             :disabled="shareStatus === 'sharing'"
             @click="handleCopyText"
           >
-            <svg
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path d="M4 6h16" />
-              <path d="M4 12h16" />
-              <path d="M4 18h12" />
-            </svg>
+            <span
+              class="i-lucide-align-left text-lg"
+              aria-hidden="true"
+            />
             Copy Text
           </button>
         </div>

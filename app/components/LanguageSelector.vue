@@ -1,8 +1,6 @@
 <script setup lang="ts">
 const language = useLanguage()
 
-const languageCode = computed(() => (String(language.value || 'en').split('-')[0] ?? 'EN').toUpperCase())
-
 function setLanguage(lang: Language) {
   language.value = lang
 }
@@ -16,12 +14,14 @@ function handleChange(event: Event) {
 <template>
   <ClientOnly>
     <SettingsPopover
-      icon="🌐"
       label="Language settings"
       class="sm:hidden"
     >
       <template #icon>
-        <span class="text-xs font-bold text-on-surface">{{ languageCode }}</span>
+        <span
+          class="i-lucide-globe text-base"
+          aria-hidden="true"
+        />
       </template>
       <template #default="{ close }">
         <div class="flex flex-col gap-2">
@@ -65,9 +65,9 @@ function handleChange(event: Event) {
         </option>
       </select>
       <span
-        class="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-xs opacity-60"
+        class="i-lucide-chevron-down pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-xs opacity-60"
         aria-hidden="true"
-      >▼</span>
+      />
     </div>
     <template #fallback>
       <div class="hidden sm:block w-28 h-7 bg-surface border-1 border-solid border-muted" />
