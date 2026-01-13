@@ -287,8 +287,8 @@ onKeyStroke('Escape', close)
             type="button"
             class="day-button aspect-square flex items-center justify-center text-sm bg-transparent border-1 border-solid border-transparent rounded-md cursor-pointer transition-all duration-150"
             :class="{
-              'bg-primary text-dark font-semibold border-primary': day.isSelected,
-              'bg-primary-subtle border-primary-border font-semibold': day.isToday && !day.isSelected,
+              'bg-primary text-primary font-semibold border-primary': day.isSelected,
+              'bg-primary-subtle text-on-surface border-primary-border font-semibold': day.isToday && !day.isSelected,
               'text-muted-foreground cursor-not-allowed': day.isFuture,
               'text-muted-foreground': !day.isCurrentMonth && !day.isFuture,
               'text-on-surface hover:bg-surface-hover hover:border-muted': day.isCurrentMonth && !day.isSelected && !day.isToday && !day.isFuture,
