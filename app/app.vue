@@ -81,12 +81,14 @@ const shareData = computed(() => scoreRef.value?.getShareData())
       <header class="flex items-start justify-between gap-4 flex-shrink-0">
         <h1 class="text-sm font-normal tracking-[0.15em] lowercase opacity-40 mx-0 mb-0 mt-1 transition-opacity transition-duration-0.2s md:text-2xl md:font-semibold md:opacity-100 md:tracking-widest hover:opacity-100">
           pangrum
-          <span
-            v-if="!isOnline"
-            class="text-xs opacity-60 ml-2"
-          >
-            offline
-          </span>
+          <ClientOnly>
+            <span
+              v-if="!isOnline"
+              class="text-xs opacity-60 ml-2"
+            >
+              offline
+            </span>
+          </ClientOnly>
         </h1>
         <div class="flex gap-2 items-center flex-shrink-0">
           <ClientOnly>
