@@ -50,7 +50,7 @@ const calendarDays = computed(() => {
 
   // Add days of current month
   for (let d = 1; d <= lastDay.getDate(); d++) {
-    const date = new Date(year, month, d).toISOString().slice(0, 10)
+    const date = new Date(year, month, d + 1).toISOString().slice(0, 10)
     days.push({
       date,
       day: d,
@@ -63,7 +63,7 @@ const calendarDays = computed(() => {
 
   const endPadding = 42 - days.length // 6 rows * 7 days
   for (let d = 1; d <= endPadding; d++) {
-    const date = new Date(year, month + 1, d).toISOString().slice(0, 10)
+    const date = new Date(year, month + 1, d + 1).toISOString().slice(0, 10)
     days.push({
       date,
       day: d,
