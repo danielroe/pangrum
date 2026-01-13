@@ -67,14 +67,21 @@ export function useShare() {
     ctx.textAlign = 'left'
 
     // Letters display (centre letter highlighted)
-    const centreIdx = 2
+    const centreLetter = data.letters[2]
+    const outerLetters = data.letters.filter((_, i) => i !== 2)
+    const displayLetters = [
+      ...outerLetters.slice(0, 3),
+      centreLetter,
+      ...outerLetters.slice(3),
+    ]
+
     const letterY = 100
     const letterSpacing = 50
-    const lettersStartX = (width - (data.letters.length * letterSpacing)) / 2 + letterSpacing / 2
+    const lettersStartX = (width - (displayLetters.length * letterSpacing)) / 2 + letterSpacing / 2
 
-    data.letters.forEach((letter, i) => {
+    displayLetters.forEach((letter, i) => {
       const x = lettersStartX + i * letterSpacing
-      const isCentre = i === centreIdx
+      const isCentre = i === 3
 
       if (isCentre) {
         // Glow effect for centre letter
@@ -89,7 +96,7 @@ export function useShare() {
 
       ctx.font = `bold ${isCentre ? 36 : 28}px ui-monospace, monospace`
       ctx.textAlign = 'center'
-      ctx.fillText(letter, x, letterY)
+      ctx.fillText(letter!, x, letterY)
     })
 
     // Reset shadow
