@@ -100,7 +100,7 @@ function closeModal() {
   <div class="select-none h-full min-h-0 flex flex-col">
     <div
       ref="carousel"
-      class="flex-1 min-h-0 flex overflow-x-auto snap-x snap-mandatory scroll-smooth touch-pan-x lg:grid lg:grid-cols-2 lg:gap-8 lg:overflow-x-visible lg:overflow-y-auto lg:snap-none motion-reduce:scroll-auto"
+      class="flex-1 min-h-0 flex overflow-x-auto snap-x snap-mandatory scroll-smooth touch-pan-x lg:grid lg:grid-cols-2 lg:gap-8 lg:overflow-x-visible lg:overflow-y-auto lg:snap-none motion-reduce:scroll-auto focus:outline-none"
       style="grid-template-areas: 'word-grid pairs-grid' 'word-list word-list'"
       role="region"
       aria-label="Word hints carousel"
