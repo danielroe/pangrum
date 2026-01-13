@@ -52,7 +52,7 @@ describe('TheScore', () => {
       },
     })
 
-    const stars = component.findAll('svg.star')
+    const stars = component.findAll('.star')
     expect(stars).toHaveLength(3)
   })
 
@@ -67,7 +67,7 @@ describe('TheScore', () => {
     })
 
     // Find stars and check if any have the 'filled' class
-    const allStars = component.findAll('svg.star')
+    const allStars = component.findAll('.star')
     const filledStars = allStars.filter(star => star.classes().includes('filled'))
     expect(filledStars).toHaveLength(1)
   })
