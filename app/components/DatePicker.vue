@@ -12,6 +12,7 @@ const triggerRef = useTemplateRef<HTMLButtonElement>('trigger')
 const popoverRef = useTemplateRef<HTMLDivElement>('popover')
 
 const today = new Date().toISOString().slice(0, 10)
+const startDate = '2026-01-01'
 const isToday = computed(() => props.modelValue === today)
 
 // Current view month for calendar navigation
@@ -31,7 +32,7 @@ const calendarDays = computed(() => {
   const firstDay = new Date(year, month, 1)
   const lastDay = new Date(year, month + 1, 0)
 
-  const days: { date: string, day: number, isCurrentMonth: boolean, isToday: boolean, isSelected: boolean, isFuture: boolean }[] = []
+  const days: { date: string, day: number, isCurrentMonth: boolean, isToday: boolean, isSelected: boolean, isFuture: boolean, isPast: boolean }[] = []
 
   const startPadding = firstDay.getDay()
   const prevMonthLastDay = new Date(year, month, 0).getDate()
@@ -45,6 +46,7 @@ const calendarDays = computed(() => {
       isToday: date === today,
       isSelected: date === props.modelValue,
       isFuture: date > today,
+      isPast: date < startDate,
     })
   }
 
@@ -58,6 +60,7 @@ const calendarDays = computed(() => {
       isToday: date === today,
       isSelected: date === props.modelValue,
       isFuture: date > today,
+      isPast: date < startDate,
     })
   }
 
@@ -71,6 +74,7 @@ const calendarDays = computed(() => {
       isToday: date === today,
       isSelected: date === props.modelValue,
       isFuture: date > today,
+      isPast: date < startDate,
     })
   }
 
@@ -89,7 +93,7 @@ function close() {
 }
 
 function selectDate(date: string) {
-  if (date > today) return
+  if (date > today || date < startDate) return
   emit('update:modelValue', date)
   close()
 }
@@ -100,7 +104,12 @@ function goToToday() {
 }
 
 function prevMonth() {
-  viewDate.value = new Date(viewYear.value, viewMonth.value - 1, 1)
+  const prev = new Date(viewYear.value, viewMonth.value - 1, 1)
+  const startDateObj = new Date(startDate)
+  if (prev.getFullYear() > startDateObj.getFullYear()
+    || (prev.getFullYear() === startDateObj.getFullYear() && prev.getMonth() >= startDateObj.getMonth())) {
+    viewDate.value = prev
+  }
 }
 
 function nextMonth() {
@@ -236,6 +245,7 @@ onKeyStroke('Escape', close)
             type="button"
             class="w-8 h-8 flex items-center justify-center bg-transparent border-1 border-solid border-muted rounded-md text-on-surface cursor-pointer transition-colors duration-150 hover:bg-surface-hover disabled:opacity-30 disabled:cursor-not-allowed"
             aria-label="Previous month"
+            :disabled="viewYear <= 2026 && viewMonth <= 0"
             @click="prevMonth"
           >
             <svg
@@ -289,11 +299,11 @@ onKeyStroke('Escape', close)
             :class="{
               'bg-primary text-primary font-semibold border-primary': day.isSelected,
               'bg-primary-subtle text-on-surface border-primary-border font-semibold': day.isToday && !day.isSelected,
-              'text-muted-foreground cursor-not-allowed': day.isFuture,
-              'text-muted-foreground': !day.isCurrentMonth && !day.isFuture,
-              'text-on-surface hover:bg-surface-hover hover:border-muted': day.isCurrentMonth && !day.isSelected && !day.isToday && !day.isFuture,
+              'text-muted-foreground cursor-not-allowed': day.isFuture || day.isPast,
+              'text-muted-foreground': !day.isCurrentMonth && !day.isFuture && !day.isPast,
+              'text-on-surface hover:bg-surface-hover hover:border-muted': day.isCurrentMonth && !day.isSelected && !day.isToday && !day.isFuture && !day.isPast,
             }"
-            :disabled="day.isFuture"
+            :disabled="day.isFuture || day.isPast"
             @click="() => selectDate(day.date)"
           >
             {{ day.day }}
