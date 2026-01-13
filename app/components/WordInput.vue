@@ -154,7 +154,7 @@ function addWord() {
           name="word"
           autofocus
           type="text"
-          class="word-input p-2 border-none rounded-none font-mono font-bold text-xl uppercase tracking-widest h-6 bg-transparent outline-none text-transparent caret-primary"
+          class="word-input p-2 border-none rounded-none font-mono font-bold text-xl uppercase tracking-widest bg-transparent outline-none text-transparent caret-primary"
         >
         <div
           v-if="word"
