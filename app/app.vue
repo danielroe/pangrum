@@ -35,6 +35,32 @@ const words = useLocalStorage<Set<string>>(() => `pangrum-${language.value}-${le
   },
 })
 
+const { sendWord } = useSync({
+  currentPuzzleKey: () => letters.value.length ? `${language.value}-${letters.value.join('')}` : '',
+  currentWords: words,
+  currentDate: selectedDate,
+  currentLang: language,
+  onNavigateToPuzzle: (date, lang) => {
+    if (date === selectedDate.value && lang === language.value) {
+      return
+    }
+    if (!isLanguage(lang)) {
+      return
+    }
+
+    language.value = lang
+    selectedDate.value = date
+    addToast({
+      message: 'Navigated to synced puzzle',
+      type: 'success',
+    })
+  },
+})
+
+function handleWordAdded(word: string) {
+  sendWord(word)
+}
+
 const showDateMismatchModal = ref(false)
 const showShareModal = ref(false)
 const scoreRef = useTemplateRef<InstanceType<typeof TheScore>>('score')
@@ -99,6 +125,7 @@ const shareData = computed(() => scoreRef.value?.getShareData())
           </ClientOnly>
           <TutorialButton />
           <HintsToggle />
+          <SyncToggle />
           <NotificationToggle />
           <ThemeSelector />
           <LanguageSelector />
@@ -133,6 +160,7 @@ const shareData = computed(() => scoreRef.value?.getShareData())
           :centre-letter="centreLetter"
           :valid-words="validWords"
           class="flex-shrink-0"
+          @word-added="handleWordAdded"
         />
 
         <section class="flex-1 min-h-0 overflow-y-auto px-0 py-2 md:pb-0 words-section">

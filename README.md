@@ -6,19 +6,26 @@
 
 ## Features
 
-- 🏔️ Built on [Nuxt](https://nuxt.com/) and ⚗️ [Nitro](https://nuxt.com/docs/guide/concepts/server-engine#server-engine)
 - 🇺🇸🇬🇧🇩🇪🇳🇱🇫🇷🇪🇸 Play in multiple languages
-- 🏆 Social sharing of your results!
-- 📲 Use offline (+ install as a PWA) with [`@vite-pwa/nuxt`](https://github.com/vite-pwa/nuxt/)
-- 🌒 Light and dark mode with [`@nuxtjs/color-mode`](https://color-mode.nuxtjs.org/)
-- 📖 Word lists from [Hunspell](https://hunspell.github.io/)
-- 💾 [Upstash](https://upstash.com/) KV for persistent data
-- ▲ Hosted on [Vercel](https://vercel.com/)
+- 🔄 Cross-device progress sync (no login required)
+- 🏆 Social sharing of your results
+- 📲 Use offline (+ install as a PWA)
+- 🌒 Light and dark mode
+
+## Tech Stack
+
+- [Nuxt](https://nuxt.com/) - of course!
+- [Nitro](https://nuxt.com/docs/guide/concepts/server-engine#server-engine) - server engine
+- [PartyKit](https://partykit.io/) - real-time cross-device sync
+- [Hunspell](https://hunspell.github.io/) - word lists
+- [`@vite-pwa/nuxt`](https://github.com/vite-pwa/nuxt/) - PWA support
+- [`@nuxtjs/color-mode`](https://color-mode.nuxtjs.org/) - theme switching
+- [Upstash](https://upstash.com/) - KV storage for persistent data
+- [Vercel](https://vercel.com/) - hosting
 
 ## 🚧 Roadmap
 
 - [ ] Streak tracking
-- [ ] Cross-device progress sync
 - [ ] Keyboard shortcuts
 - [ ] Internationalisation
 

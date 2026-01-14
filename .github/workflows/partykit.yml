@@ -1,0 +1,30 @@
+name: partykit
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'party/**'
+      - 'partykit.json'
+      - '.github/workflows/partykit.yml'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - run: corepack enable
+      - uses: actions/setup-node@v6
+        with:
+          node-version: lts/*
+
+      - name: 📦 Install dependencies
+        run: pnpm install
+
+      - name: 🚀 Deploy to PartyKit
+        run: pnpm party:deploy
+        env:
+          PARTYKIT_TOKEN: ${{ secrets.PARTYKIT_TOKEN }}
+          PARTYKIT_LOGIN: ${{ secrets.PARTYKIT_LOGIN }}

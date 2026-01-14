@@ -9,7 +9,11 @@ const props = defineProps<{
   validWords: string[]
 }>()
 
-const words = defineModel<Set<string>>('words')
+const emit = defineEmits<{
+  wordAdded: [word: string]
+}>()
+
+const words = defineModel<Set<string>>('words', { required: true })
 
 const language = useLanguage()
 
@@ -32,7 +36,7 @@ const { triggerCelebration } = useParticles()
 const matchingWords = computed(() => {
   if (!word.value || word.value.length < 2) return []
   const currentWord = word.value.toUpperCase()
-  return [...(words.value || [])].filter(w => w.startsWith(currentWord)).sort()
+  return [...words.value].filter(w => w.startsWith(currentWord)).sort()
 })
 
 const matchingIncorrect = computed(() => {
@@ -85,11 +89,12 @@ function addWord() {
     if (!props.hashes.includes(hash(normalisedWord))) {
       throw new TypeError('Not a valid word')
     }
-    if (words.value?.has(normalisedWord)) {
+    if (words.value.has(normalisedWord)) {
       throw new TypeError('Already guessed')
     }
 
-    words.value?.add(normalisedWord)
+    words.value.add(normalisedWord)
+    emit('wordAdded', normalisedWord)
 
     const isPangram = props.letters.every(letter => normalisedWord.includes(letter))
     const points = scoreWord(normalisedWord)
