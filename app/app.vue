@@ -35,6 +35,52 @@ const words = useLocalStorage<Set<string>>(() => `pangrum-${language.value}-${se
   },
 })
 
+// TODO: Remove this migration code after a few releases
+// Migrate words from old localStorage key format (pangrum-{lang}-{letters}) to new format (pangrum-{lang}-{date})
+watch([letters, words], ([newLetters, currentWords]) => {
+  if (!newLetters.length || !import.meta.client) return
+
+  const oldKey = `pangrum-${language.value}-${newLetters.join('')}`
+  const oldData = localStorage.getItem(oldKey)
+  if (!oldData) return
+
+  try {
+    const oldWords = JSON.parse(oldData) as string[]
+    if (!Array.isArray(oldWords) || oldWords.length === 0) return
+
+    // Filter to only valid words (contain centre letter + only use available letters)
+    const letterSet = new Set(newLetters)
+    const centre = newLetters[2]
+    const validOldWords = oldWords.filter((word) => {
+      if (!word.includes(centre!)) return false
+      return [...word].every(char => letterSet.has(char))
+    })
+
+    // Merge valid words into current set
+    let migrated = 0
+    for (const word of validOldWords) {
+      if (!currentWords.has(word)) {
+        currentWords.add(word)
+        migrated++
+      }
+    }
+
+    // Remove old key after successful migration
+    localStorage.removeItem(oldKey)
+
+    if (migrated > 0) {
+      addToast({
+        message: `Migrated ${migrated} word${migrated > 1 ? 's' : ''} from previous format`,
+        type: 'success',
+      })
+    }
+  }
+  catch {
+    // Ignore parse errors, just remove the bad key
+    localStorage.removeItem(oldKey)
+  }
+}, { immediate: true })
+
 const { sendWord } = useSync({
   currentPuzzleKey: () => `${language.value}-${selectedDate.value}`,
   currentWords: words,
