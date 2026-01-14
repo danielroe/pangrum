@@ -16,9 +16,8 @@ const {
   copyCode,
 } = useSyncUI()
 
-function onPopoverOpen() {
-  resetInput()
-}
+// possible values for buttonIcon, listed here for unocss to pick them up:
+// i-lucide-cloud-off i-lucide-cloud text-primary animate-pulse
 </script>
 
 <template>
@@ -26,7 +25,7 @@ function onPopoverOpen() {
     <SettingsPopover
       label="Sync"
       class="sm:hidden"
-      @vue:mounted="onPopoverOpen"
+      @vue:mounted="resetInput"
     >
       <template #icon>
         <span
