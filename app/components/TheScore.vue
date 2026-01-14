@@ -25,30 +25,9 @@ const foundPangrams = computed(() => {
   return count
 })
 
-const thresholds = {
-  'beginner': 0,
-  'novice': 2.5,
-  'moving up': 5,
-  'good': 8,
-  'solid': 15,
-  'nice': 25,
-  'great': 40,
-  'amazing': 50,
-  'genius': 70,
-  'perfect': 100,
-} as const
+const thresholdsForward = Object.entries(LEVEL_THRESHOLDS)
 
-const thresholdsReversed = Object.entries(thresholds).reverse()
-const thresholdsForward = Object.entries(thresholds)
-
-const status = computed(() => {
-  for (const [label, threshold] of thresholdsReversed) {
-    if (threshold <= percentage.value) {
-      return label
-    }
-  }
-  return 'beginner'
-})
+const status = computed(() => getLevel(percentage.value))
 
 const nextThreshold = computed(() => {
   for (const [label, threshold] of thresholdsForward) {
@@ -124,7 +103,7 @@ defineExpose({
 
     <div class="flex items-center px-1">
       <template
-        v-for="(threshold, label) in thresholds"
+        v-for="(threshold, label) in LEVEL_THRESHOLDS"
         :key="`${label}-dot`"
       >
         <div

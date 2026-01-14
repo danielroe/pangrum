@@ -93,8 +93,14 @@ function addWord() {
       throw new TypeError('Already guessed')
     }
 
+    const { percentage } = useScore(() => words.value, () => props.validWords)
+    const levelBefore = getLevel(percentage.value)
+
     words.value.add(normalisedWord)
     emit('wordAdded', normalisedWord)
+
+    const levelAfter = getLevel(percentage.value)
+    const didLevelUp = levelBefore !== levelAfter
 
     const isPangram = props.letters.every(letter => normalisedWord.includes(letter))
     const points = scoreWord(normalisedWord)
@@ -116,6 +122,13 @@ function addWord() {
       addToast({
         message: `+${points}`,
         type: 'success',
+      })
+    }
+
+    if (didLevelUp) {
+      addToast({
+        message: `Level up: ${levelAfter}!`,
+        type: 'celebration',
       })
     }
   }
