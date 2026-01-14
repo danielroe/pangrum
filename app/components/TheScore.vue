@@ -156,7 +156,7 @@ defineExpose({
         <!-- Filled portion with traveling pulse -->
         <div
           class="progress-fill"
-          :style="{ '--fill-width': `${fillWidth}%` }"
+          :style="{ '--fill-width': `${fillWidth}%`, '--fill-scale': `${fillWidth / 100}` }"
         />
 
         <!-- Milestone dots (on top of bar) -->
@@ -226,10 +226,12 @@ defineExpose({
 .progress-fill {
   position: absolute;
   inset: 0;
-  width: var(--fill-width, 0%);
+  width: 100%;
   background: var(--color-primary);
   border-radius: 9999px;
-  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: left;
+  transform: scaleX(var(--fill-scale, 0));
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   overflow: hidden;
   z-index: 2;
 }
