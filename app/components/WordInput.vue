@@ -159,12 +159,12 @@ function addWord() {
           name="word"
           autofocus
           type="text"
-          class="word-input p-2 border-none rounded-none font-mono font-bold text-xl uppercase tracking-widest bg-transparent outline-none text-transparent caret-primary"
+          class="word-input p-2 border-none rounded-none font-mono font-bold text-2xl sm:text-xl uppercase tracking-widest bg-transparent outline-none text-transparent caret-primary"
         >
         <div
           v-if="word"
           aria-hidden="true"
-          class="absolute p-2 font-mono font-bold text-xl uppercase tracking-widest pointer-events-none flex"
+          class="absolute p-2 font-mono font-bold text-2xl sm:text-xl uppercase tracking-widest pointer-events-none flex"
         >
           <span
             v-for="letter, i of wordLetters"
