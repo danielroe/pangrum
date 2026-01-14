@@ -105,6 +105,10 @@ export default defineNuxtConfig({
       scope: '/',
       orientation: 'portrait',
       categories: ['games', 'entertainment'],
+      launch_handler: {
+        client_mode: ['navigate-existing', 'auto'],
+      },
+      handle_links: 'preferred',
     },
     pwaAssets: {
       preset: 'minimal-2023',
