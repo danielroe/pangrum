@@ -111,9 +111,9 @@ export default defineNuxtConfig({
       handle_links: 'preferred',
     },
     pwaAssets: {
-      preset: 'minimal-2023',
-      image: 'public/logo.svg',
+      config: true,
       overrideManifestIcons: true,
+      injectThemeColor: false,
     },
     strategies: 'injectManifest',
     srcDir: '.',

@@ -1,6 +1,14 @@
 <script setup lang="ts">
 import type { TheScore } from '#components'
 
+const colorMode = useColorMode()
+useHead({
+  meta: [{
+    name: 'theme-color',
+    content: () => colorMode.value === 'light' ? '#fafaf9' : '#0f0f0f',
+  }],
+})
+
 const language = useLanguage()
 const selectedDate = ref(new Date().toISOString().slice(0, 10))
 const { data } = useFetch(() => `/api/words/${language.value}/${selectedDate.value}`, {
