@@ -27,7 +27,7 @@ const pairs = computed(() => data.value?.pairs || {})
 const totalPangrams = computed(() => data.value?.pangrams || 0)
 const puzzleDate = computed(() => data.value?.date || '')
 
-const words = useLocalStorage<Set<string>>(() => `pangrum-${language.value}-${selectedDate.value}`, new Set(), {
+const storedWords = useLocalStorage<Set<string>>(() => `pangrum-${language.value}-${selectedDate.value}`, new Set(), {
   initOnMounted: true,
   serializer: {
     read: (v: string) => new Set(JSON.parse(v)),
@@ -35,9 +35,23 @@ const words = useLocalStorage<Set<string>>(() => `pangrum-${language.value}-${se
   },
 })
 
+// Filter stored words to only include valid words for the current puzzle
+// This protects against invalid words from the old localStorage key format bug
+const words = computed(() => {
+  if (!letters.value.length) return storedWords.value
+
+  const letterSet = new Set(letters.value)
+  const centre = centreLetter.value
+
+  return new Set([...storedWords.value].filter((word) => {
+    if (!centre || !word.includes(centre)) return false
+    return [...word].every(char => letterSet.has(char))
+  }))
+})
+
 // TODO: Remove this migration code after a few releases
 // Migrate words from old localStorage key format (pangrum-{lang}-{letters}) to new format (pangrum-{lang}-{date})
-watch([letters, words], ([newLetters, currentWords]) => {
+watch(letters, (newLetters) => {
   if (!newLetters.length || !import.meta.client) return
 
   const oldKey = `pangrum-${language.value}-${newLetters.join('')}`
@@ -59,8 +73,8 @@ watch([letters, words], ([newLetters, currentWords]) => {
     // Merge valid words into current set
     let migrated = 0
     for (const word of validOldWords) {
-      if (!currentWords.has(word)) {
-        currentWords.add(word)
+      if (!storedWords.value.has(word)) {
+        storedWords.value.add(word)
         migrated++
       }
     }
@@ -83,7 +97,7 @@ watch([letters, words], ([newLetters, currentWords]) => {
 
 const { sendWord } = useSync({
   currentPuzzleKey: () => `${language.value}-${selectedDate.value}`,
-  currentWords: words,
+  currentWords: storedWords,
   currentDate: selectedDate,
   currentLang: language,
   onNavigateToPuzzle: (date, lang) => {
@@ -200,7 +214,7 @@ const shareData = computed(() => scoreRef.value?.getShareData())
         </div>
 
         <WordInput
-          v-model:words="words"
+          v-model:words="storedWords"
           :hashes="hashes"
           :letters="letters"
           :centre-letter="centreLetter"
