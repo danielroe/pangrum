@@ -2,6 +2,9 @@
 const {
   syncCode,
   isEnabled,
+  isConnecting,
+  canEnableSync,
+  isUnavailable,
   inputCode,
   showInput,
   isWaitingForDevice,
@@ -83,11 +86,23 @@ function closeAndDisable() {
           </div>
 
           <template v-if="isEnabled">
-            <!-- Sync is enabled -->
             <div class="flex flex-col gap-4">
-              <!-- Status message -->
               <div
-                v-if="isWaitingForDevice"
+                v-if="isUnavailable"
+                class="flex items-center gap-2 p-3 rounded-lg bg-surface border-1 border-solid border-muted"
+              >
+                <span class="i-lucide-cloud-off text-on-surface opacity-50" />
+                <span class="text-sm text-on-surface opacity-70">Offline - sync paused</span>
+              </div>
+              <div
+                v-else-if="isConnecting"
+                class="flex items-center gap-2 p-3 rounded-lg bg-primary-subtle border-1 border-solid border-primary-border"
+              >
+                <span class="i-lucide-loader-2 animate-spin text-primary" />
+                <span class="text-sm text-on-surface">Connecting to sync server...</span>
+              </div>
+              <div
+                v-else-if="isWaitingForDevice"
                 class="flex items-center gap-2 p-3 rounded-lg bg-primary-subtle border-1 border-solid border-primary-border"
               >
                 <span class="i-lucide-loader-2 animate-spin text-primary" />
@@ -155,6 +170,14 @@ function closeAndDisable() {
               </p>
 
               <div
+                v-if="!canEnableSync"
+                class="flex items-center gap-2 p-3 rounded-lg bg-surface border-1 border-solid border-muted"
+              >
+                <span class="i-lucide-wifi-off text-on-surface opacity-50" />
+                <span class="text-sm text-on-surface opacity-70">You're offline. Connect to the internet to enable sync.</span>
+              </div>
+
+              <div
                 v-if="showInput"
                 class="flex flex-col gap-3"
               >
@@ -162,10 +185,11 @@ function closeAndDisable() {
                   v-model="inputCode"
                   type="text"
                   placeholder="Enter sync code"
-                  class="w-full px-4 py-3 text-sm rounded-lg border-1 border-solid border-muted bg-surface text-on-surface placeholder:text-on-surface/50 focus:outline-2 focus:outline-primary text-center font-mono tracking-wider"
+                  class="w-full px-4 py-3 text-sm rounded-lg border-1 border-solid border-muted bg-surface text-on-surface placeholder:text-on-surface/50 focus:outline-2 focus:outline-primary text-center font-mono tracking-wider disabled:opacity-50"
                   maxlength="20"
                   autofocus
-                  @keyup.enter="handleEnable"
+                  :disabled="!canEnableSync"
+                  @keyup.enter="() => { if (canEnableSync) handleEnable() }"
                 >
                 <div class="flex gap-2">
                   <button
@@ -177,8 +201,8 @@ function closeAndDisable() {
                   </button>
                   <button
                     type="button"
-                    class="flex-1 px-4 py-2 text-sm rounded-lg bg-primary hover:bg-primary-hover text-white transition-colors disabled:opacity-50"
-                    :disabled="!inputCode.trim()"
+                    class="flex-1 px-4 py-2 text-sm rounded-lg bg-primary hover:bg-primary-hover text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    :disabled="!inputCode.trim() || !canEnableSync"
                     @click="handleEnable"
                   >
                     Connect
@@ -192,14 +216,16 @@ function closeAndDisable() {
               >
                 <button
                   type="button"
-                  class="w-full px-4 py-3 text-sm rounded-lg bg-primary hover:bg-primary-hover text-white transition-colors font-medium"
+                  class="w-full px-4 py-3 text-sm rounded-lg bg-primary hover:bg-primary-hover text-white transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                  :disabled="!canEnableSync"
                   @click="handleEnable"
                 >
                   Create new sync
                 </button>
                 <button
                   type="button"
-                  class="w-full px-4 py-2 text-sm rounded-lg border-1 border-solid border-muted bg-surface hover:bg-surface-hover text-on-surface transition-colors"
+                  class="w-full px-4 py-2 text-sm rounded-lg border-1 border-solid border-muted bg-surface hover:bg-surface-hover text-on-surface transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  :disabled="!canEnableSync"
                   @click="showInput = true"
                 >
                   Join existing sync

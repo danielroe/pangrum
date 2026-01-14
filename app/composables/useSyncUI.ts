@@ -2,10 +2,17 @@ import { renderSVG } from 'uqr'
 
 export function useSyncUI() {
   const { syncCode, isEnabled, enable, disable } = useSyncCode()
-  const { connectedDevices, isConnected, hasEverSynced } = useSyncState()
+  const { connectedDevices, isConnected, isConnecting, connectionError, hasEverSynced } = useSyncState()
+  const isOnline = useOnline()
 
   const inputCode = ref('')
   const showInput = ref(false)
+
+  const canEnableSync = computed(() => isOnline.value)
+
+  const isUnavailable = computed(() =>
+    !isOnline.value || (isEnabled.value && !isConnected.value && !isConnecting.value && connectionError.value !== null),
+  )
 
   function resetInput() {
     inputCode.value = ''
@@ -53,12 +60,16 @@ export function useSyncUI() {
 
   const buttonLabel = computed(() => {
     if (!isEnabled.value) return 'Sync'
+    if (isUnavailable.value) return 'Offline'
+    if (isConnecting.value) return 'Connecting...'
     if (isWaitingForDevice.value) return 'Waiting...'
     return 'Synced'
   })
 
   const buttonIcon = computed(() => {
     if (!isEnabled.value) return 'i-lucide-cloud-off'
+    if (isUnavailable.value) return 'i-lucide-cloud-off opacity-50'
+    if (isConnecting.value) return 'i-lucide-cloud text-primary animate-pulse'
     if (isWaitingForDevice.value) return 'i-lucide-cloud text-primary animate-pulse'
     return 'i-lucide-cloud text-primary'
   })
@@ -81,6 +92,10 @@ export function useSyncUI() {
     // State
     syncCode,
     isEnabled,
+    isOnline,
+    isConnecting,
+    canEnableSync,
+    isUnavailable,
     inputCode,
     showInput,
     isWaitingForDevice,

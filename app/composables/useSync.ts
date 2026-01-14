@@ -165,6 +165,7 @@ export function useSync(options: UseSyncOptions) {
     socket.value.addEventListener('error', () => {
       connectionError.value = 'Connection error'
       isConnecting.value = false
+      isConnected.value = false
     })
   }
 
