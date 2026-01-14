@@ -5,6 +5,9 @@ import { NavigationRoute, registerRoute } from 'workbox-routing'
 
 declare let self: ServiceWorkerGlobalScope
 
+const WORDS_CACHE_VERSION = 'v1'
+const WORDS_CACHE_NAME = `words-api-cache-${WORDS_CACHE_VERSION}`
+
 self.skipWaiting()
 clientsClaim()
 
@@ -14,7 +17,7 @@ precacheAndRoute(self.__WB_MANIFEST)
 registerRoute(
   ({ url }) => url.pathname.startsWith('/api/words/'),
   new NetworkFirst({
-    cacheName: 'words-api-cache',
+    cacheName: WORDS_CACHE_NAME,
     networkTimeoutSeconds: 5,
   }),
 )
@@ -43,7 +46,7 @@ self.addEventListener('install', (event) => {
       }
     }
 
-    const cache = await caches.open('words-api-cache')
+    const cache = await caches.open(WORDS_CACHE_NAME)
 
     // Prefetch all upcoming days
     await Promise.allSettled(
@@ -64,9 +67,16 @@ self.addEventListener('install', (event) => {
   event.waitUntil(prefetchUpcomingDays())
 })
 
-// Prefetch on activation and periodically
+// clean up old word caches and prefetch on activation
 self.addEventListener('activate', (event) => {
-  const prefetchUpcomingDays = async () => {
+  const cleanupAndPrefetch = async () => {
+    const cacheNames = await caches.keys()
+    await Promise.all(
+      cacheNames
+        .filter(name => name.startsWith('words-api-cache-') && name !== WORDS_CACHE_NAME)
+        .map(name => caches.delete(name)),
+    )
+
     const today = new Date()
     const urls: string[] = []
     const languages = ['en', 'en-gb', 'de', 'nl', 'fr', 'es']
@@ -80,7 +90,7 @@ self.addEventListener('activate', (event) => {
       }
     }
 
-    const cache = await caches.open('words-api-cache')
+    const cache = await caches.open(WORDS_CACHE_NAME)
 
     await Promise.allSettled(
       urls.map(async (url) => {
@@ -97,7 +107,7 @@ self.addEventListener('activate', (event) => {
     )
   }
 
-  event.waitUntil(prefetchUpcomingDays())
+  event.waitUntil(cleanupAndPrefetch())
 })
 
 self.addEventListener('periodicsync', (event: Event) => {
