@@ -27,7 +27,7 @@ const pairs = computed(() => data.value?.pairs || {})
 const totalPangrams = computed(() => data.value?.pangrams || 0)
 const puzzleDate = computed(() => data.value?.date || '')
 
-const words = useLocalStorage<Set<string>>(() => `pangrum-${language.value}-${letters.value.join('')}`, new Set(), {
+const words = useLocalStorage<Set<string>>(() => `pangrum-${language.value}-${selectedDate.value}`, new Set(), {
   initOnMounted: true,
   serializer: {
     read: (v: string) => new Set(JSON.parse(v)),
@@ -36,7 +36,7 @@ const words = useLocalStorage<Set<string>>(() => `pangrum-${language.value}-${le
 })
 
 const { sendWord } = useSync({
-  currentPuzzleKey: () => letters.value.length ? `${language.value}-${letters.value.join('')}` : '',
+  currentPuzzleKey: () => `${language.value}-${selectedDate.value}`,
   currentWords: words,
   currentDate: selectedDate,
   currentLang: language,
