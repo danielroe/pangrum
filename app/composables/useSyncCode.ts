@@ -25,6 +25,7 @@ export function useSyncCode() {
 
   function disable() {
     syncCode.value = null
+    localStorage.removeItem('pangrum-has-synced')
   }
 
   // Check for ?sync= URL parameter on mount and auto-join

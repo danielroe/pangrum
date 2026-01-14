@@ -30,6 +30,7 @@ type ServerMessage = SyncAllMessage | SyncPuzzleMessage | WordMessage | SyncStat
 
 const STORAGE_PREFIX = 'pangrum-'
 const STORAGE_INCORRECT_MARKER = '-incorrect-'
+const DATE_KEY_PATTERN = /^[a-z]{2}-\d{4}-\d{2}-\d{2}$/
 
 function normalizeRoomId(code: string): string {
   return code.toLowerCase().trim()
@@ -42,9 +43,13 @@ function getAllLocalPuzzles(): Record<string, string[]> {
     const key = localStorage.key(i)
     if (!key) continue
 
-    // Match keys like "pangrum-en-ABCDEFG" but NOT "pangrum-en-incorrect-ABCDEFG"
+    // Match keys like "pangrum-en-2024-01-14" but NOT "pangrum-en-incorrect-..." or old letter-based keys
     if (key.startsWith(STORAGE_PREFIX) && !key.includes(STORAGE_INCORRECT_MARKER)) {
-      const puzzleKey = key.slice(STORAGE_PREFIX.length) // "en-ABCDEFG"
+      const puzzleKey = key.slice(STORAGE_PREFIX.length) // "en-2024-01-14"
+
+      // Only include date-based keys, skip old letter-based format (e.g., "en-ABCDEFG")
+      if (!DATE_KEY_PATTERN.test(puzzleKey)) continue
+
       try {
         const value = localStorage.getItem(key)
         if (value) {
@@ -207,10 +212,17 @@ export function useSync(options: UseSyncOptions) {
     }
   }
 
-  // Track if this is the first sync (to know when to navigate)
+  // Track if this is the first sync in this page load (to know when to navigate)
   let hasCompletedInitialSync = false
 
+  // Track if we've ever completed an initial sync (persists across page reloads)
+  // This lets us suppress the toast on page reload, but show it when first joining sync
+  const HAS_SYNCED_KEY = 'pangrum-has-synced'
+  const hadPreviouslyCompletedSync = import.meta.client && localStorage.getItem(HAS_SYNCED_KEY) === 'true'
+
   function handleSyncAll(remotePuzzles: Record<string, string[]>, lastActiveDate?: string, lastActiveLang?: string) {
+    const isInitialSync = !hasCompletedInitialSync
+
     let totalAdded = 0
 
     for (const [puzzleKey, remoteWords] of Object.entries(remotePuzzles)) {
@@ -218,15 +230,23 @@ export function useSync(options: UseSyncOptions) {
       totalAdded += added
     }
 
-    if (totalAdded > 0) {
+    // Show toast logic:
+    // - Initial sync on page load when we've synced before: suppress (silent reconnect)
+    // - Initial sync when first joining: show (user just set up sync)
+    // - Later syncs during session: show (new words from other devices)
+    const suppressToast = isInitialSync && hadPreviouslyCompletedSync
+    if (totalAdded > 0 && !suppressToast) {
       addToast({
         message: `Synced ${totalAdded} word${totalAdded > 1 ? 's' : ''} from other devices`,
         type: 'success',
       })
     }
 
+    // Mark that we've completed at least one sync (persists across reloads)
+    localStorage.setItem(HAS_SYNCED_KEY, 'true')
+
     // On first sync, navigate to the last active puzzle if we have date info
-    if (!hasCompletedInitialSync && lastActiveDate && lastActiveLang) {
+    if (isInitialSync && lastActiveDate && lastActiveLang) {
       options.onNavigateToPuzzle?.(lastActiveDate, lastActiveLang)
     }
     hasCompletedInitialSync = true
