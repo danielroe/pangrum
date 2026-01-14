@@ -171,40 +171,38 @@ const shareData = computed(() => scoreRef.value?.getShareData())
   <TheToast />
   <ParticleCanvas />
   <div class="h-100dvh overflow-hidden">
-    <div class="flex flex-col h-full gap-3 p-3 text-on-surface md:gap-6 p-8">
-      <header class="flex items-start justify-between gap-4 flex-shrink-0">
-        <h1 class="text-sm font-normal tracking-[0.15em] lowercase opacity-40 mx-0 mb-0 mt-1 transition-opacity transition-duration-0.2s md:text-2xl md:font-semibold md:opacity-100 md:tracking-widest hover:opacity-100">
+    <div class="flex flex-col h-full gap-2 px-2 py-2 text-on-surface sm:gap-3 sm:p-3 md:gap-6 md:p-8">
+      <header class="flex items-center justify-between gap-2 flex-shrink-0 sm:items-start sm:gap-4">
+        <h1 class="text-xs font-normal tracking-[0.12em] lowercase opacity-40 m-0 transition-opacity transition-duration-0.2s sm:text-sm sm:mt-1 md:text-2xl md:font-semibold md:opacity-100 md:tracking-widest hover:opacity-100">
           pangrum
           <ClientOnly>
             <span
               v-if="!isOnline"
-              class="text-xs opacity-60 ml-2"
+              class="text-xs opacity-60 ml-1 sm:ml-2"
             >
               offline
             </span>
           </ClientOnly>
         </h1>
-        <div class="flex gap-2 items-center flex-shrink-0">
-          <ClientOnly>
-            <DatePicker v-model="selectedDate" />
-            <template #fallback>
-              <div class="w-9 h-9 bg-surface border-1 border-solid border-muted rounded-lg sm:w-24 sm:h-7" />
-            </template>
-          </ClientOnly>
+        <div class="flex gap-1.5 items-center flex-shrink-0 sm:gap-2">
+          <DatePicker v-model="selectedDate" />
           <TutorialButton />
           <HintsToggle />
-          <SyncToggle />
-          <NotificationToggle />
-          <ThemeSelector />
-          <LanguageSelector />
+          <!-- Desktop-only controls -->
+          <LazySyncToggle hydrate-on-media-query="(min-width: 40rem)" />
+          <LazyNotificationToggle hydrate-on-media-query="(min-width: 40rem)" />
+          <LazyThemeSelector hydrate-on-media-query="(min-width: 40rem)" />
+          <LazyLanguageSelector hydrate-on-media-query="(min-width: 40rem)" />
+          <!-- Mobile settings menu -->
+          <LazyMobileSettingsMenu hydrate-on-media-query="(max-width: 39.99rem)" />
         </div>
       </header>
 
       <main
         v-if="data"
-        class="flex flex-col flex-1 min-h-0 gap-4 md:gap-6"
+        class="flex flex-col flex-1 min-h-0 gap-3 sm:gap-4 md:gap-6"
       >
-        <div class="flex flex-col-reverse gap-8 flex-shrink-0 md:flex-row md:items-end md:gap-12">
+        <div class="flex flex-col-reverse gap-4 flex-shrink-0 sm:gap-8 md:flex-row md:items-end md:gap-12">
           <LetterGrid
             :letters="letters"
             :centre-letter="centreLetter"
@@ -231,7 +229,7 @@ const shareData = computed(() => scoreRef.value?.getShareData())
           @word-added="handleWordAdded"
         />
 
-        <section class="flex-1 min-h-0 overflow-y-auto px-0 py-2 md:pb-0 words-section">
+        <section class="flex-1 min-h-0 overflow-y-auto px-0 py-1 sm:py-2 md:pb-0 words-section">
           <WordHints
             v-if="hintsEnabled"
             :pairs="pairs"

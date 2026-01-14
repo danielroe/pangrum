@@ -112,36 +112,36 @@ const letterPositions = [
       </button>
     </div>
 
-    <div class="flex flex-col gap-2 flex-grow items-center sm:hidden">
+    <div class="flex flex-col gap-1.5 flex-grow items-center sm:hidden">
       <button
-        class="w-11 h-11 flex items-center justify-center bg-surface text-muted-foreground border-1 border-solid border-muted rounded-lg cursor-pointer transition-colors hover:bg-surface-hover hover:text-on-surface active:bg-surface-active focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
+        class="w-10 h-10 flex items-center justify-center bg-surface text-muted-foreground border-1 border-solid border-muted rounded-lg cursor-pointer transition-colors hover:bg-surface-hover hover:text-on-surface active:bg-surface-active focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
         style="-webkit-tap-highlight-color: transparent"
         @click="shuffleLetters"
       >
         <span
-          class="i-lucide-shuffle text-xl"
+          class="i-lucide-shuffle text-lg"
           aria-hidden="true"
         />
         <span class="sr-only">Shuffle letters</span>
       </button>
       <button
-        class="w-11 h-11 flex items-center justify-center bg-surface text-muted-foreground border-1 border-solid border-muted rounded-lg cursor-pointer transition-colors hover:bg-surface-hover hover:text-on-surface active:bg-surface-active focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
+        class="w-10 h-10 flex items-center justify-center bg-surface text-muted-foreground border-1 border-solid border-muted rounded-lg cursor-pointer transition-colors hover:bg-surface-hover hover:text-on-surface active:bg-surface-active focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
         style="-webkit-tap-highlight-color: transparent"
         @click="deleteLetter"
       >
         <span
-          class="i-lucide-delete text-xl"
+          class="i-lucide-delete text-lg"
           aria-hidden="true"
         />
         <span class="sr-only">Delete character</span>
       </button>
       <button
-        class="w-11 h-11 flex items-center justify-center bg-surface text-muted-foreground border-1 border-solid border-muted rounded-lg cursor-pointer transition-colors hover:bg-surface-hover hover:text-on-surface active:bg-surface-active focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
+        class="w-10 h-10 flex items-center justify-center bg-surface text-muted-foreground border-1 border-solid border-muted rounded-lg cursor-pointer transition-colors hover:bg-surface-hover hover:text-on-surface active:bg-surface-active focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
         style="-webkit-tap-highlight-color: transparent"
         @click="submitWord"
       >
         <span
-          class="i-lucide-corner-down-left text-xl"
+          class="i-lucide-corner-down-left text-lg"
           aria-hidden="true"
         />
         <span class="sr-only">Submit word</span>
@@ -152,9 +152,9 @@ const letterPositions = [
 
 <style scoped>
 .letter-cluster {
-  --letter-size: clamp(2.5rem, 12vw, 3.25rem);
-  --centre-size: clamp(3rem, 14vw, 4rem);
-  --spread: clamp(2.5rem, 12vw, 3.25rem);
+  --letter-size: clamp(2.75rem, 14vw, 3.5rem);
+  --centre-size: clamp(3.25rem, 16vw, 4.25rem);
+  --spread: clamp(2.75rem, 14vw, 3.5rem);
 
   position: relative;
   width: calc(var(--centre-size) + var(--spread) * 2.5);

@@ -30,57 +30,6 @@ function handleTimeChange(event: Event) {
 
 <template>
   <ClientOnly>
-    <SettingsPopover
-      v-if="isSupported"
-      label="Notification settings"
-      class="sm:hidden"
-    >
-      <template #icon>
-        <span
-          :class="iconClass"
-          class="text-base"
-          aria-hidden="true"
-        />
-      </template>
-      <template #default>
-        <div class="flex flex-col gap-3">
-          <div class="text-sm font-medium text-on-surface">
-            Daily Reminders
-          </div>
-          <button
-            type="button"
-            class="flex items-center justify-between gap-3 w-full px-3 py-2 text-sm rounded-lg text-on-surface border-1 border-solid border-muted bg-surface hover:bg-surface-hover transition-colors focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
-            @click="toggleNotifications"
-          >
-            <span>{{ isEnabled ? 'Enabled' : 'Disabled' }}</span>
-            <span
-              :class="iconClass"
-              class="text-lg"
-              aria-hidden="true"
-            />
-          </button>
-          <div
-            v-if="isEnabled"
-            class="flex flex-col gap-2"
-          >
-            <label class="text-xs text-muted-foreground">Remind me at:</label>
-            <input
-              type="time"
-              :value="settings.time"
-              class="px-3 py-2 text-sm font-mono rounded-lg border-1 border-solid border-muted bg-surface text-on-surface focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
-              aria-label="Reminder time"
-              @change="handleTimeChange"
-            >
-          </div>
-        </div>
-      </template>
-    </SettingsPopover>
-    <template #fallback>
-      <div class="w-9 h-9 sm:hidden" />
-    </template>
-  </ClientOnly>
-
-  <ClientOnly>
     <div
       v-if="isSupported"
       class="reminders-group hidden sm:flex items-center"

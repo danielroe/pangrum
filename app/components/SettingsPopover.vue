@@ -24,7 +24,7 @@ onKeyStroke('Escape', close)
     <button
       ref="trigger"
       type="button"
-      class="w-9 h-9 flex items-center justify-center text-lg rounded-lg border-1 border-solid border-muted bg-surface hover:bg-surface-hover transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
+      class="w-8 h-8 flex items-center justify-center text-base rounded-lg border-1 border-solid border-muted bg-surface hover:bg-surface-hover transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
       :aria-label="label"
       :aria-expanded="isOpen"
       @click="toggle"

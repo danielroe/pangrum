@@ -130,117 +130,122 @@ onKeyStroke('Escape', close)
 </script>
 
 <template>
-  <div class="relative">
-    <button
-      ref="trigger"
-      type="button"
-      class="trigger-btn flex sm:hidden items-center justify-center w-9 h-9 rounded-lg bg-surface border-1 border-solid text-on-surface cursor-pointer transition-colors hover:bg-surface-hover focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
-      :class="isToday ? 'border-muted' : 'border-primary-border'"
-      aria-label="Select puzzle date"
-      :aria-expanded="isOpen"
-      @click="toggle"
-    >
-      <span
-        class="i-lucide-calendar text-lg"
-        aria-hidden="true"
-      />
-    </button>
-
-    <button
-      type="button"
-      class="trigger-btn hidden sm:flex items-center justify-center gap-2 px-3 py-1 text-sm rounded-lg bg-surface border-1 border-solid text-on-surface cursor-pointer transition-colors hover:bg-surface-hover focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
-      :class="isToday ? 'border-muted' : 'border-primary-border'"
-      aria-label="Select puzzle date"
-      :aria-expanded="isOpen"
-      @click="toggle"
-    >
-      <span
-        class="i-lucide-calendar text-sm"
-        aria-hidden="true"
-      />
-      <span>{{ displayDate }}</span>
-    </button>
-
-    <Transition
-      enter-active-class="transition-opacity duration-150 ease-out"
-      enter-from-class="opacity-0"
-      enter-to-class="opacity-100"
-      leave-active-class="transition-opacity duration-100 ease-in"
-      leave-from-class="opacity-100"
-      leave-to-class="opacity-0"
-    >
-      <div
-        v-if="isOpen"
-        ref="popover"
-        class="popover fixed sm:absolute top-14 sm:top-full right-3 sm:right-auto sm:left-0 mt-0 sm:mt-2 z-50 bg-surface-elevated border-1 border-solid border-muted rounded-xl p-4 w-[min(18rem,calc(100vw-1.5rem))] shadow-xl"
+  <ClientOnly>
+    <div class="relative">
+      <button
+        ref="trigger"
+        type="button"
+        class="trigger-btn flex sm:hidden items-center justify-center w-8 h-8 rounded-lg bg-surface border-1 border-solid text-on-surface cursor-pointer transition-colors hover:bg-surface-hover focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
+        :class="isToday ? 'border-muted' : 'border-primary-border'"
+        aria-label="Select puzzle date"
+        :aria-expanded="isOpen"
+        @click="toggle"
       >
-        <div class="flex items-center justify-between mb-3">
-          <button
-            type="button"
-            class="w-8 h-8 flex items-center justify-center bg-surface border-1 border-solid border-muted rounded-lg text-on-surface cursor-pointer transition-colors hover:bg-surface-hover disabled:opacity-30 disabled:cursor-not-allowed focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
-            aria-label="Previous month"
-            :disabled="viewYear <= 2026 && viewMonth <= 0"
-            @click="prevMonth"
-          >
-            <span
-              class="i-lucide-chevron-left text-sm"
-              aria-hidden="true"
-            />
-          </button>
-          <span class="text-sm font-medium text-on-surface">{{ monthName }}</span>
-          <button
-            type="button"
-            class="w-8 h-8 flex items-center justify-center bg-surface border-1 border-solid border-muted rounded-lg text-on-surface cursor-pointer transition-colors hover:bg-surface-hover disabled:opacity-30 disabled:cursor-not-allowed focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
-            aria-label="Next month"
-            :disabled="viewYear >= new Date(today).getFullYear() && viewMonth >= new Date(today).getMonth()"
-            @click="nextMonth"
-          >
-            <span
-              class="i-lucide-chevron-right text-sm"
-              aria-hidden="true"
-            />
-          </button>
-        </div>
+        <span
+          class="i-lucide-calendar text-base"
+          aria-hidden="true"
+        />
+      </button>
 
-        <div class="grid grid-cols-7 gap-1 mb-1">
-          <div
-            v-for="day in ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']"
-            :key="day"
-            class="text-xs text-center text-muted-foreground p-1"
-          >
-            {{ day }}
-          </div>
-        </div>
+      <button
+        type="button"
+        class="trigger-btn hidden sm:flex items-center justify-center gap-2 px-3 py-1 text-sm rounded-lg bg-surface border-1 border-solid text-on-surface cursor-pointer transition-colors hover:bg-surface-hover focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
+        :class="isToday ? 'border-muted' : 'border-primary-border'"
+        aria-label="Select puzzle date"
+        :aria-expanded="isOpen"
+        @click="toggle"
+      >
+        <span
+          class="i-lucide-calendar text-sm"
+          aria-hidden="true"
+        />
+        <span>{{ displayDate }}</span>
+      </button>
 
-        <div class="grid grid-cols-7 gap-1">
-          <button
-            v-for="day in calendarDays"
-            :key="day.date"
-            type="button"
-            class="day-button aspect-square flex items-center justify-center text-sm bg-transparent border-1 border-solid border-transparent rounded-lg cursor-pointer transition-colors focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-1"
-            :class="{
-              'bg-primary text-primary font-semibold border-primary': day.isSelected,
-              'bg-primary-subtle text-on-surface border-primary-border font-semibold': day.isToday && !day.isSelected,
-              'text-muted-foreground cursor-not-allowed': day.isFuture || day.isPast,
-              'text-muted-foreground': !day.isCurrentMonth && !day.isFuture && !day.isPast,
-              'text-on-surface hover:bg-surface-hover hover:border-muted': day.isCurrentMonth && !day.isSelected && !day.isToday && !day.isFuture && !day.isPast,
-            }"
-            :disabled="day.isFuture || day.isPast"
-            @click="() => selectDate(day.date)"
-          >
-            {{ day.day }}
-          </button>
-        </div>
-
-        <button
-          v-if="!isToday"
-          type="button"
-          class="mt-3 w-full p-2 text-sm bg-primary-subtle border-1 border-solid border-primary-border rounded-lg text-on-surface cursor-pointer transition-colors hover:bg-primary-muted focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
-          @click="goToToday"
+      <Transition
+        enter-active-class="transition-opacity duration-150 ease-out"
+        enter-from-class="opacity-0"
+        enter-to-class="opacity-100"
+        leave-active-class="transition-opacity duration-100 ease-in"
+        leave-from-class="opacity-100"
+        leave-to-class="opacity-0"
+      >
+        <div
+          v-if="isOpen"
+          ref="popover"
+          class="popover fixed sm:absolute top-14 sm:top-full right-3 sm:right-auto sm:left-0 mt-0 sm:mt-2 z-50 bg-surface-elevated border-1 border-solid border-muted rounded-xl p-4 w-[min(18rem,calc(100vw-1.5rem))] shadow-xl"
         >
-          Back to today
-        </button>
-      </div>
-    </Transition>
-  </div>
+          <div class="flex items-center justify-between mb-3">
+            <button
+              type="button"
+              class="w-8 h-8 flex items-center justify-center bg-surface border-1 border-solid border-muted rounded-lg text-on-surface cursor-pointer transition-colors hover:bg-surface-hover disabled:opacity-30 disabled:cursor-not-allowed focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
+              aria-label="Previous month"
+              :disabled="viewYear <= 2026 && viewMonth <= 0"
+              @click="prevMonth"
+            >
+              <span
+                class="i-lucide-chevron-left text-sm"
+                aria-hidden="true"
+              />
+            </button>
+            <span class="text-sm font-medium text-on-surface">{{ monthName }}</span>
+            <button
+              type="button"
+              class="w-8 h-8 flex items-center justify-center bg-surface border-1 border-solid border-muted rounded-lg text-on-surface cursor-pointer transition-colors hover:bg-surface-hover disabled:opacity-30 disabled:cursor-not-allowed focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
+              aria-label="Next month"
+              :disabled="viewYear >= new Date(today).getFullYear() && viewMonth >= new Date(today).getMonth()"
+              @click="nextMonth"
+            >
+              <span
+                class="i-lucide-chevron-right text-sm"
+                aria-hidden="true"
+              />
+            </button>
+          </div>
+
+          <div class="grid grid-cols-7 gap-1 mb-1">
+            <div
+              v-for="day in ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']"
+              :key="day"
+              class="text-xs text-center text-muted-foreground p-1"
+            >
+              {{ day }}
+            </div>
+          </div>
+
+          <div class="grid grid-cols-7 gap-1">
+            <button
+              v-for="day in calendarDays"
+              :key="day.date"
+              type="button"
+              class="day-button aspect-square flex items-center justify-center text-sm bg-transparent border-1 border-solid border-transparent rounded-lg cursor-pointer transition-colors focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-1"
+              :class="{
+                'bg-primary text-primary font-semibold border-primary': day.isSelected,
+                'bg-primary-subtle text-on-surface border-primary-border font-semibold': day.isToday && !day.isSelected,
+                'text-muted-foreground cursor-not-allowed': day.isFuture || day.isPast,
+                'text-muted-foreground': !day.isCurrentMonth && !day.isFuture && !day.isPast,
+                'text-on-surface hover:bg-surface-hover hover:border-muted': day.isCurrentMonth && !day.isSelected && !day.isToday && !day.isFuture && !day.isPast,
+              }"
+              :disabled="day.isFuture || day.isPast"
+              @click="() => selectDate(day.date)"
+            >
+              {{ day.day }}
+            </button>
+          </div>
+
+          <button
+            v-if="!isToday"
+            type="button"
+            class="mt-3 w-full p-2 text-sm bg-primary-subtle border-1 border-solid border-primary-border rounded-lg text-on-surface cursor-pointer transition-colors hover:bg-primary-muted focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
+            @click="goToToday"
+          >
+            Back to today
+          </button>
+        </div>
+      </Transition>
+    </div>
+    <template #fallback>
+      <div class="w-8 h-8 bg-surface border-1 border-solid border-muted rounded-lg sm:w-9 sm:h-9 md:w-24 md:h-7" />
+    </template>
+  </ClientOnly>
 </template>

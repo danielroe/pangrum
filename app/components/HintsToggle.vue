@@ -6,46 +6,22 @@ const label = computed(() => hintsEnabled.value ? 'Hints on' : 'Hints off')
 
 <template>
   <ClientOnly>
-    <SettingsPopover
-      label="Hints"
-      class="sm:hidden"
+    <button
+      type="button"
+      class="w-8 h-8 flex sm:hidden items-center justify-center text-base rounded-lg border-1 border-solid bg-surface hover:bg-surface-hover transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
+      :class="hintsEnabled ? 'border-primary-border' : 'border-muted'"
+      :aria-pressed="hintsEnabled"
+      :aria-label="label"
+      @click="toggleHints"
     >
-      <template #icon>
-        <span
-          class="i-lucide-lightbulb text-base"
-          aria-hidden="true"
-        />
-      </template>
-      <template #default="{ close }">
-        <div class="flex flex-col gap-2">
-          <div class="text-sm font-medium text-on-surface">
-            Hints
-          </div>
-          <button
-            type="button"
-            class="flex items-center gap-2 w-full px-3 py-2 text-sm text-left rounded-lg border-1 border-solid transition-colors"
-            :class="!hintsEnabled
-              ? 'bg-primary-subtle border-primary-border text-on-surface'
-              : 'bg-surface border-muted hover:bg-surface-hover text-on-surface'"
-            @click="() => { if (hintsEnabled) toggleHints(); close() }"
-          >
-            Off
-          </button>
-          <button
-            type="button"
-            class="flex items-center gap-2 w-full px-3 py-2 text-sm text-left rounded-lg border-1 border-solid transition-colors"
-            :class="hintsEnabled
-              ? 'bg-primary-subtle border-primary-border text-on-surface'
-              : 'bg-surface border-muted hover:bg-surface-hover text-on-surface'"
-            @click="() => { if (!hintsEnabled) toggleHints(); close() }"
-          >
-            On
-          </button>
-        </div>
-      </template>
-    </SettingsPopover>
+      <span
+        class="i-lucide-lightbulb text-base"
+        :class="hintsEnabled ? 'text-primary' : 'text-on-surface'"
+        aria-hidden="true"
+      />
+    </button>
     <template #fallback>
-      <div class="w-9 h-9 sm:hidden rounded-lg border-1 border-solid border-muted bg-surface" />
+      <div class="w-8 h-8 sm:hidden rounded-lg border-1 border-solid border-muted bg-surface" />
     </template>
   </ClientOnly>
 
