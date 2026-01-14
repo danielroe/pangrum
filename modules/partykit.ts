@@ -34,7 +34,7 @@ export default defineNuxtModule({
 
       partyProcess = spawn('npx', ['partykit', 'dev', '--port', String(port)], {
         cwd: nuxt.options.rootDir,
-        stdio: 'inherit',
+        stdio: 'ignore',
         shell: true,
         env: {
           ...process.env,
