@@ -27,4 +27,4 @@ jobs:
         run: pnpm party:deploy
         env:
           PARTYKIT_TOKEN: ${{ secrets.PARTYKIT_TOKEN }}
-          PARTYKIT_LOGIN: ${{ secrets.PARTYKIT_LOGIN }}
+          PARTYKIT_LOGIN: ${{ vars.PARTYKIT_LOGIN }}
