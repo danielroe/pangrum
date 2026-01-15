@@ -80,7 +80,7 @@ onKeyStroke('Escape', handleSkip)
   >
     <div class="flex justify-between items-center p-4 border-b-1 border-solid border-muted">
       <div class="flex items-center gap-3">
-        <span class="text-primary font-mono text-sm">
+        <span class="text-on-surface/70 font-mono text-sm">
           {{ currentStep + 1 }}/{{ totalSteps }}
         </span>
         <h3 class="text-on-surface font-mono font-bold text-lg m-0">
@@ -89,7 +89,7 @@ onKeyStroke('Escape', handleSkip)
       </div>
       <button
         type="button"
-        class="px-3 py-1 text-sm font-mono rounded-lg border-1 border-solid border-transparent bg-transparent text-muted-foreground cursor-pointer hover:bg-surface-hover hover:text-on-surface transition-colors focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
+        class="px-3 py-1 text-sm font-mono rounded-lg border-1 border-solid border-transparent bg-transparent text-on-surface/70 cursor-pointer hover:bg-surface-hover hover:text-on-surface transition-colors focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
         @click="handleSkip"
       >
         {{ t('tutorial.skip') }}
@@ -180,7 +180,7 @@ onKeyStroke('Escape', handleSkip)
       </button>
       <button
         type="button"
-        class="flex-1 px-4 py-3 font-mono text-sm rounded-lg border-1 border-solid border-primary bg-primary text-surface cursor-pointer transition-colors hover:bg-primary-hover flex items-center justify-center gap-2 focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
+        class="flex-1 px-4 py-3 font-mono text-sm rounded-lg border-1 border-solid border-primary bg-primary text-primary-on cursor-pointer transition-colors hover:bg-primary-hover flex items-center justify-center gap-2 focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
         @click="handleNext"
       >
         {{ isLastStep ? t('tutorial.startPlaying') : t('tutorial.next') }}

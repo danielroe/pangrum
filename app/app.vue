@@ -482,6 +482,7 @@ const shareData = computed(() => scoreRef.value?.getShareData())
   --color-primary-muted: rgba(20, 184, 166, 0.2);
   --color-primary-subtle: rgba(20, 184, 166, 0.08);
   --color-primary-border: rgba(20, 184, 166, 0.3);
+  --color-on-primary: #022c22;
 
   /* Surface - Deep charcoal */
   --color-surface: #0f0f0f;
@@ -528,6 +529,7 @@ html[data-theme='light'] {
   --color-primary-muted: rgba(13, 148, 136, 0.15);
   --color-primary-subtle: rgba(13, 148, 136, 0.06);
   --color-primary-border: rgba(13, 148, 136, 0.25);
+  --color-on-primary: #f0fdfa;
 
   /* Surface - Warm off-white */
   --color-surface: #fafaf9;

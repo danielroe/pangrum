@@ -41,6 +41,7 @@ export default defineConfig({
         muted: 'var(--color-primary-muted)',
         subtle: 'var(--color-primary-subtle)',
         border: 'var(--color-primary-border)',
+        on: 'var(--color-on-primary)',
       },
 
       'success': {
