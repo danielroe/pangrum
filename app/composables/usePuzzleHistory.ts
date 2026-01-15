@@ -13,6 +13,85 @@ export interface PuzzleStats {
   totalDaysPlayed: number
 }
 
+const MILLISECONDS_PER_DAY = 1000 * 60 * 60 * 24
+
+/**
+ * Calculates the current streak of consecutive days played.
+ * The streak must include today or yesterday to be valid.
+ */
+export function calculateCurrentStreak(playedDates: Set<string>, today: string): number {
+  if (playedDates.size === 0) return 0
+
+  let currentStreak = 0
+  const checkDate = new Date(today)
+
+  while (true) {
+    const dateStr = checkDate.toISOString().slice(0, 10)
+    if (playedDates.has(dateStr)) {
+      currentStreak++
+      checkDate.setDate(checkDate.getDate() - 1)
+    }
+    else if (currentStreak === 0) {
+      // If today has no progress, check if yesterday started a streak
+      checkDate.setDate(checkDate.getDate() - 1)
+      const yesterdayStr = checkDate.toISOString().slice(0, 10)
+      if (!playedDates.has(yesterdayStr)) {
+        break // No streak
+      }
+      // Continue counting from yesterday
+    }
+    else {
+      break // Streak broken
+    }
+  }
+
+  return currentStreak
+}
+
+/**
+ * Calculates the longest streak of consecutive days played.
+ */
+export function calculateLongestStreak(playedDates: Set<string>): number {
+  if (playedDates.size === 0) return 0
+
+  const sortedDates = [...playedDates].sort()
+
+  let longestStreak = 0
+  let tempStreak = 0
+  let prevDate: Date | null = null
+
+  for (const dateStr of sortedDates) {
+    const currentDate = new Date(dateStr)
+
+    if (prevDate === null) {
+      tempStreak = 1
+    }
+    else {
+      const dayDiff = Math.round((currentDate.getTime() - prevDate.getTime()) / MILLISECONDS_PER_DAY)
+      if (dayDiff === 1) {
+        tempStreak++
+      }
+      else {
+        longestStreak = Math.max(longestStreak, tempStreak)
+        tempStreak = 1
+      }
+    }
+
+    prevDate = currentDate
+  }
+  longestStreak = Math.max(longestStreak, tempStreak)
+
+  return longestStreak
+}
+
+export function calculateStats(playedDates: Set<string>, today: string): PuzzleStats {
+  return {
+    currentStreak: calculateCurrentStreak(playedDates, today),
+    longestStreak: calculateLongestStreak(playedDates),
+    totalDaysPlayed: playedDates.size,
+  }
+}
+
 /**
  * Reads all puzzle progress from localStorage for a given language.
  * Returns a map of date -> progress data.
@@ -85,68 +164,8 @@ export function usePuzzleHistory(language: MaybeRefOrGetter<Language>) {
 
   const stats = computed<PuzzleStats>(() => {
     const today = new Date().toISOString().slice(0, 10)
-    const sortedDates = [...historyMap.value.keys()].sort().reverse()
-
-    if (sortedDates.length === 0) {
-      return { currentStreak: 0, longestStreak: 0, totalDaysPlayed: 0 }
-    }
-
-    // Calculate current streak (must include today or yesterday)
-    let currentStreak = 0
-    const checkDate = new Date(today)
-
-    // Start from today and work backwards
-    while (true) {
-      const dateStr = checkDate.toISOString().slice(0, 10)
-      if (historyMap.value.has(dateStr)) {
-        currentStreak++
-        checkDate.setDate(checkDate.getDate() - 1)
-      }
-      else if (currentStreak === 0) {
-        // If today has no progress, check if yesterday started a streak
-        checkDate.setDate(checkDate.getDate() - 1)
-        const yesterdayStr = checkDate.toISOString().slice(0, 10)
-        if (!historyMap.value.has(yesterdayStr)) {
-          break // No streak
-        }
-        // Continue counting from yesterday
-      }
-      else {
-        break // Streak broken
-      }
-    }
-
-    // Calculate longest streak
-    let longestStreak = 0
-    let tempStreak = 0
-    let prevDate: Date | null = null
-
-    for (const dateStr of sortedDates.slice().reverse()) {
-      const currentDate = new Date(dateStr)
-
-      if (prevDate === null) {
-        tempStreak = 1
-      }
-      else {
-        const dayDiff = Math.round((currentDate.getTime() - prevDate.getTime()) / (1000 * 60 * 60 * 24))
-        if (dayDiff === 1) {
-          tempStreak++
-        }
-        else {
-          longestStreak = Math.max(longestStreak, tempStreak)
-          tempStreak = 1
-        }
-      }
-
-      prevDate = currentDate
-    }
-    longestStreak = Math.max(longestStreak, tempStreak)
-
-    return {
-      currentStreak,
-      longestStreak,
-      totalDaysPlayed: historyMap.value.size,
-    }
+    const playedDates = new Set(historyMap.value.keys())
+    return calculateStats(playedDates, today)
   })
 
   return {
