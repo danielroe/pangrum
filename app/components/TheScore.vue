@@ -5,6 +5,7 @@ const props = defineProps<{
   totalPangrams: number
   letters: string[]
   date: string
+  compact?: boolean
 }>()
 
 const emit = defineEmits<{
@@ -93,7 +94,65 @@ defineExpose({
 </script>
 
 <template>
-  <div class="flex flex-col gap-1 ls:gap-1">
+  <!-- Compact mode for landscape header -->
+  <div
+    v-if="compact"
+    class="flex items-center gap-3"
+  >
+    <div class="flex items-baseline gap-1.5">
+      <span class="score-value-compact font-mono font-bold">{{ score }}</span>
+      <span class="text-sm font-medium text-on-surface op-70 lowercase tracking-tight">{{ status }}</span>
+    </div>
+    <!-- Mini progress bar -->
+    <div class="progress-track-compact">
+      <div class="track-bg-compact" />
+      <div
+        class="progress-fill-compact"
+        :style="{ '--fill-scale': `${fillWidth / 100}` }"
+      />
+    </div>
+    <div class="flex items-center gap-2">
+      <span class="flex items-baseline gap-0.5 text-xs tabular-nums text-muted-foreground">
+        <span class="font-mono font-semibold text-on-surface">{{ wordsFound }}</span>
+        <span class="op-40">/</span>
+        <span class="font-mono">{{ totalWords }}</span>
+      </span>
+      <span
+        v-if="totalPangrams > 0"
+        class="flex items-center gap-px"
+        role="img"
+        :aria-label="`${foundPangrams} of ${totalPangrams} pangrams found`"
+      >
+        <span
+          v-for="i in totalPangrams"
+          :key="i"
+          class="i-lucide-star text-3 transition-all duration-300"
+          :class="i <= foundPangrams
+            ? 'text-celebration star-glow'
+            : 'text-muted-foreground op-30'"
+          aria-hidden="true"
+        />
+      </span>
+    </div>
+    <button
+      v-if="words.size > 0"
+      type="button"
+      class="flex items-center justify-center w-6 h-6 p-0 bg-transparent border-1 border-solid border-muted/60 rounded-md text-muted-foreground cursor-pointer transition-all duration-150 hover:bg-surface-hover hover:text-on-surface hover:border-muted active:scale-95 focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
+      aria-label="Share results"
+      @click="emit('share')"
+    >
+      <span
+        class="i-lucide-share-2 text-xs"
+        aria-hidden="true"
+      />
+    </button>
+  </div>
+
+  <!-- Full mode -->
+  <div
+    v-else
+    class="flex flex-col gap-1 ls:gap-1"
+  >
     <!-- Score + Status row -->
     <div class="flex items-center justify-between gap-3">
       <div class="flex items-baseline gap-1.5">
@@ -218,6 +277,45 @@ defineExpose({
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
+}
+
+.score-value-compact {
+  font-size: 1.5rem;
+  line-height: 1;
+  letter-spacing: -0.025em;
+  font-variant-numeric: tabular-nums;
+  background: linear-gradient(
+    135deg,
+    var(--color-primary) 0%,
+    color-mix(in oklch, var(--color-primary) 65%, white) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Compact progress bar for header */
+.progress-track-compact {
+  position: relative;
+  width: 60px;
+  height: 3px;
+}
+
+.track-bg-compact {
+  position: absolute;
+  inset: 0;
+  background: var(--color-progress-inactive);
+  border-radius: 9999px;
+}
+
+.progress-fill-compact {
+  position: absolute;
+  inset: 0;
+  background: var(--color-primary);
+  border-radius: 9999px;
+  transform-origin: left;
+  transform: scaleX(var(--fill-scale, 0));
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .star-glow {

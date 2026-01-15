@@ -177,9 +177,9 @@ const shareData = computed(() => scoreRef.value?.getShareData())
   <TheToast />
   <ParticleCanvas />
   <div class="h-100dvh overflow-hidden">
-    <div class="flex flex-col h-full gap-2 px-2 py-2 text-on-surface sm:gap-3 sm:p-3 md:gap-6 md:p-8 ls:grid ls:grid-cols-[auto_1fr] ls:grid-rows-[auto_1fr] ls:gap-2 ls:p-2">
-      <header class="flex items-center justify-between gap-2 flex-shrink-0 sm:items-start sm:gap-4 ls:col-span-2 ls:gap-2">
-        <h1 class="text-xs font-normal tracking-[0.12em] lowercase opacity-40 m-0 transition-opacity transition-duration-0.2s sm:text-sm sm:mt-1 md:text-2xl md:font-semibold md:opacity-100 md:tracking-widest hover:opacity-100">
+    <div class="flex flex-col h-full gap-2 px-2 py-2 text-on-surface sm:gap-3 sm:p-3 md:gap-6 md:p-8 ls:grid ls:grid-cols-[minmax(280px,auto)_1fr] ls:grid-rows-[auto_1fr] ls:gap-3 ls:p-2">
+      <header class="flex items-center justify-between gap-2 flex-shrink-0 sm:items-start sm:gap-4 ls:col-span-2 ls:gap-3 ls:py-1">
+        <h1 class="text-xs font-normal tracking-[0.12em] lowercase opacity-40 m-0 transition-opacity transition-duration-0.2s sm:text-sm sm:mt-1 md:text-2xl md:font-semibold md:opacity-100 md:tracking-widest hover:opacity-100 ls:hidden">
           pangrum
           <ClientOnly>
             <span
@@ -190,6 +190,22 @@ const shareData = computed(() => scoreRef.value?.getShareData())
             </span>
           </ClientOnly>
         </h1>
+        <!-- Compact score display for landscape header -->
+        <div
+          v-if="data"
+          class="hidden ls:flex items-center gap-2 ls:py-1"
+        >
+          <TheScore
+            ref="score"
+            :words="words"
+            :valid-words="validWords"
+            :total-pangrams="totalPangrams"
+            :letters="letters"
+            :date="selectedDate"
+            compact
+            @share="openShareModal"
+          />
+        </div>
         <div class="flex gap-1.5 items-center flex-shrink-0 sm:gap-2">
           <DatePicker
             v-model="selectedDate"
@@ -230,11 +246,12 @@ const shareData = computed(() => scoreRef.value?.getShareData())
         v-if="data"
         class="app-main flex flex-col flex-1 min-h-0 gap-3 sm:gap-4 md:gap-6 ls:contents"
       >
-        <!-- Left column in landscape: letter grid -->
-        <div class="flex flex-col-reverse gap-4 flex-shrink-0 sm:gap-8 md:flex-row md:items-end md:gap-12 ls:flex-col ls:gap-2 ls:row-start-2 ls:self-center ls:justify-self-center">
+        <!-- Left column in landscape: letter grid + input -->
+        <div class="flex flex-col-reverse gap-4 flex-shrink-0 sm:gap-8 md:flex-row md:items-end md:gap-12 ls:flex-col ls:gap-3 ls:row-start-2 ls:self-center ls:justify-self-center">
           <LetterGrid
             :letters="letters"
             :centre-letter="centreLetter"
+            class="ls:scale-110 ls:origin-top"
           />
           <TheScore
             ref="score"
@@ -267,32 +284,21 @@ const shareData = computed(() => scoreRef.value?.getShareData())
           @word-added="handleWordAdded"
         />
 
-        <!-- Right column in landscape: score + hints/words -->
-        <section class="flex-1 min-h-0 flex flex-col px-0 py-1 sm:py-2 md:pb-0 words-section ls:row-start-2 ls:gap-2 ls:p-0 ls:overflow-hidden">
-          <TheScore
-            class="hidden flex-shrink-0 ls:block"
+        <!-- Right column in landscape: hints/words slider -->
+        <section class="flex-1 min-h-0 flex flex-col px-0 py-1 sm:py-2 md:pb-0 words-section ls:row-start-2 ls:p-0">
+          <WordHints
+            v-if="hintsEnabled"
+            :pairs="pairs"
             :words="words"
             :valid-words="validWords"
-            :total-pangrams="totalPangrams"
             :letters="letters"
-            :date="selectedDate"
-            @share="openShareModal"
+            :total-pangrams="totalPangrams"
           />
-          <div class="flex-1 min-h-0 h-full ls:overflow-y-auto">
-            <WordHints
-              v-if="hintsEnabled"
-              :pairs="pairs"
-              :words="words"
-              :valid-words="validWords"
-              :letters="letters"
-              :total-pangrams="totalPangrams"
-            />
-            <FoundWordsList
-              v-else
-              :words="words"
-              :letters="letters"
-            />
-          </div>
+          <FoundWordsList
+            v-else
+            :words="words"
+            :letters="letters"
+          />
         </section>
       </main>
       <footer class="hidden sm:flex flex-shrink-0 items-center justify-center gap-1.5 text-[10px] text-muted-foreground pt-1 pb-safe ls:hidden">
