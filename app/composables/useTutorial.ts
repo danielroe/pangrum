@@ -1,15 +1,14 @@
 export interface TutorialStep {
   id: string
-  highlight?: 'letters' | 'centre' | 'input' | 'score' | 'hints'
 }
 
 export const TUTORIAL_STEPS: TutorialStep[] = [
   { id: 'welcome' },
-  { id: 'letters', highlight: 'letters' },
-  { id: 'centre', highlight: 'centre' },
-  { id: 'scoring', highlight: 'score' },
-  { id: 'pangrams', highlight: 'letters' },
-  { id: 'hints', highlight: 'hints' },
+  { id: 'letters' },
+  { id: 'centre' },
+  { id: 'scoring' },
+  { id: 'pangrams' },
+  { id: 'hints' },
 ]
 
 const STORAGE_KEY = 'pangrum-tutorial-seen'
@@ -72,7 +71,6 @@ export function useTutorial() {
     showTutorial,
     currentStep,
     currentStepId: computed(() => TUTORIAL_STEPS[currentStep.value]?.id),
-    currentStepHighlight: computed(() => TUTORIAL_STEPS[currentStep.value]?.highlight),
     totalSteps: TUTORIAL_STEPS.length,
     isFirstStep: computed(() => currentStep.value === 0),
     isLastStep: computed(() => currentStep.value === TUTORIAL_STEPS.length - 1),

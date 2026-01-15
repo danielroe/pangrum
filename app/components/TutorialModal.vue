@@ -8,7 +8,6 @@ const { t } = useI18n()
 const {
   currentStep,
   currentStepId,
-  currentStepHighlight,
   totalSteps,
   isFirstStep,
   isLastStep,
@@ -121,12 +120,7 @@ onKeyStroke('Escape', handleSkip)
       </div>
 
       <div class="flex justify-center py-4">
-        <div
-          class="w-24 h-24 rounded-2xl flex items-center justify-center text-4xl"
-          :class="currentStepHighlight === 'centre'
-            ? 'bg-primary/20 text-primary'
-            : 'bg-surface-elevated text-on-surface'"
-        >
+        <div class="w-24 h-24 rounded-2xl flex items-center justify-center bg-primary/15">
           <template v-if="currentStepId === 'welcome'">
             <span
               class="i-lucide-layers text-5xl text-primary"
@@ -134,27 +128,26 @@ onKeyStroke('Escape', handleSkip)
             />
           </template>
           <template v-else-if="currentStepId === 'letters'">
-            <div class="flex flex-wrap gap-1 justify-center">
-              <span class="w-6 h-6 bg-surface-elevated rounded text-xs flex items-center justify-center font-mono font-bold">A</span>
-              <span class="w-6 h-6 bg-surface-elevated rounded text-xs flex items-center justify-center font-mono font-bold">B</span>
-              <span class="w-6 h-6 bg-surface-elevated rounded text-xs flex items-center justify-center font-mono font-bold">C</span>
-            </div>
+            <span
+              class="i-lucide-keyboard text-5xl text-primary"
+              aria-hidden="true"
+            />
           </template>
           <template v-else-if="currentStepId === 'centre'">
             <span
-              class="i-lucide-star text-5xl text-primary"
+              class="i-lucide-circle-dot text-5xl text-primary"
               aria-hidden="true"
             />
           </template>
           <template v-else-if="currentStepId === 'scoring'">
             <span
-              class="i-lucide-bar-chart-3 text-5xl"
+              class="i-lucide-trophy text-5xl text-primary"
               aria-hidden="true"
             />
           </template>
           <template v-else-if="currentStepId === 'pangrams'">
             <span
-              class="i-lucide-star text-5xl text-celebration"
+              class="i-lucide-sparkles text-5xl text-primary"
               aria-hidden="true"
             />
           </template>
@@ -187,7 +180,7 @@ onKeyStroke('Escape', handleSkip)
       </button>
       <button
         type="button"
-        class="flex-1 px-4 py-3 font-mono text-sm rounded-lg border-1 border-solid border-primary bg-primary text-on-primary cursor-pointer transition-colors hover:bg-primary-hover flex items-center justify-center gap-2 focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
+        class="flex-1 px-4 py-3 font-mono text-sm rounded-lg border-1 border-solid border-primary bg-primary text-on-surface cursor-pointer transition-colors hover:bg-primary-hover flex items-center justify-center gap-2 focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
         :aria-label="isLastStep ? t('tutorial.startPlaying') : t('tutorial.goToStep', { step: currentStep + 2 })"
         @click="handleNext"
       >
