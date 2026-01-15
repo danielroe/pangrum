@@ -313,7 +313,7 @@ const shareData = computed(() => scoreRef.value?.getShareData())
             </template>
           </ClientOnly>
           <HintsToggle />
-          <SettingsMenu />
+          <LazySettingsMenu hydrate-on-interaction />
         </div>
       </header>
 
@@ -361,8 +361,9 @@ const shareData = computed(() => scoreRef.value?.getShareData())
 
         <!-- Right column in landscape: hints/words slider -->
         <section class="flex-1 min-h-0 flex flex-col px-0 py-1 sm:py-2 md:pb-0 words-section ls:row-start-2 ls:p-0">
-          <WordHints
+          <LazyWordHints
             v-if="hintsEnabled"
+            :hydrate-when="hintsEnabled"
             :pairs="pairs"
             :hashes="hashes"
             :words="words"
@@ -450,14 +451,16 @@ const shareData = computed(() => scoreRef.value?.getShareData())
       </main>
     </div>
   </div>
-  <DateMismatchModal
+  <LazyDateMismatchModal
     v-if="data && showDateMismatchModal"
+    :hydrate-when="data && showDateMismatchModal"
     :puzzle-date="puzzleDate"
     :on-refresh="goToToday"
     @close="closeDateMismatchModal"
   />
-  <ShareResultsModal
+  <LazyShareResultsModal
     v-if="showShareModal && shareData"
+    :hydrate-when="shareData && showShareModal"
     :data="shareData"
     @close="showShareModal = false"
   />
@@ -465,8 +468,9 @@ const shareData = computed(() => scoreRef.value?.getShareData())
     v-if="showTutorial"
     @close="showTutorial = false"
   />
-  <StatsOverview
+  <LazyStatsOverview
     v-if="showStatsModal"
+    :hydrate-when="showStatsModal"
     :stats="puzzleStats"
     @close="showStatsModal = false"
   />
