@@ -1,7 +1,8 @@
 <script setup lang="ts">
+const { t } = useI18n()
 const { hintsEnabled, toggleHints } = useHints()
 
-const label = computed(() => hintsEnabled.value ? 'Hints on' : 'Hints off')
+const label = computed(() => hintsEnabled.value ? t('hintsToggle.hintsOn') : t('hintsToggle.hintsOff'))
 </script>
 
 <template>

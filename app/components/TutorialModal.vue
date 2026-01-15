@@ -3,9 +3,12 @@ const emit = defineEmits<{
   close: []
 }>()
 
+const { t } = useI18n()
+
 const {
   currentStep,
-  currentStepData,
+  currentStepId,
+  currentStepHighlight,
   totalSteps,
   isFirstStep,
   isLastStep,
@@ -14,6 +17,9 @@ const {
   skipTutorial,
   completeTutorial,
 } = useTutorial()
+
+const stepTitle = computed(() => currentStepId.value ? t(`tutorial.steps.${currentStepId.value}.title`) : '')
+const stepContent = computed(() => currentStepId.value ? t(`tutorial.steps.${currentStepId.value}.content`) : '')
 
 const dialogRef = useTemplateRef<HTMLDialogElement>('dialog')
 
@@ -78,7 +84,7 @@ onKeyStroke('Escape', handleSkip)
           {{ currentStep + 1 }}/{{ totalSteps }}
         </span>
         <h3 class="text-on-surface font-mono font-bold text-lg m-0">
-          {{ currentStepData?.title }}
+          {{ stepTitle }}
         </h3>
       </div>
       <button
@@ -86,7 +92,7 @@ onKeyStroke('Escape', handleSkip)
         class="px-3 py-1 text-sm font-mono rounded-lg border-1 border-solid border-transparent bg-transparent text-muted-foreground cursor-pointer hover:bg-surface-hover hover:text-on-surface transition-colors focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
         @click="handleSkip"
       >
-        Skip
+        {{ t('tutorial.skip') }}
       </button>
     </div>
 
@@ -102,7 +108,7 @@ onKeyStroke('Escape', handleSkip)
             : index < currentStep
               ? 'bg-primary/50 hover:bg-primary/70'
               : 'bg-muted hover:bg-muted-foreground'"
-          :aria-label="`Go to step ${index + 1}`"
+          :aria-label="t('tutorial.goToStep', { step: index + 1 })"
           @click="currentStep = index"
         />
       </div>
@@ -110,42 +116,42 @@ onKeyStroke('Escape', handleSkip)
       <div class="flex justify-center py-4">
         <div
           class="w-24 h-24 rounded-2xl flex items-center justify-center text-4xl"
-          :class="currentStepData?.highlight === 'centre'
+          :class="currentStepHighlight === 'centre'
             ? 'bg-primary/20 text-primary'
             : 'bg-surface-elevated text-on-surface'"
         >
-          <template v-if="currentStepData?.id === 'welcome'">
+          <template v-if="currentStepId === 'welcome'">
             <span
               class="i-lucide-layers text-5xl text-primary"
               aria-hidden="true"
             />
           </template>
-          <template v-else-if="currentStepData?.id === 'letters'">
+          <template v-else-if="currentStepId === 'letters'">
             <div class="flex flex-wrap gap-1 justify-center">
               <span class="w-6 h-6 bg-surface-elevated rounded text-xs flex items-center justify-center font-mono font-bold">A</span>
               <span class="w-6 h-6 bg-surface-elevated rounded text-xs flex items-center justify-center font-mono font-bold">B</span>
               <span class="w-6 h-6 bg-surface-elevated rounded text-xs flex items-center justify-center font-mono font-bold">C</span>
             </div>
           </template>
-          <template v-else-if="currentStepData?.id === 'centre'">
+          <template v-else-if="currentStepId === 'centre'">
             <span
               class="i-lucide-star text-5xl text-primary"
               aria-hidden="true"
             />
           </template>
-          <template v-else-if="currentStepData?.id === 'scoring'">
+          <template v-else-if="currentStepId === 'scoring'">
             <span
               class="i-lucide-bar-chart-3 text-5xl"
               aria-hidden="true"
             />
           </template>
-          <template v-else-if="currentStepData?.id === 'pangrams'">
+          <template v-else-if="currentStepId === 'pangrams'">
             <span
               class="i-lucide-star text-5xl text-celebration"
               aria-hidden="true"
             />
           </template>
-          <template v-else-if="currentStepData?.id === 'hints'">
+          <template v-else-if="currentStepId === 'hints'">
             <span
               class="i-lucide-lightbulb text-5xl text-primary"
               aria-hidden="true"
@@ -155,7 +161,7 @@ onKeyStroke('Escape', handleSkip)
       </div>
 
       <p class="text-on-surface font-mono text-base text-center leading-relaxed m-0">
-        {{ currentStepData?.content }}
+        {{ stepContent }}
       </p>
     </div>
 
@@ -170,14 +176,14 @@ onKeyStroke('Escape', handleSkip)
           class="i-lucide-chevron-left text-base"
           aria-hidden="true"
         />
-        Back
+        {{ t('tutorial.back') }}
       </button>
       <button
         type="button"
         class="flex-1 px-4 py-3 font-mono text-sm rounded-lg border-1 border-solid border-primary bg-primary text-surface cursor-pointer transition-colors hover:bg-primary-hover flex items-center justify-center gap-2 focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
         @click="handleNext"
       >
-        {{ isLastStep ? 'Start Playing' : 'Next' }}
+        {{ isLastStep ? t('tutorial.startPlaying') : t('tutorial.next') }}
         <span
           v-if="!isLastStep"
           class="i-lucide-chevron-right text-base"

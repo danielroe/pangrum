@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { TheScore } from '#components'
 
+const { t } = useI18n()
 const colorMode = useColorMode()
 
 useHead({
@@ -36,10 +37,6 @@ const isViewingToday = computed(() => selectedDate.value === todayDate.value)
 
 function goToToday() {
   selectedDate.value = todayDate.value
-}
-
-function reloadPage() {
-  window.location.reload()
 }
 
 const letters = computed(() => data.value?.letters || [])
@@ -114,7 +111,7 @@ watch(letters, (newLetters) => {
 
     if (migrated > 0) {
       addToast({
-        message: `Migrated ${migrated} word${migrated > 1 ? 's' : ''} from previous format`,
+        message: t('toasts.migrated', migrated),
         type: 'success',
       })
     }
@@ -141,7 +138,7 @@ const { sendWord } = useSync({
     language.value = lang
     selectedDate.value = date
     addToast({
-      message: 'Navigated to synced puzzle',
+      message: t('toasts.navigatedToSynced'),
       type: 'success',
     })
   },
@@ -255,7 +252,7 @@ const shareData = computed(() => scoreRef.value?.getShareData())
               v-if="!isOnline"
               class="text-xs opacity-60 ml-1 sm:ml-2"
             >
-              offline
+              {{ t('app.offline') }}
             </span>
           </ClientOnly>
         </h1>
@@ -302,7 +299,7 @@ const shareData = computed(() => scoreRef.value?.getShareData())
                   class="i-lucide-bar-chart-2 text-sm"
                   aria-hidden="true"
                 />
-                <span>Statistics</span>
+                <span>{{ t('header.statistics') }}</span>
               </button>
             </template>
           </ClientOnly>
@@ -372,34 +369,6 @@ const shareData = computed(() => scoreRef.value?.getShareData())
           />
         </section>
       </main>
-      <footer class="hidden sm:flex flex-shrink-0 items-center justify-center gap-1.5 text-[10px] text-muted-foreground pt-1 pb-safe ls:hidden">
-        <span>made with <span class="text-error-light">&#9829;</span> by</span>
-        <a
-          href="https://roe.dev"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="hover:text-on-surface transition-colors"
-        >daniel roe</a>
-        <span aria-hidden="true">·</span>
-        <span class="inline-flex items-center gap-1 font-mono opacity-60 hover:opacity-100 transition-opacity">
-          <a
-            :href="`https://github.com/danielroe/pangrum/commit/${$config.public.commitHash}`"
-            target="_blank"
-            rel="noopener noreferrer"
-          >{{ $config.public.commitHash }}</a>
-          <button
-            type="button"
-            title="Refresh app to get latest version"
-            @click="reloadPage"
-          >
-            <span
-              class="i-lucide-refresh-cw text-[10px]"
-              aria-hidden="true"
-            />
-            <span class="sr-only">Refresh app</span>
-          </button>
-        </span>
-      </footer>
     </div>
   </div>
   <DateMismatchModal

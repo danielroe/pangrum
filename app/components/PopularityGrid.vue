@@ -10,6 +10,8 @@ const props = defineProps<{
   loading: boolean
 }>()
 
+const { t } = useI18n()
+
 function isPangram(word: string) {
   return props.letters.every(l => word.includes(l))
 }
@@ -58,14 +60,14 @@ function redactWord(word: string): string {
     v-if="loading"
     class="flex items-center justify-center h-full text-muted-foreground font-mono text-sm text-center p-4"
   >
-    Loading popularity data...
+    {{ t('popularity.loading') }}
   </div>
 
   <div
     v-else-if="!popularity || popularity.totalPlayers === 0"
     class="flex items-center justify-center h-full text-muted-foreground font-mono text-sm text-center p-4"
   >
-    Popularity data will appear as more players complete this puzzle.
+    {{ t('popularity.noData') }}
   </div>
 
   <div
@@ -108,7 +110,7 @@ function redactWord(word: string): string {
         <div class="flex items-center gap-2 shrink-0">
           <div
             class="w-16 h-1.5 bg-muted/30 rounded-full overflow-hidden"
-            :title="`${item.percentage ?? 0}% of players found this word`"
+            :title="t('popularity.foundPercent', { percent: item.percentage ?? 0 })"
           >
             <div
               class="h-full rounded-full transition-all duration-300"
@@ -127,7 +129,7 @@ function redactWord(word: string): string {
     </ul>
 
     <p class="text-xs text-muted-foreground text-center mt-2 pt-2 border-t border-muted/20">
-      Based on {{ popularity.totalPlayers.toLocaleString() }} {{ popularity.totalPlayers === 1 ? 'player' : 'players' }}
+      {{ t('popularity.basedOn', popularity.totalPlayers) }}
     </p>
   </div>
 </template>

@@ -14,6 +14,7 @@ export default defineNuxtConfig({
     '@nuxtjs/color-mode',
     '@nuxt/test-utils',
     'nuxt-og-image',
+    '@nuxtjs/i18n',
   ],
   $development: {
     nitro: {
@@ -80,6 +81,23 @@ export default defineNuxtConfig({
   eslint: {
     config: {
       stylistic: true,
+    },
+  },
+  i18n: {
+    locales: [
+      { code: 'en', language: 'en', file: 'en.json', name: 'English' },
+      { code: 'de', language: 'de', file: 'de.json', name: 'Deutsch' },
+      { code: 'es', language: 'es', file: 'es.json', name: 'Español' },
+      { code: 'fr', language: 'fr', file: 'fr.json', name: 'Français' },
+      { code: 'nl', language: 'nl', file: 'nl.json', name: 'Nederlands' },
+    ],
+    defaultLocale: 'en',
+    langDir: 'locales',
+    strategy: 'no_prefix',
+    detectBrowserLanguage: {
+      useCookie: true,
+      cookieKey: 'pangrum-ui-lang',
+      fallbackLocale: 'en',
     },
   },
   ogImage: {

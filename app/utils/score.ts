@@ -1,24 +1,39 @@
-export const LEVEL_THRESHOLDS = {
-  'beginner': 0,
-  'novice': 2.5,
-  'moving up': 5,
-  'good': 8,
-  'solid': 15,
-  'nice': 25,
-  'great': 40,
-  'amazing': 50,
-  'genius': 70,
-  'perfect': 100,
-} as const
+// Level keys for i18n lookup
+export const LEVEL_KEYS = [
+  'beginner',
+  'novice',
+  'movingUp',
+  'good',
+  'solid',
+  'nice',
+  'great',
+  'amazing',
+  'genius',
+  'perfect',
+] as const
 
-export type Level = keyof typeof LEVEL_THRESHOLDS
+export type LevelKey = typeof LEVEL_KEYS[number]
 
-const THRESHOLDS_REVERSED = Object.entries(LEVEL_THRESHOLDS).reverse() as [Level, number][]
+// Thresholds indexed by level key
+export const LEVEL_THRESHOLDS: Record<LevelKey, number> = {
+  beginner: 0,
+  novice: 2.5,
+  movingUp: 5,
+  good: 8,
+  solid: 15,
+  nice: 25,
+  great: 40,
+  amazing: 50,
+  genius: 70,
+  perfect: 100,
+}
 
-export function getLevel(percentage: number): Level {
-  for (const [label, threshold] of THRESHOLDS_REVERSED) {
+const THRESHOLDS_REVERSED = LEVEL_KEYS.slice().reverse().map(key => [key, LEVEL_THRESHOLDS[key]] as const)
+
+export function getLevelKey(percentage: number): LevelKey {
+  for (const [key, threshold] of THRESHOLDS_REVERSED) {
     if (threshold <= percentage) {
-      return label
+      return key
     }
   }
   return 'beginner'

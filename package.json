@@ -27,6 +27,7 @@
     "@nuxt/fonts": "0.12.1",
     "@nuxt/test-utils": "3.23.0",
     "@nuxtjs/color-mode": "^4.0.0",
+    "@nuxtjs/i18n": "^10.2.1",
     "@unocss/nuxt": "^66.5.12",
     "@unocss/transformer-directives": "^66.5.12",
     "@vercel/kv": "^3.0.0",

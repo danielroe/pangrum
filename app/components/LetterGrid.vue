@@ -1,4 +1,6 @@
 <script setup lang="ts">
+const { t } = useI18n()
+
 const props = defineProps<{
   letters: string[]
   centreLetter: string
@@ -108,7 +110,7 @@ const letterPositions = [
           class="i-lucide-shuffle text-base"
           aria-hidden="true"
         />
-        <span class="text-sm font-mono">Shuffle</span>
+        <span class="text-sm font-mono">{{ t('letterGrid.shuffle') }}</span>
       </button>
     </div>
 
@@ -122,7 +124,7 @@ const letterPositions = [
           class="i-lucide-shuffle text-lg ls:text-base"
           aria-hidden="true"
         />
-        <span class="sr-only">Shuffle letters</span>
+        <span class="sr-only">{{ t('letterGrid.shuffleLetters') }}</span>
       </button>
       <button
         class="w-10 h-10 flex items-center justify-center bg-surface text-muted-foreground border-1 border-solid border-muted rounded-lg cursor-pointer transition-colors hover:bg-surface-hover hover:text-on-surface active:bg-surface-active focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2 ls:w-9 ls:h-9"
@@ -133,7 +135,7 @@ const letterPositions = [
           class="i-lucide-delete text-lg ls:text-base"
           aria-hidden="true"
         />
-        <span class="sr-only">Delete character</span>
+        <span class="sr-only">{{ t('letterGrid.deleteCharacter') }}</span>
       </button>
       <button
         class="w-10 h-10 flex items-center justify-center bg-surface text-muted-foreground border-1 border-solid border-muted rounded-lg cursor-pointer transition-colors hover:bg-surface-hover hover:text-on-surface active:bg-surface-active focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2 ls:w-9 ls:h-9"
@@ -144,7 +146,7 @@ const letterPositions = [
           class="i-lucide-corner-down-left text-lg ls:text-base"
           aria-hidden="true"
         />
-        <span class="sr-only">Submit word</span>
+        <span class="sr-only">{{ t('letterGrid.submitWord') }}</span>
       </button>
     </div>
   </div>

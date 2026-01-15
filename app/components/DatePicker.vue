@@ -1,4 +1,6 @@
 <script setup lang="ts">
+const { t, locale } = useI18n()
+
 const props = defineProps<{
   modelValue: string // YYYY-MM-DD format
   hasProgress?: (date: string) => boolean
@@ -23,7 +25,7 @@ const viewYear = computed(() => viewDate.value.getFullYear())
 const viewMonth = computed(() => viewDate.value.getMonth())
 
 const monthName = computed(() => {
-  return viewDate.value.toLocaleDateString('en', { month: 'long', year: 'numeric' })
+  return viewDate.value.toLocaleDateString(locale.value, { month: 'long', year: 'numeric' })
 })
 
 interface CalendarDay {
@@ -135,9 +137,9 @@ function nextMonth() {
 }
 
 const displayDate = computed(() => {
-  if (isToday.value) return 'Today'
+  if (isToday.value) return t('datePicker.today')
   const date = new Date(props.modelValue)
-  return date.toLocaleDateString('en', { month: 'short', day: 'numeric' })
+  return date.toLocaleDateString(locale.value, { month: 'short', day: 'numeric' })
 })
 
 onClickOutside(popoverRef, close, { ignore: [triggerRef] })
@@ -152,7 +154,7 @@ onKeyStroke('Escape', close)
         type="button"
         class="flex sm:hidden items-center justify-center w-8 h-8 rounded-lg bg-surface border-1 border-solid text-on-surface cursor-pointer transition-colors hover:bg-surface-hover focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2 ls:flex ls:w-7 ls:h-7"
         :class="isToday ? 'border-muted' : 'border-primary-border'"
-        aria-label="Select puzzle date"
+        :aria-label="t('datePicker.selectDate')"
         :aria-expanded="isOpen"
         @click="toggle"
       >
@@ -166,7 +168,7 @@ onKeyStroke('Escape', close)
         type="button"
         class="hidden sm:flex items-center justify-center gap-2 px-3 py-1 text-sm rounded-lg bg-surface border-1 border-solid text-on-surface cursor-pointer transition-colors hover:bg-surface-hover focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2 ls:hidden"
         :class="isToday ? 'border-muted' : 'border-primary-border'"
-        aria-label="Select puzzle date"
+        :aria-label="t('datePicker.selectDate')"
         :aria-expanded="isOpen"
         @click="toggle"
       >
@@ -194,7 +196,7 @@ onKeyStroke('Escape', close)
             <button
               type="button"
               class="w-8 h-8 flex items-center justify-center bg-surface border-1 border-solid border-muted rounded-lg text-on-surface cursor-pointer transition-colors hover:bg-surface-hover disabled:opacity-30 disabled:cursor-not-allowed focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
-              aria-label="Previous month"
+              :aria-label="t('datePicker.previousMonth')"
               :disabled="viewYear <= 2026 && viewMonth <= 0"
               @click="prevMonth"
             >
@@ -207,7 +209,7 @@ onKeyStroke('Escape', close)
             <button
               type="button"
               class="w-8 h-8 flex items-center justify-center bg-surface border-1 border-solid border-muted rounded-lg text-on-surface cursor-pointer transition-colors hover:bg-surface-hover disabled:opacity-30 disabled:cursor-not-allowed focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
-              aria-label="Next month"
+              :aria-label="t('datePicker.nextMonth')"
               :disabled="viewYear >= new Date(today).getFullYear() && viewMonth >= new Date(today).getMonth()"
               @click="nextMonth"
             >
@@ -220,11 +222,11 @@ onKeyStroke('Escape', close)
 
           <div class="grid grid-cols-7 gap-1 mb-1">
             <div
-              v-for="day in ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']"
-              :key="day"
+              v-for="dayKey in ['su', 'mo', 'tu', 'we', 'th', 'fr', 'sa'] as const"
+              :key="dayKey"
               class="text-xs text-center text-muted-foreground p-1"
             >
-              {{ day }}
+              {{ t(`datePicker.days.${dayKey}`) }}
             </div>
           </div>
 
@@ -260,7 +262,7 @@ onKeyStroke('Escape', close)
             class="mt-3 w-full p-2 text-sm bg-primary-subtle border-1 border-solid border-primary-border rounded-lg text-on-surface cursor-pointer transition-colors hover:bg-primary-muted focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
             @click="goToToday"
           >
-            Back to today
+            {{ t('datePicker.backToToday') }}
           </button>
         </div>
       </Transition>

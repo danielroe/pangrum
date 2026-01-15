@@ -4,6 +4,8 @@ const props = defineProps<{
   letters: string[]
 }>()
 
+const { t } = useI18n()
+
 const sortedWords = computed(() => [...props.words].sort())
 
 function isPangram(word: string) {
@@ -16,7 +18,7 @@ function isPangram(word: string) {
     v-if="sortedWords.length === 0"
     class="flex items-center justify-center h-full text-muted-foreground font-mono text-sm text-center p-4"
   >
-    Make a guess to get started
+    {{ t('foundWords.empty') }}
   </div>
   <ul
     v-else
@@ -29,7 +31,7 @@ function isPangram(word: string) {
       :class="isPangram(word)
         ? 'is-pangram bg-celebration-bg border-celebration text-celebration font-semibold'
         : 'bg-surface-elevated border-muted text-on-surface hover:bg-surface-hover'"
-      :title="isPangram(word) ? 'Pangram!' : ''"
+      :title="isPangram(word) ? t('foundWords.pangram') : ''"
     >
       {{ word.toLowerCase() }}
     </li>

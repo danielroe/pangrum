@@ -12,6 +12,8 @@ const emit = defineEmits<{
   share: []
 }>()
 
+const { t } = useI18n()
+
 const { maxScore, score, percentage } = useScore(() => props.words, () => props.validWords)
 
 const foundPangrams = computed(() => {
@@ -26,24 +28,25 @@ const foundPangrams = computed(() => {
   return count
 })
 
-const thresholdsForward = Object.entries(LEVEL_THRESHOLDS)
+const thresholdsForward = LEVEL_KEYS.map(key => [key, LEVEL_THRESHOLDS[key]] as const)
 const thresholdCount = thresholdsForward.length
 
-const status = computed(() => getLevel(percentage.value))
+const statusKey = computed(() => getLevelKey(percentage.value))
+const status = computed(() => t(`levels.${statusKey.value}`))
 
 // Get index of current status for progress calculation
 const currentStatusIndex = computed(() => {
-  const idx = thresholdsForward.findIndex(([label]) => label === status.value)
+  const idx = thresholdsForward.findIndex(([key]) => key === statusKey.value)
   return idx >= 0 ? idx : 0
 })
 
 const nextThreshold = computed(() => {
-  for (const [label, threshold] of thresholdsForward) {
+  for (const [key, threshold] of thresholdsForward) {
     if (threshold > percentage.value) {
-      return { label, threshold }
+      return { key, label: t(`levels.${key}`), threshold }
     }
   }
-  return { threshold: 0 }
+  return { key: 'perfect', label: t('levels.perfect'), threshold: 100 }
 })
 
 const pointsToGo = computed(() => Math.ceil((nextThreshold.value.threshold / 100) * maxScore.value) - score.value)
@@ -180,12 +183,12 @@ defineExpose({
       <div class="progress-track">
         <!-- Milestone dot rings (behind bar) -->
         <span
-          v-for="([label], index) in thresholdsForward"
-          :key="`ring-${label}`"
+          v-for="([key], index) in thresholdsForward"
+          :key="`ring-${key}`"
           class="dot-ring"
           :class="{
             reached: index <= currentStatusIndex,
-            current: label === status,
+            current: key === statusKey,
           }"
           :style="{ left: `${getDotPosition(index)}%` }"
         />
@@ -201,12 +204,12 @@ defineExpose({
 
         <!-- Milestone dots (on top of bar) -->
         <span
-          v-for="([label], index) in thresholdsForward"
-          :key="`dot-${label}`"
+          v-for="([key], index) in thresholdsForward"
+          :key="`dot-${key}`"
           class="milestone-dot"
           :class="{
             reached: index <= currentStatusIndex,
-            current: label === status,
+            current: key === statusKey,
           }"
           :style="{ left: `${getDotPosition(index)}%` }"
         />
@@ -219,7 +222,7 @@ defineExpose({
             <span class="font-mono font-semibold text-on-surface">{{ wordsFound }}</span>
             <span class="text-muted-foreground op-40">/</span>
             <span class="font-mono text-muted-foreground">{{ totalWords }}</span>
-            <span class="text-muted-foreground op-60 ml-1">words</span>
+            <span class="text-muted-foreground op-60 ml-1">{{ t('score.words') }}</span>
           </span>
 
           <!-- Pangram indicators -->
@@ -227,9 +230,9 @@ defineExpose({
             v-if="totalPangrams > 0"
             class="flex items-center gap-px"
             role="img"
-            :aria-label="`${foundPangrams} of ${totalPangrams} pangrams found`"
+            :aria-label="t('score.pangramsFound', { found: foundPangrams, total: totalPangrams })"
           >
-            <span class="sr-only">{{ foundPangrams }} of {{ totalPangrams }} pangrams found</span>
+            <span class="sr-only">{{ t('score.pangramsFound', { found: foundPangrams, total: totalPangrams }) }}</span>
             <span
               v-for="i in totalPangrams"
               :key="i"
@@ -243,11 +246,11 @@ defineExpose({
         </div>
 
         <span
-          v-if="status !== 'perfect'"
+          v-if="statusKey !== 'perfect'"
           class="flex items-baseline gap-1 text-2.75"
         >
           <span class="font-mono font-semibold text-muted-foreground tabular-nums">{{ pointsToGo }}</span>
-          <span class="text-muted-foreground op-60">to {{ nextThreshold.label }}</span>
+          <span class="text-muted-foreground op-60">{{ t('score.to') }} {{ nextThreshold.label }}</span>
         </span>
         <span
           v-else

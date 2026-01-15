@@ -1,7 +1,16 @@
 <script setup lang="ts">
+const { t, locale, locales, setLocale } = useI18n()
+
 const colorMode = useColorMode()
-const language = useLanguage()
+const puzzleLanguage = useLanguage()
 const { startTutorial } = useTutorial()
+
+const availableUILocales = computed(() =>
+  (locales.value as Array<{ code: string, name: string }>).map(l => ({
+    code: l.code,
+    name: l.name,
+  })),
+)
 const {
   settings: notificationSettings,
   permission,
@@ -31,23 +40,23 @@ const {
 } = useSyncUI()
 
 const isOpen = ref(false)
-const activeSection = ref<'main' | 'theme' | 'language' | 'notifications' | 'sync'>('main')
+const activeSection = ref<'main' | 'theme' | 'ui-language' | 'puzzle-language' | 'notifications' | 'sync'>('main')
 const triggerRef = useTemplateRef<HTMLButtonElement>('trigger')
 const popoverRef = useTemplateRef<HTMLDivElement>('popover')
 
 const isNotificationsEnabled = computed(() => notificationSettings.value.enabled && permission.value === 'granted')
 
-const themeOptions = {
-  system: { label: 'System', iconClass: 'i-lucide-monitor' },
-  light: { label: 'Light', iconClass: 'i-lucide-sun' },
-  dark: { label: 'Dark', iconClass: 'i-lucide-moon' },
-} as const
+const themeOptions = computed(() => ({
+  system: { label: t('settings.theme.system'), iconClass: 'i-lucide-monitor' },
+  light: { label: t('settings.theme.light'), iconClass: 'i-lucide-sun' },
+  dark: { label: t('settings.theme.dark'), iconClass: 'i-lucide-moon' },
+}))
 
-type ThemeKey = keyof typeof themeOptions
+type ThemeKey = 'system' | 'light' | 'dark'
 
 const currentThemeIcon = computed(() => {
   const pref = colorMode.preference as ThemeKey
-  return themeOptions[pref]?.iconClass || 'i-lucide-monitor'
+  return themeOptions.value[pref]?.iconClass || 'i-lucide-monitor'
 })
 
 function toggle() {
@@ -68,8 +77,14 @@ function setTheme(value: string) {
   activeSection.value = 'main'
 }
 
-function setLanguageValue(lang: Language) {
-  language.value = lang
+function setPuzzleLanguageValue(lang: Language) {
+  puzzleLanguage.value = lang
+  activeSection.value = 'main'
+}
+
+async function setUILocale(code: string) {
+  // @ts-expect-error - i18n types are strict but code is validated by availableUILocales
+  await setLocale(code)
   activeSection.value = 'main'
 }
 
@@ -133,7 +148,7 @@ const syncButtonIcon = computed(() => {
           class="i-lucide-settings text-sm"
           aria-hidden="true"
         />
-        <span class="text-on-surface">Settings</span>
+        <span class="text-on-surface">{{ t('header.settings') }}</span>
       </button>
       <Transition
         enter-active-class="transition duration-150 ease-out"
@@ -146,7 +161,7 @@ const syncButtonIcon = computed(() => {
         <div
           v-if="isOpen"
           ref="popover"
-          class="absolute right-0 top-full mt-2 z-50 min-w-56 bg-surface-elevated rounded-xl border-1 border-solid border-muted shadow-xl overflow-hidden"
+          class="absolute right-0 top-full mt-2 z-50 min-w-72 bg-surface-elevated rounded-xl border-1 border-solid border-muted shadow-xl overflow-hidden"
         >
           <!-- Main Menu -->
           <div
@@ -154,7 +169,7 @@ const syncButtonIcon = computed(() => {
             class="p-2"
           >
             <div class="text-xs font-medium text-muted-foreground px-2 py-1 mb-1">
-              Settings
+              {{ t('settings.title') }}
             </div>
 
             <!-- Theme -->
@@ -169,25 +184,41 @@ const syncButtonIcon = computed(() => {
                   class="text-base"
                   aria-hidden="true"
                 />
-                <span>Theme</span>
+                <span>{{ t('settings.theme.label') }}</span>
               </span>
               <span class="text-xs text-muted-foreground">{{ themeOptions[colorMode.preference as ThemeKey]?.label }}</span>
             </button>
 
-            <!-- Language -->
+            <!-- UI Language -->
             <button
               type="button"
               class="flex items-center justify-between w-full px-3 py-2.5 text-sm rounded-lg hover:bg-surface-hover transition-colors text-on-surface"
-              @click="activeSection = 'language'"
+              @click="activeSection = 'ui-language'"
             >
               <span class="flex items-center gap-3">
                 <span
                   class="i-lucide-globe text-base"
                   aria-hidden="true"
                 />
-                <span>Language</span>
+                <span>{{ t('settings.language.label') }}</span>
               </span>
-              <span class="text-xs text-muted-foreground">{{ SUPPORTED_LANGUAGES[language] }}</span>
+              <span class="text-xs text-muted-foreground">{{ availableUILocales.find(l => l.code === locale)?.name }}</span>
+            </button>
+
+            <!-- Puzzle Language -->
+            <button
+              type="button"
+              class="flex items-center justify-between w-full px-3 py-2.5 text-sm rounded-lg hover:bg-surface-hover transition-colors text-on-surface"
+              @click="activeSection = 'puzzle-language'"
+            >
+              <span class="flex items-center gap-3">
+                <span
+                  class="i-lucide-book-text text-base"
+                  aria-hidden="true"
+                />
+                <span>{{ t('settings.puzzleLanguage.label') }}</span>
+              </span>
+              <span class="text-xs text-muted-foreground">{{ SUPPORTED_LANGUAGES[puzzleLanguage] }}</span>
             </button>
 
             <!-- Notifications (if supported) -->
@@ -203,9 +234,9 @@ const syncButtonIcon = computed(() => {
                   class="text-base"
                   aria-hidden="true"
                 />
-                <span>Reminders</span>
+                <span>{{ t('settings.notifications.label') }}</span>
               </span>
-              <span class="text-xs text-muted-foreground">{{ isNotificationsEnabled ? 'On' : 'Off' }}</span>
+              <span class="text-xs text-muted-foreground">{{ isNotificationsEnabled ? t('settings.notifications.on') : t('settings.notifications.off') }}</span>
             </button>
 
             <!-- Sync -->
@@ -220,9 +251,9 @@ const syncButtonIcon = computed(() => {
                   class="text-base"
                   aria-hidden="true"
                 />
-                <span>Sync</span>
+                <span>{{ t('settings.sync.label') }}</span>
               </span>
-              <span class="text-xs text-muted-foreground">{{ syncEnabled ? 'Connected' : 'Off' }}</span>
+              <span class="text-xs text-muted-foreground">{{ syncEnabled ? t('settings.sync.connected') : t('settings.sync.off') }}</span>
             </button>
 
             <!-- Tutorial -->
@@ -236,14 +267,14 @@ const syncButtonIcon = computed(() => {
                   class="i-lucide-circle-help text-base"
                   aria-hidden="true"
                 />
-                <span>How to play</span>
+                <span>{{ t('settings.howToPlay') }}</span>
               </span>
             </button>
 
             <!-- Credits -->
             <div class="mt-2 pt-2 border-t border-solid border-muted">
               <div class="flex flex-wrap items-center justify-center gap-x-1.5 gap-y-0.5 text-[10px] text-muted-foreground py-1">
-                <span>made with <span class="text-error-light">&#9829;</span> by</span>
+                <span>{{ t('footer.madeWith') }} <span class="text-error-light">&#9829;</span> {{ t('footer.by') }}</span>
                 <a
                   href="https://roe.dev"
                   target="_blank"
@@ -259,14 +290,14 @@ const syncButtonIcon = computed(() => {
                   >{{ $config.public.commitHash }}</a>
                   <button
                     type="button"
-                    title="Refresh app to get latest version"
+                    :title="t('footer.refreshApp')"
                     @click="reloadPage"
                   >
                     <span
                       class="i-lucide-refresh-cw text-[10px]"
                       aria-hidden="true"
                     />
-                    <span class="sr-only">Refresh app</span>
+                    <span class="sr-only">{{ t('footer.refreshApp') }}</span>
                   </button>
                 </span>
               </div>
@@ -287,7 +318,7 @@ const syncButtonIcon = computed(() => {
                 class="i-lucide-chevron-left text-sm"
                 aria-hidden="true"
               />
-              <span>Theme</span>
+              <span>{{ t('settings.theme.label') }}</span>
             </button>
             <div class="mt-1 space-y-1">
               <button
@@ -310,9 +341,9 @@ const syncButtonIcon = computed(() => {
             </div>
           </div>
 
-          <!-- Language Section -->
+          <!-- UI Language Section -->
           <div
-            v-else-if="activeSection === 'language'"
+            v-else-if="activeSection === 'ui-language'"
             class="p-2"
           >
             <button
@@ -324,18 +355,53 @@ const syncButtonIcon = computed(() => {
                 class="i-lucide-chevron-left text-sm"
                 aria-hidden="true"
               />
-              <span>Language</span>
+              <span>{{ t('settings.language.label') }}</span>
             </button>
+            <div class="mt-1 space-y-1">
+              <button
+                v-for="loc in availableUILocales"
+                :key="loc.code"
+                type="button"
+                class="flex items-center gap-3 w-full px-3 py-2.5 text-sm rounded-lg border-1 border-solid transition-colors"
+                :class="locale === loc.code
+                  ? 'bg-primary-subtle border-primary-border text-on-surface'
+                  : 'bg-transparent border-transparent hover:bg-surface-hover text-on-surface'"
+                @click="setUILocale(loc.code)"
+              >
+                {{ loc.name }}
+              </button>
+            </div>
+          </div>
+
+          <!-- Puzzle Language Section -->
+          <div
+            v-else-if="activeSection === 'puzzle-language'"
+            class="p-2"
+          >
+            <button
+              type="button"
+              class="flex items-center gap-2 w-full px-2 py-1.5 text-xs text-muted-foreground hover:text-on-surface transition-colors"
+              @click="activeSection = 'main'"
+            >
+              <span
+                class="i-lucide-chevron-left text-sm"
+                aria-hidden="true"
+              />
+              <span>{{ t('settings.puzzleLanguage.label') }}</span>
+            </button>
+            <p class="text-xs text-muted-foreground px-3 py-2">
+              {{ t('settings.puzzleLanguage.description') }}
+            </p>
             <div class="mt-1 space-y-1">
               <button
                 v-for="(label, lang) in SUPPORTED_LANGUAGES"
                 :key="lang"
                 type="button"
                 class="flex items-center gap-3 w-full px-3 py-2.5 text-sm rounded-lg border-1 border-solid transition-colors"
-                :class="language === lang
+                :class="puzzleLanguage === lang
                   ? 'bg-primary-subtle border-primary-border text-on-surface'
                   : 'bg-transparent border-transparent hover:bg-surface-hover text-on-surface'"
-                @click="setLanguageValue(lang)"
+                @click="setPuzzleLanguageValue(lang)"
               >
                 {{ label }}
               </button>
@@ -356,7 +422,7 @@ const syncButtonIcon = computed(() => {
                 class="i-lucide-chevron-left text-sm"
                 aria-hidden="true"
               />
-              <span>Reminders</span>
+              <span>{{ t('settings.notifications.label') }}</span>
             </button>
             <div class="mt-2 space-y-2 px-1">
               <button
@@ -364,7 +430,7 @@ const syncButtonIcon = computed(() => {
                 class="flex items-center justify-between w-full px-3 py-2.5 text-sm rounded-lg text-on-surface border-1 border-solid border-muted bg-surface hover:bg-surface-hover transition-colors"
                 @click="toggleNotifications"
               >
-                <span>{{ isNotificationsEnabled ? 'Enabled' : 'Disabled' }}</span>
+                <span>{{ isNotificationsEnabled ? t('settings.notifications.enabled') : t('settings.notifications.disabled') }}</span>
                 <span
                   :class="isNotificationsEnabled ? 'i-lucide-bell' : 'i-lucide-bell-off'"
                   class="text-lg"
@@ -375,12 +441,12 @@ const syncButtonIcon = computed(() => {
                 v-if="isNotificationsEnabled"
                 class="flex flex-col gap-2"
               >
-                <label class="text-xs text-muted-foreground">Remind me at:</label>
+                <label class="text-xs text-muted-foreground">{{ t('settings.notifications.remindAt') }}</label>
                 <input
                   type="time"
                   :value="notificationSettings.time"
                   class="px-3 py-2 text-sm font-mono rounded-lg border-1 border-solid border-muted bg-surface text-on-surface focus-visible:outline-2 focus-visible:outline-primary"
-                  aria-label="Reminder time"
+                  :aria-label="t('settings.notifications.remindAt')"
                   @change="handleTimeChange"
                 >
               </div>
@@ -401,7 +467,7 @@ const syncButtonIcon = computed(() => {
                 class="i-lucide-chevron-left text-sm"
                 aria-hidden="true"
               />
-              <span>Sync</span>
+              <span>{{ t('settings.sync.label') }}</span>
             </button>
             <div class="mt-2 space-y-3 px-1">
               <template v-if="syncEnabled">
@@ -411,21 +477,21 @@ const syncButtonIcon = computed(() => {
                   class="flex items-center gap-2 p-2 rounded-lg bg-surface border-1 border-solid border-muted"
                 >
                   <span class="i-lucide-cloud-off text-on-surface opacity-50 text-sm" />
-                  <span class="text-xs text-on-surface opacity-70">Offline - sync paused</span>
+                  <span class="text-xs text-on-surface opacity-70">{{ t('settings.sync.offline') }}</span>
                 </div>
                 <div
                   v-else-if="isConnecting"
                   class="flex items-center gap-2 p-2 rounded-lg bg-primary-subtle"
                 >
                   <span class="i-lucide-loader-2 animate-spin text-primary text-sm" />
-                  <span class="text-xs text-on-surface">Connecting...</span>
+                  <span class="text-xs text-on-surface">{{ t('settings.sync.connecting') }}</span>
                 </div>
                 <div
                   v-else-if="isWaitingForDevice"
                   class="flex items-center gap-2 p-2 rounded-lg bg-primary-subtle"
                 >
                   <span class="i-lucide-loader-2 animate-spin text-primary text-sm" />
-                  <span class="text-xs text-on-surface">Waiting for device...</span>
+                  <span class="text-xs text-on-surface">{{ t('settings.sync.waitingForDevice') }}</span>
                 </div>
                 <div
                   v-else-if="isSynced"
@@ -438,7 +504,7 @@ const syncButtonIcon = computed(() => {
                 <!-- QR Code & Code -->
                 <div class="flex flex-col gap-2">
                   <p class="text-xs text-on-surface opacity-70">
-                    Scan or enter code on another device:
+                    {{ t('settings.sync.scanOrEnter') }}
                   </p>
                   <div
                     v-if="qrSvg"
@@ -464,7 +530,7 @@ const syncButtonIcon = computed(() => {
                     <button
                       type="button"
                       class="p-2 rounded-lg bg-surface hover:bg-surface-hover border-1 border-solid border-muted transition-colors"
-                      title="Copy code"
+                      :title="t('settings.sync.copyCode')"
                       @click="copyCode"
                     >
                       <span class="i-lucide-copy text-sm text-on-surface" />
@@ -476,20 +542,20 @@ const syncButtonIcon = computed(() => {
                   class="w-full px-3 py-2 text-sm rounded-lg border-1 border-solid border-muted bg-surface hover:bg-surface-hover text-on-surface transition-colors"
                   @click="() => { handleDisable(); close() }"
                 >
-                  Disconnect
+                  {{ t('settings.sync.disconnect') }}
                 </button>
               </template>
 
               <template v-else>
                 <p class="text-xs text-on-surface opacity-70">
-                  Sync your found words across devices in real-time.
+                  {{ t('settings.sync.description') }}
                 </p>
                 <div
                   v-if="!canEnableSync"
                   class="flex items-center gap-2 p-2 rounded-lg bg-surface border-1 border-solid border-muted"
                 >
                   <span class="i-lucide-wifi-off text-on-surface opacity-50 text-sm" />
-                  <span class="text-xs text-on-surface opacity-70">You're offline</span>
+                  <span class="text-xs text-on-surface opacity-70">{{ t('settings.sync.youreOffline') }}</span>
                 </div>
 
                 <div
@@ -499,7 +565,7 @@ const syncButtonIcon = computed(() => {
                   <input
                     v-model="inputCode"
                     type="text"
-                    placeholder="Enter sync code"
+                    :placeholder="t('settings.sync.enterCode')"
                     class="w-full px-3 py-2 text-sm rounded-lg border-1 border-solid border-muted bg-surface text-on-surface placeholder:text-on-surface/50 focus:outline-2 focus:outline-primary disabled:opacity-50"
                     maxlength="20"
                     :disabled="!canEnableSync"
@@ -511,7 +577,7 @@ const syncButtonIcon = computed(() => {
                       class="flex-1 px-3 py-2 text-sm rounded-lg border-1 border-solid border-muted bg-surface hover:bg-surface-hover text-on-surface transition-colors"
                       @click="showInput = false"
                     >
-                      Cancel
+                      {{ t('settings.sync.cancel') }}
                     </button>
                     <button
                       type="button"
@@ -519,7 +585,7 @@ const syncButtonIcon = computed(() => {
                       :disabled="!inputCode.trim() || !canEnableSync"
                       @click="() => { handleEnable(); close() }"
                     >
-                      Connect
+                      {{ t('settings.sync.connect') }}
                     </button>
                   </div>
                 </div>
@@ -534,7 +600,7 @@ const syncButtonIcon = computed(() => {
                     :disabled="!canEnableSync"
                     @click="handleEnable"
                   >
-                    Create new sync
+                    {{ t('settings.sync.createNew') }}
                   </button>
                   <button
                     type="button"
@@ -542,7 +608,7 @@ const syncButtonIcon = computed(() => {
                     :disabled="!canEnableSync"
                     @click="showInput = true"
                   >
-                    Join existing sync
+                    {{ t('settings.sync.joinExisting') }}
                   </button>
                 </div>
               </template>

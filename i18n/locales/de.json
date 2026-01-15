@@ -1,0 +1,221 @@
+{
+  "app": {
+    "name": "pangrum",
+    "offline": "offline"
+  },
+  "header": {
+    "statistics": "Statistik",
+    "settings": "Einstellungen"
+  },
+  "input": {
+    "label": "Wort eingeben",
+    "submit": "Wort absenden"
+  },
+  "score": {
+    "words": "Wörter",
+    "to": "bis",
+    "pangramsFound": "{found} von {total} Pangrammen gefunden"
+  },
+  "levels": {
+    "beginner": "Anfänger",
+    "novice": "Neuling",
+    "movingUp": "Aufsteiger",
+    "good": "Gut",
+    "solid": "Solide",
+    "nice": "Schön",
+    "great": "Großartig",
+    "amazing": "Fantastisch",
+    "genius": "Genie",
+    "perfect": "Perfekt"
+  },
+  "foundWords": {
+    "empty": "Rate ein Wort, um zu beginnen",
+    "pangram": "Pangramm!"
+  },
+  "hints": {
+    "wordGrid": "Wortgitter mit Anzahl nach Präfix und Länge",
+    "twoLetterPairs": "Zwei-Buchstaben-Paare",
+    "popularity": "Wortbeliebtheit - wie viele Spieler jedes Wort gefunden haben",
+    "wordList": "Liste gefundener Wörter",
+    "goTo": "Gehe zu {panel}"
+  },
+  "popularity": {
+    "loading": "Lade Beliebtheitsdaten...",
+    "noData": "Beliebtheitsdaten erscheinen, sobald mehr Spieler dieses Rätsel lösen.",
+    "basedOn": "Basierend auf {count} Spieler | Basierend auf {count} Spielern",
+    "foundPercent": "{percent}% der Spieler haben dieses Wort gefunden"
+  },
+  "tutorial": {
+    "skip": "Überspringen",
+    "back": "Zurück",
+    "next": "Weiter",
+    "startPlaying": "Los geht's",
+    "goToStep": "Gehe zu Schritt {step}",
+    "steps": {
+      "welcome": {
+        "title": "Willkommen bei Pangrum",
+        "content": "Bilde Wörter aus den angezeigten Buchstaben. Jedes Rätsel hat 7 einzigartige Buchstaben und dutzende gültige Wörter."
+      },
+      "letters": {
+        "title": "Buchstaben verwenden",
+        "content": "Tippe oder klicke auf die Buchstaben, um Wörter zu bilden. Du kannst auch die Tastatur benutzen. Verwende jeden Buchstaben beliebig oft."
+      },
+      "centre": {
+        "title": "Der Mittelbuchstabe",
+        "content": "Jedes Wort muss den markierten Mittelbuchstaben enthalten. Wörter ohne ihn werden nicht akzeptiert."
+      },
+      "scoring": {
+        "title": "Punktevergabe",
+        "content": "4-Buchstaben-Wörter geben 1 Punkt. Längere Wörter geben 1 Punkt pro Buchstabe. Erreiche höhere Stufen durch mehr Punkte!"
+      },
+      "pangrams": {
+        "title": "Pangramme",
+        "content": "Ein Pangramm verwendet alle 7 Buchstaben mindestens einmal. Diese besonderen Wörter geben 7 Bonuspunkte und sind mit einem Stern markiert."
+      },
+      "hints": {
+        "title": "Brauchst du Hilfe?",
+        "content": "Aktiviere Hinweise, um zu sehen, wie viele Wörter mit jedem Buchstabenpaar beginnen, und verfolge deinen Fortschritt. Schalte Hinweise mit dem Glühbirnensymbol um."
+      }
+    }
+  },
+  "settings": {
+    "title": "Einstellungen",
+    "theme": {
+      "label": "Design",
+      "system": "System",
+      "light": "Hell",
+      "dark": "Dunkel"
+    },
+    "language": {
+      "label": "Oberfläche"
+    },
+    "puzzleLanguage": {
+      "label": "Wortliste",
+      "description": "Wähle die Sprache für tägliche Rätsel und gültige Wörter."
+    },
+    "notifications": {
+      "label": "Erinnerungen",
+      "on": "An",
+      "off": "Aus",
+      "enabled": "Aktiviert",
+      "disabled": "Deaktiviert",
+      "remindAt": "Erinnere mich um:"
+    },
+    "sync": {
+      "label": "Sync",
+      "connected": "Verbunden",
+      "off": "Aus",
+      "offline": "Offline - Sync pausiert",
+      "connecting": "Verbinde...",
+      "waitingForDevice": "Warte auf Gerät...",
+      "scanOrEnter": "Scanne oder gib den Code auf einem anderen Gerät ein:",
+      "copyCode": "Code kopieren",
+      "disconnect": "Trennen",
+      "description": "Synchronisiere gefundene Wörter in Echtzeit auf allen Geräten.",
+      "youreOffline": "Du bist offline",
+      "enterCode": "Sync-Code eingeben",
+      "cancel": "Abbrechen",
+      "connect": "Verbinden",
+      "createNew": "Neue Synchronisation erstellen",
+      "joinExisting": "Bestehender Synchronisation beitreten"
+    },
+    "howToPlay": "Spielanleitung"
+  },
+  "dateMismatch": {
+    "title": "Anderes Datum",
+    "message": "Dies ist das Rätsel von {date}.",
+    "prompt": "Möchtest du stattdessen das heutige Rätsel laden?",
+    "loadToday": "Heutiges Rätsel laden",
+    "keepPlaying": "Weiterspielen"
+  },
+  "relativeDate": {
+    "today": "heute",
+    "yesterday": "gestern",
+    "tomorrow": "morgen",
+    "daysAgo": "vor {count} Tagen",
+    "lastWeek": "letzte Woche",
+    "weeksAgo": "vor {count} Wochen",
+    "overAMonth": "vor über einem Monat"
+  },
+  "share": {
+    "title": "Ergebnisse teilen",
+    "generatingPreview": "Erstelle Vorschau...",
+    "previewUnavailable": "Vorschau nicht verfügbar",
+    "points": "Punkte",
+    "share": "Teilen",
+    "copyImage": "Bild kopieren",
+    "copyText": "Text kopieren",
+    "status": {
+      "preparing": "Wird vorbereitet...",
+      "textCopied": "Text kopiert!",
+      "imageCopied": "Bild kopiert!",
+      "imageDownloaded": "Bild heruntergeladen!",
+      "shared": "Geteilt!",
+      "error": "Etwas ist schiefgelaufen"
+    }
+  },
+  "stats": {
+    "title": "Statistik",
+    "currentStreak": "Aktuelle Serie",
+    "bestStreak": "Beste Serie",
+    "daysPlayed": "Tage gespielt",
+    "incredible": "Unglaublich!",
+    "onFire": "Du bist on fire!",
+    "nice": "Toll!",
+    "keepGoing": "Weiter so!",
+    "playTomorrow": "Spiele morgen, um deine Serie fortzusetzen!",
+    "startStreak": "Starte eine Serie, indem du heute spielst!"
+  },
+  "toasts": {
+    "pangram": "PANGRAMM! +{points}",
+    "amazing": "Fantastisch! +{points}",
+    "points": "+{points}",
+    "levelUp": "Level up: {level}!",
+    "notLongEnough": "Nicht lang genug",
+    "noCentreLetter": "Enthält nicht den Mittelbuchstaben",
+    "wrongLetters": "Verwendet falsche Buchstaben",
+    "notValid": "Kein gültiges Wort",
+    "alreadyGuessed": "Bereits geraten",
+    "migrated": "{count} Wort aus vorherigem Format migriert | {count} Wörter aus vorherigem Format migriert",
+    "navigatedToSynced": "Zum synchronisierten Rätsel navigiert"
+  },
+  "wordStats": {
+    "letters": "{count} Buchstaben",
+    "allLengths": "alle Längen",
+    "allPrefixes": "alle Präfixe"
+  },
+  "footer": {
+    "madeWith": "gemacht mit",
+    "by": "von",
+    "refreshApp": "App aktualisieren für neueste Version"
+  },
+  "common": {
+    "close": "Schließen"
+  },
+  "letterGrid": {
+    "shuffle": "Mischen",
+    "shuffleLetters": "Buchstaben mischen",
+    "deleteCharacter": "Zeichen löschen",
+    "submitWord": "Wort absenden"
+  },
+  "hintsToggle": {
+    "hintsOn": "Hinweise an",
+    "hintsOff": "Hinweise aus"
+  },
+  "datePicker": {
+    "selectDate": "Rätseldatum auswählen",
+    "today": "Heute",
+    "backToToday": "Zurück zu heute",
+    "previousMonth": "Vorheriger Monat",
+    "nextMonth": "Nächster Monat",
+    "days": {
+      "su": "So",
+      "mo": "Mo",
+      "tu": "Di",
+      "we": "Mi",
+      "th": "Do",
+      "fr": "Fr",
+      "sa": "Sa"
+    }
+  }
+}

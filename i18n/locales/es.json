@@ -1,0 +1,221 @@
+{
+  "app": {
+    "name": "pangrum",
+    "offline": "sin conexión"
+  },
+  "header": {
+    "statistics": "Estadísticas",
+    "settings": "Ajustes"
+  },
+  "input": {
+    "label": "ingresa tu palabra",
+    "submit": "Enviar palabra"
+  },
+  "score": {
+    "words": "palabras",
+    "to": "a",
+    "pangramsFound": "{found} de {total} pangramas encontrados"
+  },
+  "levels": {
+    "beginner": "principiante",
+    "novice": "novato",
+    "movingUp": "avanzando",
+    "good": "bueno",
+    "solid": "sólido",
+    "nice": "genial",
+    "great": "excelente",
+    "amazing": "increíble",
+    "genius": "genio",
+    "perfect": "perfecto"
+  },
+  "foundWords": {
+    "empty": "Adivina una palabra para empezar",
+    "pangram": "¡Pangrama!"
+  },
+  "hints": {
+    "wordGrid": "Cuadrícula de palabras mostrando conteos por prefijo y longitud",
+    "twoLetterPairs": "Cuadrícula de pares de dos letras",
+    "popularity": "Popularidad de palabras mostrando cuántos jugadores encontraron cada palabra",
+    "wordList": "Lista de palabras encontradas",
+    "goTo": "Ir a {panel}"
+  },
+  "popularity": {
+    "loading": "Cargando datos de popularidad...",
+    "noData": "Los datos de popularidad aparecerán cuando más jugadores completen este puzzle.",
+    "basedOn": "Basado en {count} jugador | Basado en {count} jugadores",
+    "foundPercent": "{percent}% de los jugadores encontraron esta palabra"
+  },
+  "tutorial": {
+    "skip": "Omitir",
+    "back": "Atrás",
+    "next": "Siguiente",
+    "startPlaying": "Empezar a jugar",
+    "goToStep": "Ir al paso {step}",
+    "steps": {
+      "welcome": {
+        "title": "Bienvenido a Pangrum",
+        "content": "Crea palabras usando las letras mostradas. Cada puzzle tiene un conjunto único de 7 letras y docenas de palabras válidas para encontrar."
+      },
+      "letters": {
+        "title": "Usando las letras",
+        "content": "Toca o haz clic en las letras para formar palabras. También puedes escribir con tu teclado. Usa cada letra tantas veces como quieras."
+      },
+      "centre": {
+        "title": "La letra central",
+        "content": "Cada palabra debe incluir la letra central resaltada. Las palabras sin ella no serán aceptadas."
+      },
+      "scoring": {
+        "title": "Puntuación",
+        "content": "Las palabras de 4 letras dan 1 punto. Las palabras más largas dan 1 punto por letra. ¡Alcanza niveles más altos ganando más puntos!"
+      },
+      "pangrams": {
+        "title": "Pangramas",
+        "content": "Un pangrama usa las 7 letras al menos una vez. Estas palabras especiales dan 7 puntos bonus y están marcadas con una estrella."
+      },
+      "hints": {
+        "title": "¿Necesitas ayuda?",
+        "content": "Activa las pistas para ver cuántas palabras empiezan con cada par de letras y sigue tu progreso. Activa las pistas con el icono de bombilla."
+      }
+    }
+  },
+  "settings": {
+    "title": "Ajustes",
+    "theme": {
+      "label": "Tema",
+      "system": "Sistema",
+      "light": "Claro",
+      "dark": "Oscuro"
+    },
+    "language": {
+      "label": "Interfaz"
+    },
+    "puzzleLanguage": {
+      "label": "Lista de palabras",
+      "description": "Elige el idioma para los puzzles diarios y las palabras válidas."
+    },
+    "notifications": {
+      "label": "Recordatorios",
+      "on": "Activado",
+      "off": "Desactivado",
+      "enabled": "Activado",
+      "disabled": "Desactivado",
+      "remindAt": "Recordarme a las:"
+    },
+    "sync": {
+      "label": "Sync",
+      "connected": "Conectado",
+      "off": "Desactivado",
+      "offline": "Sin conexión - sync pausado",
+      "connecting": "Conectando...",
+      "waitingForDevice": "Esperando dispositivo...",
+      "scanOrEnter": "Escanea o ingresa el código en otro dispositivo:",
+      "copyCode": "Copiar código",
+      "disconnect": "Desconectar",
+      "description": "Sincroniza tus palabras encontradas en todos tus dispositivos en tiempo real.",
+      "youreOffline": "Estás sin conexión",
+      "enterCode": "Ingresar código de sync",
+      "cancel": "Cancelar",
+      "connect": "Conectar",
+      "createNew": "Crear nuevo sync",
+      "joinExisting": "Unirse a sync existente"
+    },
+    "howToPlay": "Cómo jugar"
+  },
+  "dateMismatch": {
+    "title": "Fecha diferente",
+    "message": "Este es el puzzle del {date}.",
+    "prompt": "¿Te gustaría cargar el puzzle de hoy en su lugar?",
+    "loadToday": "Cargar puzzle de hoy",
+    "keepPlaying": "Seguir jugando"
+  },
+  "relativeDate": {
+    "today": "hoy",
+    "yesterday": "ayer",
+    "tomorrow": "mañana",
+    "daysAgo": "hace {count} días",
+    "lastWeek": "la semana pasada",
+    "weeksAgo": "hace {count} semanas",
+    "overAMonth": "hace más de un mes"
+  },
+  "share": {
+    "title": "Compartir resultados",
+    "generatingPreview": "Generando vista previa...",
+    "previewUnavailable": "Vista previa no disponible",
+    "points": "puntos",
+    "share": "Compartir",
+    "copyImage": "Copiar imagen",
+    "copyText": "Copiar texto",
+    "status": {
+      "preparing": "Preparando...",
+      "textCopied": "¡Texto copiado!",
+      "imageCopied": "¡Imagen copiada!",
+      "imageDownloaded": "¡Imagen descargada!",
+      "shared": "¡Compartido!",
+      "error": "Algo salió mal"
+    }
+  },
+  "stats": {
+    "title": "Estadísticas",
+    "currentStreak": "Racha actual",
+    "bestStreak": "Mejor racha",
+    "daysPlayed": "Días jugados",
+    "incredible": "¡Increíble!",
+    "onFire": "¡Estás en racha!",
+    "nice": "¡Bien!",
+    "keepGoing": "¡Sigue así!",
+    "playTomorrow": "¡Juega mañana para extender tu racha!",
+    "startStreak": "¡Comienza una racha jugando hoy!"
+  },
+  "toasts": {
+    "pangram": "¡PANGRAMA! +{points}",
+    "amazing": "¡Increíble! +{points}",
+    "points": "+{points}",
+    "levelUp": "¡Subiste de nivel: {level}!",
+    "notLongEnough": "No es suficientemente largo",
+    "noCentreLetter": "No contiene la letra central",
+    "wrongLetters": "Usa letras incorrectas",
+    "notValid": "Palabra no válida",
+    "alreadyGuessed": "Ya adivinada",
+    "migrated": "{count} palabra migrada del formato anterior | {count} palabras migradas del formato anterior",
+    "navigatedToSynced": "Navegado al puzzle sincronizado"
+  },
+  "wordStats": {
+    "letters": "{count} letras",
+    "allLengths": "todas las longitudes",
+    "allPrefixes": "todos los prefijos"
+  },
+  "footer": {
+    "madeWith": "hecho con",
+    "by": "por",
+    "refreshApp": "Actualiza la app para obtener la última versión"
+  },
+  "common": {
+    "close": "Cerrar"
+  },
+  "letterGrid": {
+    "shuffle": "Mezclar",
+    "shuffleLetters": "Mezclar letras",
+    "deleteCharacter": "Borrar carácter",
+    "submitWord": "Enviar palabra"
+  },
+  "hintsToggle": {
+    "hintsOn": "Pistas activadas",
+    "hintsOff": "Pistas desactivadas"
+  },
+  "datePicker": {
+    "selectDate": "Seleccionar fecha del puzzle",
+    "today": "Hoy",
+    "backToToday": "Volver a hoy",
+    "previousMonth": "Mes anterior",
+    "nextMonth": "Mes siguiente",
+    "days": {
+      "su": "Do",
+      "mo": "Lu",
+      "tu": "Ma",
+      "we": "Mi",
+      "th": "Ju",
+      "fr": "Vi",
+      "sa": "Sa"
+    }
+  }
+}

@@ -8,6 +8,8 @@ const emit = defineEmits<{
   close: []
 }>()
 
+const { t } = useI18n()
+
 function getRelativeDate(dateStr: string): string {
   const date = new Date(dateStr + 'T00:00:00')
   const today = new Date()
@@ -16,13 +18,13 @@ function getRelativeDate(dateStr: string): string {
   const diffMs = today.getTime() - date.getTime()
   const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24))
 
-  if (diffDays === 0) return 'today'
-  if (diffDays === 1) return 'yesterday'
-  if (diffDays === -1) return 'tomorrow'
-  if (diffDays > 1 && diffDays < 7) return `${diffDays} days ago`
-  if (diffDays >= 7 && diffDays < 14) return 'last week'
-  if (diffDays >= 14 && diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`
-  if (diffDays >= 30) return 'over a month ago'
+  if (diffDays === 0) return t('relativeDate.today')
+  if (diffDays === 1) return t('relativeDate.yesterday')
+  if (diffDays === -1) return t('relativeDate.tomorrow')
+  if (diffDays > 1 && diffDays < 7) return t('relativeDate.daysAgo', { count: diffDays })
+  if (diffDays >= 7 && diffDays < 14) return t('relativeDate.lastWeek')
+  if (diffDays >= 14 && diffDays < 30) return t('relativeDate.weeksAgo', { count: Math.floor(diffDays / 7) })
+  if (diffDays >= 30) return t('relativeDate.overAMonth')
   return dateStr
 }
 
@@ -61,12 +63,12 @@ function handleRefresh() {
   >
     <div class="flex justify-between items-center p-4 border-b-1 border-solid border-muted">
       <h3 class="text-on-surface font-mono font-bold text-lg m-0">
-        Different date
+        {{ t('dateMismatch.title') }}
       </h3>
       <button
         type="button"
         class="w-8 h-8 flex items-center justify-center text-on-surface text-xl leading-none rounded-lg border-1 border-solid border-transparent bg-transparent cursor-pointer hover:bg-surface-hover transition-colors focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
-        aria-label="Close"
+        :aria-label="t('common.close')"
         @click="emit('close')"
       >
         ×
@@ -75,11 +77,11 @@ function handleRefresh() {
 
     <div class="p-6 flex-grow flex flex-col gap-4">
       <p class="text-on-surface font-mono text-base m-0">
-        This is the puzzle from <span class="text-primary font-bold">{{ relativeDate }}</span>.
+        {{ t('dateMismatch.message', { date: relativeDate }) }}
       </p>
 
       <p class="text-muted-foreground font-mono text-sm m-0">
-        Would you like to load today's puzzle instead?
+        {{ t('dateMismatch.prompt') }}
       </p>
 
       <div class="flex gap-3 mt-2">
@@ -88,14 +90,14 @@ function handleRefresh() {
           class="flex-1 px-4 py-3 font-mono text-sm rounded-lg border-1 border-solid border-primary bg-primary text-dark cursor-pointer transition-colors hover:bg-primary-hover focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
           @click="handleRefresh"
         >
-          Load today's puzzle
+          {{ t('dateMismatch.loadToday') }}
         </button>
         <button
           type="button"
           class="flex-1 px-4 py-3 font-mono text-sm rounded-lg border-1 border-solid border-muted bg-surface text-on-surface cursor-pointer transition-colors hover:bg-surface-hover focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
           @click="emit('close')"
         >
-          Keep playing
+          {{ t('dateMismatch.keepPlaying') }}
         </button>
       </div>
     </div>

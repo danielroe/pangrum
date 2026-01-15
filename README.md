@@ -21,13 +21,13 @@
 - [Hunspell](https://hunspell.github.io/) - word lists
 - [`@vite-pwa/nuxt`](https://github.com/vite-pwa/nuxt/) - PWA support
 - [`@nuxtjs/color-mode`](https://color-mode.nuxtjs.org/) - theme switching
+- [`@nuxtjs/i18n`](https://i18n.nuxtjs.org/) - UI internationalisation (EN, DE, ES, FR, NL)
 - [Upstash](https://upstash.com/) - KV storage for persistent data
 - [Vercel](https://vercel.com/) - hosting
 
 ## 🚧 Roadmap
 
 - [ ] Keyboard shortcuts
-- [ ] Internationalisation
 
 ## Try it out locally
 

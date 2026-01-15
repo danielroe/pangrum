@@ -1,0 +1,221 @@
+{
+  "app": {
+    "name": "pangrum",
+    "offline": "offline"
+  },
+  "header": {
+    "statistics": "Statistics",
+    "settings": "Settings"
+  },
+  "input": {
+    "label": "enter your word",
+    "submit": "Submit word"
+  },
+  "score": {
+    "words": "words",
+    "to": "to",
+    "pangramsFound": "{found} of {total} pangrams found"
+  },
+  "levels": {
+    "beginner": "beginner",
+    "novice": "novice",
+    "movingUp": "moving up",
+    "good": "good",
+    "solid": "solid",
+    "nice": "nice",
+    "great": "great",
+    "amazing": "amazing",
+    "genius": "genius",
+    "perfect": "perfect"
+  },
+  "foundWords": {
+    "empty": "Make a guess to get started",
+    "pangram": "Pangram!"
+  },
+  "hints": {
+    "wordGrid": "Word grid showing counts by prefix and length",
+    "twoLetterPairs": "Two-letter pairs grid",
+    "popularity": "Word popularity showing how many players found each word",
+    "wordList": "Found words list",
+    "goTo": "Go to {panel}"
+  },
+  "popularity": {
+    "loading": "Loading popularity data...",
+    "noData": "Popularity data will appear as more players complete this puzzle.",
+    "basedOn": "Based on {count} player | Based on {count} players",
+    "foundPercent": "{percent}% of players found this word"
+  },
+  "tutorial": {
+    "skip": "Skip",
+    "back": "Back",
+    "next": "Next",
+    "startPlaying": "Start Playing",
+    "goToStep": "Go to step {step}",
+    "steps": {
+      "welcome": {
+        "title": "Welcome to Pangrum",
+        "content": "Create words using the letters shown. Each puzzle has a unique set of 7 letters and dozens of valid words to find."
+      },
+      "letters": {
+        "title": "Using the Letters",
+        "content": "Tap or click the letters to build words. You can also type on your keyboard. Use each letter as many times as you like."
+      },
+      "centre": {
+        "title": "The Centre Letter",
+        "content": "Every word must include the highlighted centre letter. Words without it won't be accepted."
+      },
+      "scoring": {
+        "title": "Scoring",
+        "content": "4-letter words score 1 point. Longer words score 1 point per letter. Reach higher tiers by earning more points!"
+      },
+      "pangrams": {
+        "title": "Pangrams",
+        "content": "A pangram uses all 7 letters at least once. These special words earn 7 bonus points and are marked with a star."
+      },
+      "hints": {
+        "title": "Need Help?",
+        "content": "Enable hints to see how many words start with each letter pair, and track your progress. Toggle hints with the lightbulb icon."
+      }
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "theme": {
+      "label": "Theme",
+      "system": "System",
+      "light": "Light",
+      "dark": "Dark"
+    },
+    "language": {
+      "label": "Interface"
+    },
+    "puzzleLanguage": {
+      "label": "Word List",
+      "description": "Choose the language for daily puzzles and valid words."
+    },
+    "notifications": {
+      "label": "Reminders",
+      "on": "On",
+      "off": "Off",
+      "enabled": "Enabled",
+      "disabled": "Disabled",
+      "remindAt": "Remind me at:"
+    },
+    "sync": {
+      "label": "Sync",
+      "connected": "Connected",
+      "off": "Off",
+      "offline": "Offline - sync paused",
+      "connecting": "Connecting...",
+      "waitingForDevice": "Waiting for device...",
+      "scanOrEnter": "Scan or enter code on another device:",
+      "copyCode": "Copy code",
+      "disconnect": "Disconnect",
+      "description": "Sync your found words across devices in real-time.",
+      "youreOffline": "You're offline",
+      "enterCode": "Enter sync code",
+      "cancel": "Cancel",
+      "connect": "Connect",
+      "createNew": "Create new sync",
+      "joinExisting": "Join existing sync"
+    },
+    "howToPlay": "How to play"
+  },
+  "dateMismatch": {
+    "title": "Different date",
+    "message": "This is the puzzle from {date}.",
+    "prompt": "Would you like to load today's puzzle instead?",
+    "loadToday": "Load today's puzzle",
+    "keepPlaying": "Keep playing"
+  },
+  "relativeDate": {
+    "today": "today",
+    "yesterday": "yesterday",
+    "tomorrow": "tomorrow",
+    "daysAgo": "{count} days ago",
+    "lastWeek": "last week",
+    "weeksAgo": "{count} weeks ago",
+    "overAMonth": "over a month ago"
+  },
+  "share": {
+    "title": "Share Results",
+    "generatingPreview": "Generating preview...",
+    "previewUnavailable": "Preview unavailable",
+    "points": "points",
+    "share": "Share",
+    "copyImage": "Copy Image",
+    "copyText": "Copy Text",
+    "status": {
+      "preparing": "Preparing...",
+      "textCopied": "Text copied!",
+      "imageCopied": "Image copied!",
+      "imageDownloaded": "Image downloaded!",
+      "shared": "Shared!",
+      "error": "Something went wrong"
+    }
+  },
+  "stats": {
+    "title": "Statistics",
+    "currentStreak": "Current streak",
+    "bestStreak": "Best streak",
+    "daysPlayed": "Days played",
+    "incredible": "Incredible!",
+    "onFire": "You're on fire!",
+    "nice": "Nice!",
+    "keepGoing": "Keep it going!",
+    "playTomorrow": "Play tomorrow to extend your streak!",
+    "startStreak": "Start a streak by playing today!"
+  },
+  "toasts": {
+    "pangram": "PANGRAM! +{points}",
+    "amazing": "Amazing! +{points}",
+    "points": "+{points}",
+    "levelUp": "Level up: {level}!",
+    "notLongEnough": "Not long enough",
+    "noCentreLetter": "Does not contain centre letter",
+    "wrongLetters": "Uses wrong letters",
+    "notValid": "Not a valid word",
+    "alreadyGuessed": "Already guessed",
+    "migrated": "Migrated {count} word from previous format | Migrated {count} words from previous format",
+    "navigatedToSynced": "Navigated to synced puzzle"
+  },
+  "wordStats": {
+    "letters": "{count} letters",
+    "allLengths": "all lengths",
+    "allPrefixes": "all prefixes"
+  },
+  "footer": {
+    "madeWith": "made with",
+    "by": "by",
+    "refreshApp": "Refresh app to get latest version"
+  },
+  "common": {
+    "close": "Close"
+  },
+  "letterGrid": {
+    "shuffle": "Shuffle",
+    "shuffleLetters": "Shuffle letters",
+    "deleteCharacter": "Delete character",
+    "submitWord": "Submit word"
+  },
+  "hintsToggle": {
+    "hintsOn": "Hints on",
+    "hintsOff": "Hints off"
+  },
+  "datePicker": {
+    "selectDate": "Select puzzle date",
+    "today": "Today",
+    "backToToday": "Back to today",
+    "previousMonth": "Previous month",
+    "nextMonth": "Next month",
+    "days": {
+      "su": "Su",
+      "mo": "Mo",
+      "tu": "Tu",
+      "we": "We",
+      "th": "Th",
+      "fr": "Fr",
+      "sa": "Sa"
+    }
+  }
+}

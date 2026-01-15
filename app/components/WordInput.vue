@@ -15,6 +15,7 @@ const emit = defineEmits<{
 
 const words = defineModel<Set<string>>('words', { required: true })
 
+const { t } = useI18n()
 const language = useLanguage()
 
 const incorrectGuesses = useLocalStorage<Record<string, string>>(
@@ -71,35 +72,47 @@ watch(word, (letters) => {
   }
 })
 
+// Error keys for validation
+const ERROR_KEYS = {
+  noWord: 'noWord',
+  notLongEnough: 'notLongEnough',
+  noCentreLetter: 'noCentreLetter',
+  wrongLetters: 'wrongLetters',
+  notValid: 'notValid',
+  alreadyGuessed: 'alreadyGuessed',
+} as const
+
+type ErrorKey = typeof ERROR_KEYS[keyof typeof ERROR_KEYS]
+
 function addWord() {
   const normalisedWord = word.value.toUpperCase()
   try {
     if (!normalisedWord) {
-      throw new TypeError('No word')
+      throw new Error(ERROR_KEYS.noWord)
     }
     if (normalisedWord.length < 4) {
-      throw new TypeError('Not long enough')
+      throw new Error(ERROR_KEYS.notLongEnough)
     }
     if (!normalisedWord.includes(props.centreLetter)) {
-      throw new TypeError('Does not contain centre letter')
+      throw new Error(ERROR_KEYS.noCentreLetter)
     }
     if (!normalisedWord.split('').every(letter => props.letters.includes(letter))) {
-      throw new TypeError('Uses wrong letters')
+      throw new Error(ERROR_KEYS.wrongLetters)
     }
     if (!props.hashes.includes(hash(normalisedWord))) {
-      throw new TypeError('Not a valid word')
+      throw new Error(ERROR_KEYS.notValid)
     }
     if (words.value.has(normalisedWord)) {
-      throw new TypeError('Already guessed')
+      throw new Error(ERROR_KEYS.alreadyGuessed)
     }
 
     const { percentage } = useScore(() => words.value, () => props.validWords)
-    const levelBefore = getLevel(percentage.value)
+    const levelBefore = getLevelKey(percentage.value)
 
     words.value.add(normalisedWord)
     emit('wordAdded', normalisedWord)
 
-    const levelAfter = getLevel(percentage.value)
+    const levelAfter = getLevelKey(percentage.value)
     const didLevelUp = levelBefore !== levelAfter
 
     const isPangram = props.letters.every(letter => normalisedWord.includes(letter))
@@ -108,43 +121,43 @@ function addWord() {
     if (isPangram) {
       triggerCelebration()
       addToast({
-        message: `PANGRAM! +${points}`,
+        message: t('toasts.pangram', { points }),
         type: 'celebration',
       })
     }
     else if (points >= 10) {
       addToast({
-        message: `Amazing! +${points}`,
+        message: t('toasts.amazing', { points }),
         type: 'success',
       })
     }
     else {
       addToast({
-        message: `+${points}`,
+        message: t('toasts.points', { points }),
         type: 'success',
       })
     }
 
     if (didLevelUp) {
       addToast({
-        message: `Level up: ${levelAfter}!`,
+        message: t('toasts.levelUp', { level: t(`levels.${levelAfter}`) }),
         type: 'celebration',
       })
     }
   }
   catch (err) {
-    const message = (err as Error).toString().replace('TypeError: ', '')
-    if (message === 'No word') {
+    const errorKey = (err as Error).message as ErrorKey
+    if (errorKey === ERROR_KEYS.noWord) {
       return
     }
 
     // Track incorrect guesses (excluding 'already guessed')
-    if (normalisedWord && message !== 'Already guessed') {
-      incorrectGuesses.value[normalisedWord] = message
+    if (normalisedWord && errorKey !== ERROR_KEYS.alreadyGuessed) {
+      incorrectGuesses.value[normalisedWord] = errorKey
     }
 
     addToast({
-      message: (err as Error).toString().replace('TypeError: ', ''),
+      message: t(`toasts.${errorKey}`),
       type: 'error',
     })
   }
@@ -164,7 +177,7 @@ function addWord() {
     @submit.prevent="addWord"
   >
     <label class="flex flex-col gap-2 flex-1 sm:flex-initial max-w-full overflow-hidden ls:gap-1">
-      <span class="hidden sm:block text-sm text-muted-foreground ls:hidden">enter your word</span>
+      <span class="hidden sm:block text-sm text-muted-foreground ls:hidden">{{ t('input.label') }}</span>
       <div class="relative flex flex-col">
         <input
           ref="wordInput"
@@ -196,7 +209,7 @@ function addWord() {
     <button
       type="submit"
       class="submit-button hidden sm:block py-2 px-3 text-lg bg-primary text-dark border-1 border-solid border-primary rounded-lg cursor-pointer transition-colors hover:bg-primary-hover focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2 ls:hidden"
-      aria-label="Submit word"
+      :aria-label="t('input.submit')"
     >
       <span aria-hidden="true">⏎</span>
     </button>

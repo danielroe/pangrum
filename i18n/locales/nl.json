@@ -1,0 +1,221 @@
+{
+  "app": {
+    "name": "pangrum",
+    "offline": "offline"
+  },
+  "header": {
+    "statistics": "Statistieken",
+    "settings": "Instellingen"
+  },
+  "input": {
+    "label": "voer je woord in",
+    "submit": "Woord indienen"
+  },
+  "score": {
+    "words": "woorden",
+    "to": "tot",
+    "pangramsFound": "{found} van {total} pangrammen gevonden"
+  },
+  "levels": {
+    "beginner": "beginner",
+    "novice": "nieuweling",
+    "movingUp": "vooruitgang",
+    "good": "goed",
+    "solid": "solide",
+    "nice": "prima",
+    "great": "geweldig",
+    "amazing": "fantastisch",
+    "genius": "geniaal",
+    "perfect": "perfect"
+  },
+  "foundWords": {
+    "empty": "Raad een woord om te beginnen",
+    "pangram": "Pangram!"
+  },
+  "hints": {
+    "wordGrid": "Woordrooster met aantallen per prefix en lengte",
+    "twoLetterPairs": "Twee-letter paren rooster",
+    "popularity": "Woordpopulariteit toont hoeveel spelers elk woord hebben gevonden",
+    "wordList": "Gevonden woordenlijst",
+    "goTo": "Ga naar {panel}"
+  },
+  "popularity": {
+    "loading": "Populariteitsgegevens laden...",
+    "noData": "Populariteitsgegevens verschijnen wanneer meer spelers deze puzzel voltooien.",
+    "basedOn": "Gebaseerd op {count} speler | Gebaseerd op {count} spelers",
+    "foundPercent": "{percent}% van de spelers heeft dit woord gevonden"
+  },
+  "tutorial": {
+    "skip": "Overslaan",
+    "back": "Terug",
+    "next": "Volgende",
+    "startPlaying": "Begin met spelen",
+    "goToStep": "Ga naar stap {step}",
+    "steps": {
+      "welcome": {
+        "title": "Welkom bij Pangrum",
+        "content": "Maak woorden met de getoonde letters. Elke puzzel heeft een unieke set van 7 letters en tientallen geldige woorden om te vinden."
+      },
+      "letters": {
+        "title": "Letters gebruiken",
+        "content": "Tik of klik op de letters om woorden te maken. Je kunt ook typen op je toetsenbord. Gebruik elke letter zo vaak als je wilt."
+      },
+      "centre": {
+        "title": "De middelste letter",
+        "content": "Elk woord moet de gemarkeerde middelste letter bevatten. Woorden zonder worden niet geaccepteerd."
+      },
+      "scoring": {
+        "title": "Scoren",
+        "content": "Woorden van 4 letters geven 1 punt. Langere woorden geven 1 punt per letter. Bereik hogere niveaus door meer punten te verdienen!"
+      },
+      "pangrams": {
+        "title": "Pangrammen",
+        "content": "Een pangram gebruikt alle 7 letters minstens één keer. Deze speciale woorden geven 7 bonuspunten en zijn gemarkeerd met een ster."
+      },
+      "hints": {
+        "title": "Hulp nodig?",
+        "content": "Schakel hints in om te zien hoeveel woorden met elk letterpaar beginnen en volg je voortgang. Schakel hints in met het lampje-icoon."
+      }
+    }
+  },
+  "settings": {
+    "title": "Instellingen",
+    "theme": {
+      "label": "Thema",
+      "system": "Systeem",
+      "light": "Licht",
+      "dark": "Donker"
+    },
+    "language": {
+      "label": "Interface"
+    },
+    "puzzleLanguage": {
+      "label": "Woordenlijst",
+      "description": "Kies de taal voor dagelijkse puzzels en geldige woorden."
+    },
+    "notifications": {
+      "label": "Herinneringen",
+      "on": "Aan",
+      "off": "Uit",
+      "enabled": "Ingeschakeld",
+      "disabled": "Uitgeschakeld",
+      "remindAt": "Herinner mij om:"
+    },
+    "sync": {
+      "label": "Sync",
+      "connected": "Verbonden",
+      "off": "Uit",
+      "offline": "Offline - sync gepauzeerd",
+      "connecting": "Verbinden...",
+      "waitingForDevice": "Wachten op apparaat...",
+      "scanOrEnter": "Scan of voer de code in op een ander apparaat:",
+      "copyCode": "Code kopiëren",
+      "disconnect": "Verbinding verbreken",
+      "description": "Synchroniseer je gevonden woorden op al je apparaten in realtime.",
+      "youreOffline": "Je bent offline",
+      "enterCode": "Sync-code invoeren",
+      "cancel": "Annuleren",
+      "connect": "Verbinden",
+      "createNew": "Nieuwe sync maken",
+      "joinExisting": "Bestaande sync bijtreden"
+    },
+    "howToPlay": "Hoe te spelen"
+  },
+  "dateMismatch": {
+    "title": "Andere datum",
+    "message": "Dit is de puzzel van {date}.",
+    "prompt": "Wil je in plaats daarvan de puzzel van vandaag laden?",
+    "loadToday": "Puzzel van vandaag laden",
+    "keepPlaying": "Doorgaan met spelen"
+  },
+  "relativeDate": {
+    "today": "vandaag",
+    "yesterday": "gisteren",
+    "tomorrow": "morgen",
+    "daysAgo": "{count} dagen geleden",
+    "lastWeek": "vorige week",
+    "weeksAgo": "{count} weken geleden",
+    "overAMonth": "meer dan een maand geleden"
+  },
+  "share": {
+    "title": "Resultaten delen",
+    "generatingPreview": "Voorbeeld genereren...",
+    "previewUnavailable": "Voorbeeld niet beschikbaar",
+    "points": "punten",
+    "share": "Delen",
+    "copyImage": "Afbeelding kopiëren",
+    "copyText": "Tekst kopiëren",
+    "status": {
+      "preparing": "Voorbereiden...",
+      "textCopied": "Tekst gekopieerd!",
+      "imageCopied": "Afbeelding gekopieerd!",
+      "imageDownloaded": "Afbeelding gedownload!",
+      "shared": "Gedeeld!",
+      "error": "Er ging iets mis"
+    }
+  },
+  "stats": {
+    "title": "Statistieken",
+    "currentStreak": "Huidige reeks",
+    "bestStreak": "Beste reeks",
+    "daysPlayed": "Dagen gespeeld",
+    "incredible": "Ongelooflijk!",
+    "onFire": "Je bent on fire!",
+    "nice": "Netjes!",
+    "keepGoing": "Ga zo door!",
+    "playTomorrow": "Speel morgen om je reeks te verlengen!",
+    "startStreak": "Begin een reeks door vandaag te spelen!"
+  },
+  "toasts": {
+    "pangram": "PANGRAM! +{points}",
+    "amazing": "Fantastisch! +{points}",
+    "points": "+{points}",
+    "levelUp": "Level omhoog: {level}!",
+    "notLongEnough": "Niet lang genoeg",
+    "noCentreLetter": "Bevat niet de middelste letter",
+    "wrongLetters": "Gebruikt verkeerde letters",
+    "notValid": "Geen geldig woord",
+    "alreadyGuessed": "Al geraden",
+    "migrated": "{count} woord gemigreerd van vorig formaat | {count} woorden gemigreerd van vorig formaat",
+    "navigatedToSynced": "Genavigeerd naar gesynchroniseerde puzzel"
+  },
+  "wordStats": {
+    "letters": "{count} letters",
+    "allLengths": "alle lengtes",
+    "allPrefixes": "alle prefixen"
+  },
+  "footer": {
+    "madeWith": "gemaakt met",
+    "by": "door",
+    "refreshApp": "Ververs de app voor de nieuwste versie"
+  },
+  "common": {
+    "close": "Sluiten"
+  },
+  "letterGrid": {
+    "shuffle": "Schudden",
+    "shuffleLetters": "Letters schudden",
+    "deleteCharacter": "Teken verwijderen",
+    "submitWord": "Woord indienen"
+  },
+  "hintsToggle": {
+    "hintsOn": "Hints aan",
+    "hintsOff": "Hints uit"
+  },
+  "datePicker": {
+    "selectDate": "Puzzeldatum selecteren",
+    "today": "Vandaag",
+    "backToToday": "Terug naar vandaag",
+    "previousMonth": "Vorige maand",
+    "nextMonth": "Volgende maand",
+    "days": {
+      "su": "Zo",
+      "mo": "Ma",
+      "tu": "Di",
+      "we": "Wo",
+      "th": "Do",
+      "fr": "Vr",
+      "sa": "Za"
+    }
+  }
+}

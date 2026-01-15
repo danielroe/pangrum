@@ -1,10 +1,10 @@
 import type { Language } from './useLanguage'
-import type { Level } from '../utils/score'
+import type { LevelKey } from '../utils/score'
 
 export interface PuzzleDayProgress {
   date: string
   wordsFound: number
-  level: Level | null // null if we can't compute (no puzzle data cached)
+  level: LevelKey | null // null if we can't compute (no puzzle data cached)
 }
 
 export interface PuzzleStats {

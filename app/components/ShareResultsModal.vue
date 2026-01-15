@@ -9,6 +9,8 @@ const emit = defineEmits<{
   close: []
 }>()
 
+const { t } = useI18n()
+
 const { generateShareImage, shareResults, downloadImage, copyTextToClipboard, copyImageToClipboard, isShareSupported } = useShare()
 
 const dialogRef = useTemplateRef<HTMLDialogElement>('dialog')
@@ -100,12 +102,12 @@ async function handleCopyImage() {
 
 const statusMessage = computed(() => {
   switch (shareStatus.value) {
-    case 'sharing': return 'Preparing...'
-    case 'copied': return 'Text copied!'
-    case 'copied-image': return 'Image copied!'
-    case 'downloaded': return 'Image downloaded!'
-    case 'shared': return 'Shared!'
-    case 'error': return 'Something went wrong'
+    case 'sharing': return t('share.status.preparing')
+    case 'copied': return t('share.status.textCopied')
+    case 'copied-image': return t('share.status.imageCopied')
+    case 'downloaded': return t('share.status.imageDownloaded')
+    case 'shared': return t('share.status.shared')
+    case 'error': return t('share.status.error')
     default: return ''
   }
 })
@@ -120,12 +122,12 @@ const statusMessage = computed(() => {
   >
     <div class="flex justify-between items-center p-4 border-b-1 border-solid border-muted">
       <h3 class="text-on-surface font-mono font-bold text-lg m-0">
-        Share Results
+        {{ t('share.title') }}
       </h3>
       <button
         type="button"
         class="w-8 h-8 flex items-center justify-center text-on-surface text-xl leading-none rounded-lg border-1 border-solid border-transparent bg-transparent cursor-pointer hover:bg-surface-hover transition-colors focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
-        aria-label="Close"
+        :aria-label="t('common.close')"
         @click="emit('close')"
       >
         ×
@@ -145,13 +147,13 @@ const statusMessage = computed(() => {
           v-else-if="isGenerating"
           class="absolute inset-0 flex items-center justify-center text-muted-foreground"
         >
-          Generating preview...
+          {{ t('share.generatingPreview') }}
         </div>
         <div
           v-else
           class="absolute inset-0 flex items-center justify-center text-muted-foreground"
         >
-          Preview unavailable
+          {{ t('share.previewUnavailable') }}
         </div>
       </div>
 
@@ -160,12 +162,12 @@ const statusMessage = computed(() => {
         v-if="data"
         class="text-center text-sm text-muted-foreground font-mono"
       >
-        <span class="text-primary font-bold">{{ data.score }}</span> points
+        <span class="text-primary font-bold">{{ data.score }}</span> {{ t('share.points') }}
         <span class="mx-2">·</span>
-        {{ data.wordsFound }}/{{ data.totalWords }} words
+        {{ data.wordsFound }}/{{ data.totalWords }} {{ t('score.words') }}
         <template v-if="data.totalPangrams > 0">
           <span class="mx-2">·</span>
-          {{ data.pangrams }}/{{ data.totalPangrams }} pangrams
+          {{ t('score.pangramsFound', { found: data.pangrams, total: data.totalPangrams }) }}
         </template>
       </div>
 
@@ -191,7 +193,7 @@ const statusMessage = computed(() => {
             class="i-lucide-share-2 text-lg"
             aria-hidden="true"
           />
-          Share
+          {{ t('share.share') }}
         </button>
 
         <div class="flex gap-2">
@@ -206,7 +208,7 @@ const statusMessage = computed(() => {
               class="i-lucide-copy text-lg"
               aria-hidden="true"
             />
-            Copy Image
+            {{ t('share.copyImage') }}
           </button>
 
           <!-- Copy Text button -->
@@ -220,7 +222,7 @@ const statusMessage = computed(() => {
               class="i-lucide-align-left text-lg"
               aria-hidden="true"
             />
-            Copy Text
+            {{ t('share.copyText') }}
           </button>
         </div>
       </div>
