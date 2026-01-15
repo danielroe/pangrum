@@ -38,8 +38,13 @@ const label = computed(() => hintsEnabled.value ? t('hintsToggle.hintsOn') : t('
       <span class="text-on-surface">{{ label }}</span>
     </button>
     <template #fallback>
-      <!-- Mobile skeleton -->
-      <div class="w-8 h-8 sm:hidden rounded-lg border-1 border-solid border-muted bg-surface ls:flex ls:w-7 ls:h-7" />
+      <!-- Mobile skeleton (full button, just missing interactivity) -->
+      <div class="w-8 h-8 flex sm:hidden items-center justify-center rounded-lg border-1 border-solid border-muted bg-surface ls:flex ls:w-7 ls:h-7">
+        <span
+          class="i-lucide-lightbulb text-base text-on-surface ls:text-sm"
+          aria-hidden="true"
+        />
+      </div>
       <!-- Desktop skeleton -->
       <div class="hidden sm:flex items-center gap-2 px-3 py-1 rounded-lg bg-surface border-1 border-solid border-muted ls:hidden">
         <div class="w-4 h-4 rounded bg-muted animate-pulse" />

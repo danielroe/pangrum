@@ -287,29 +287,47 @@ const shareData = computed(() => scoreRef.value?.getShareData())
             :has-progress="checkHasProgress"
           />
           <ClientOnly>
-            <template v-if="puzzleStats.totalDaysPlayed > 0">
-              <button
-                type="button"
-                class="flex sm:hidden items-center justify-center w-8 h-8 rounded-lg bg-surface border-1 border-solid border-muted text-on-surface cursor-pointer transition-colors hover:bg-surface-hover focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2 ls:flex ls:w-7 ls:h-7"
-                aria-label="View statistics"
-                @click="showStatsModal = true"
-              >
+            <!-- Mobile statistics button -->
+            <button
+              type="button"
+              class="flex sm:hidden items-center justify-center w-8 h-8 rounded-lg bg-surface border-1 border-solid border-muted text-on-surface transition-colors focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2 ls:flex ls:w-7 ls:h-7"
+              :class="puzzleStats.totalDaysPlayed > 0 ? 'cursor-pointer hover:bg-surface-hover' : 'opacity-40 cursor-not-allowed'"
+              :disabled="puzzleStats.totalDaysPlayed === 0"
+              aria-label="View statistics"
+              @click="puzzleStats.totalDaysPlayed > 0 && (showStatsModal = true)"
+            >
+              <span
+                class="i-lucide-bar-chart-2 text-base"
+                aria-hidden="true"
+              />
+            </button>
+            <!-- Desktop statistics button -->
+            <button
+              type="button"
+              class="hidden sm:flex items-center gap-2 px-3 py-1 text-sm rounded-lg bg-surface border-1 border-solid border-muted text-on-surface transition-colors focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2 ls:hidden"
+              :class="puzzleStats.totalDaysPlayed > 0 ? 'cursor-pointer hover:bg-surface-hover' : 'opacity-40 cursor-not-allowed'"
+              :disabled="puzzleStats.totalDaysPlayed === 0"
+              @click="puzzleStats.totalDaysPlayed > 0 && (showStatsModal = true)"
+            >
+              <span
+                class="i-lucide-bar-chart-2 text-sm"
+                aria-hidden="true"
+              />
+              <span>{{ t('header.statistics') }}</span>
+            </button>
+            <template #fallback>
+              <!-- Mobile skeleton (full button, greyed out) -->
+              <div class="flex sm:hidden items-center justify-center w-8 h-8 rounded-lg bg-surface border-1 border-solid border-muted opacity-40 ls:flex ls:w-7 ls:h-7">
                 <span
-                  class="i-lucide-bar-chart-2 text-base"
+                  class="i-lucide-bar-chart-2 text-base text-on-surface"
                   aria-hidden="true"
                 />
-              </button>
-              <button
-                type="button"
-                class="hidden sm:flex items-center gap-2 px-3 py-1 text-sm rounded-lg bg-surface border-1 border-solid border-muted text-on-surface cursor-pointer transition-colors hover:bg-surface-hover focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2 ls:hidden"
-                @click="showStatsModal = true"
-              >
-                <span
-                  class="i-lucide-bar-chart-2 text-sm"
-                  aria-hidden="true"
-                />
-                <span>{{ t('header.statistics') }}</span>
-              </button>
+              </div>
+              <!-- Desktop skeleton -->
+              <div class="hidden sm:flex items-center gap-2 px-3 py-1 rounded-lg bg-surface border-1 border-solid border-muted opacity-40 ls:hidden">
+                <div class="w-4 h-4 rounded bg-muted animate-pulse" />
+                <div class="w-14 h-4 rounded bg-muted animate-pulse" />
+              </div>
             </template>
           </ClientOnly>
           <HintsToggle />
