@@ -180,6 +180,7 @@ function closeModal() {
       :found-words="modalState.foundWords"
       :total-words="modalState.totalWords"
       :show-remaining="modalState.showRemaining"
+      :letters="letters"
       @close="closeModal"
     />
   </div>

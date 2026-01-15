@@ -25,8 +25,10 @@ function isPangram(word: string) {
     <li
       v-for="word of sortedWords"
       :key="word"
-      class="word-item font-mono text-sm px-3 py-2 bg-surface-elevated border-1 border-solid border-muted rounded-lg text-on-surface transition-all duration-150 hover:bg-surface-hover hover:-translate-y-px motion-reduce:transition-none"
-      :class="{ 'bg-celebration border-celebration text-celebration font-semibold is-pangram': isPangram(word) }"
+      class="word-item font-mono text-sm px-3 py-2 border-1 border-solid rounded-lg transition-all duration-150 hover:-translate-y-px motion-reduce:transition-none"
+      :class="isPangram(word)
+        ? 'is-pangram bg-celebration-bg border-celebration text-celebration font-semibold'
+        : 'bg-surface-elevated border-muted text-on-surface hover:bg-surface-hover'"
       :title="isPangram(word) ? 'Pangram!' : ''"
     >
       {{ word.toLowerCase() }}
