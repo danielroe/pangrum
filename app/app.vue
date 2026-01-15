@@ -268,7 +268,7 @@ const shareData = computed(() => scoreRef.value?.getShareData())
         />
 
         <!-- Right column in landscape: score + hints/words -->
-        <section class="flex-1 min-h-0 overflow-y-auto px-0 py-1 sm:py-2 md:pb-0 words-section ls:row-start-2 ls:flex ls:flex-col ls:gap-2 ls:p-0 ls:overflow-hidden">
+        <section class="flex-1 min-h-0 flex flex-col px-0 py-1 sm:py-2 md:pb-0 words-section ls:row-start-2 ls:gap-2 ls:p-0 ls:overflow-hidden">
           <TheScore
             class="hidden flex-shrink-0 ls:block"
             :words="words"
@@ -278,7 +278,7 @@ const shareData = computed(() => scoreRef.value?.getShareData())
             :date="selectedDate"
             @share="openShareModal"
           />
-          <div class="ls:flex-1 ls:min-h-0 ls:overflow-y-auto">
+          <div class="flex-1 min-h-0 h-full ls:overflow-y-auto">
             <WordHints
               v-if="hintsEnabled"
               :pairs="pairs"
