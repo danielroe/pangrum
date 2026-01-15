@@ -1,5 +1,3 @@
-import { provider } from 'std-env'
-
 export default defineNuxtConfig({
   modules: [
     function (_, nuxt) {
@@ -7,13 +5,6 @@ export default defineNuxtConfig({
         nuxt.options.pwa ||= {}
         nuxt.options.pwa.pwaAssets ||= {}
         nuxt.options.pwa.pwaAssets.disabled = true
-      }
-    },
-    function (_, nuxt) {
-      if (provider === 'vercel') {
-        nuxt.options.nitro.storage ||= {}
-        nuxt.options.nitro.storage.words ||= {}
-        nuxt.options.nitro.storage.words.driver = 'vercel-kv'
       }
     },
     '@unocss/nuxt',
