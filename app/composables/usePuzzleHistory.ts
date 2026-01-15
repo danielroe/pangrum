@@ -1,0 +1,159 @@
+import type { Language } from './useLanguage'
+import type { Level } from '../utils/score'
+
+export interface PuzzleDayProgress {
+  date: string
+  wordsFound: number
+  level: Level | null // null if we can't compute (no puzzle data cached)
+}
+
+export interface PuzzleStats {
+  currentStreak: number
+  longestStreak: number
+  totalDaysPlayed: number
+}
+
+/**
+ * Reads all puzzle progress from localStorage for a given language.
+ * Returns a map of date -> progress data.
+ */
+export function usePuzzleHistory(language: MaybeRefOrGetter<Language>) {
+  const historyMap = ref(new Map<string, PuzzleDayProgress>())
+
+  const STORAGE_PREFIX = 'pangrum-'
+  const DATE_REGEX = /^\d{4}-\d{2}-\d{2}$/
+
+  function loadHistory() {
+    if (!import.meta.client) return
+
+    const lang = toValue(language)
+    const prefix = `${STORAGE_PREFIX}${lang}-`
+    const newMap = new Map<string, PuzzleDayProgress>()
+
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i)
+      if (!key?.startsWith(prefix)) continue
+
+      const dateStr = key.slice(prefix.length)
+      if (!DATE_REGEX.test(dateStr)) continue
+
+      try {
+        const data = localStorage.getItem(key)
+        if (!data) continue
+
+        const words = JSON.parse(data) as string[]
+        if (!Array.isArray(words) || words.length === 0) continue
+
+        newMap.set(dateStr, {
+          date: dateStr,
+          wordsFound: words.length,
+          level: null, // We don't have puzzle data to compute level
+        })
+      }
+      catch {
+        // Ignore parse errors
+      }
+    }
+
+    historyMap.value = newMap
+  }
+
+  // Reload when language changes
+  watch(() => toValue(language), loadHistory, { immediate: true })
+
+  // Also reload when component mounts (for SSR hydration)
+  onMounted(loadHistory)
+
+  // Listen for storage events from other tabs
+  if (import.meta.client) {
+    useEventListener('storage', (event) => {
+      const lang = toValue(language)
+      const prefix = `${STORAGE_PREFIX}${lang}-`
+      if (event.key?.startsWith(prefix)) {
+        loadHistory()
+      }
+    })
+  }
+
+  function hasProgress(date: string): boolean {
+    return historyMap.value.has(date)
+  }
+
+  function getProgress(date: string): PuzzleDayProgress | undefined {
+    return historyMap.value.get(date)
+  }
+
+  const stats = computed<PuzzleStats>(() => {
+    const today = new Date().toISOString().slice(0, 10)
+    const sortedDates = [...historyMap.value.keys()].sort().reverse()
+
+    if (sortedDates.length === 0) {
+      return { currentStreak: 0, longestStreak: 0, totalDaysPlayed: 0 }
+    }
+
+    // Calculate current streak (must include today or yesterday)
+    let currentStreak = 0
+    const checkDate = new Date(today)
+
+    // Start from today and work backwards
+    while (true) {
+      const dateStr = checkDate.toISOString().slice(0, 10)
+      if (historyMap.value.has(dateStr)) {
+        currentStreak++
+        checkDate.setDate(checkDate.getDate() - 1)
+      }
+      else if (currentStreak === 0) {
+        // If today has no progress, check if yesterday started a streak
+        checkDate.setDate(checkDate.getDate() - 1)
+        const yesterdayStr = checkDate.toISOString().slice(0, 10)
+        if (!historyMap.value.has(yesterdayStr)) {
+          break // No streak
+        }
+        // Continue counting from yesterday
+      }
+      else {
+        break // Streak broken
+      }
+    }
+
+    // Calculate longest streak
+    let longestStreak = 0
+    let tempStreak = 0
+    let prevDate: Date | null = null
+
+    for (const dateStr of sortedDates.slice().reverse()) {
+      const currentDate = new Date(dateStr)
+
+      if (prevDate === null) {
+        tempStreak = 1
+      }
+      else {
+        const dayDiff = Math.round((currentDate.getTime() - prevDate.getTime()) / (1000 * 60 * 60 * 24))
+        if (dayDiff === 1) {
+          tempStreak++
+        }
+        else {
+          longestStreak = Math.max(longestStreak, tempStreak)
+          tempStreak = 1
+        }
+      }
+
+      prevDate = currentDate
+    }
+    longestStreak = Math.max(longestStreak, tempStreak)
+
+    return {
+      currentStreak,
+      longestStreak,
+      totalDaysPlayed: historyMap.value.size,
+    }
+  })
+
+  return {
+    historyMap,
+    hasProgress,
+    getProgress,
+    stats,
+    reload: loadHistory,
+  }
+}

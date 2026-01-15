@@ -17,6 +17,7 @@ const { data } = useFetch(() => `/api/words/${language.value}/${selectedDate.val
 const isOnline = useOnline()
 const { hintsEnabled } = useHints()
 const { showTutorial, checkFirstVisit } = useTutorial()
+const { hasProgress: checkHasProgress, stats: puzzleStats, reload: reloadHistory } = usePuzzleHistory(language)
 
 defineOgImageComponent('Default')
 
@@ -42,6 +43,9 @@ const storedWords = useLocalStorage<Set<string>>(() => `pangrum-${language.value
     write: (v: Set<string>) => JSON.stringify([...v]),
   },
 })
+
+// Reload puzzle history when words are added
+watch(storedWords, () => reloadHistory(), { deep: true })
 
 // Filter stored words to only include valid words for the current puzzle
 // This protects against invalid words from the old localStorage key format bug
@@ -131,6 +135,7 @@ function handleWordAdded(word: string) {
 
 const showDateMismatchModal = ref(false)
 const showShareModal = ref(false)
+const showStatsModal = ref(false)
 const scoreRef = useTemplateRef<InstanceType<typeof TheScore>>('score')
 
 function checkDateMismatch() {
@@ -185,7 +190,24 @@ const shareData = computed(() => scoreRef.value?.getShareData())
           </ClientOnly>
         </h1>
         <div class="flex gap-1.5 items-center flex-shrink-0 sm:gap-2">
-          <DatePicker v-model="selectedDate" />
+          <DatePicker
+            v-model="selectedDate"
+            :has-progress="checkHasProgress"
+          />
+          <ClientOnly>
+            <button
+              v-if="puzzleStats.totalDaysPlayed > 0"
+              type="button"
+              class="flex items-center justify-center w-8 h-8 rounded-lg bg-surface border-1 border-solid border-muted text-on-surface cursor-pointer transition-colors hover:bg-surface-hover focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
+              aria-label="View statistics"
+              @click="showStatsModal = true"
+            >
+              <span
+                class="i-lucide-bar-chart-2 text-base"
+                aria-hidden="true"
+              />
+            </button>
+          </ClientOnly>
           <TutorialButton />
           <HintsToggle />
           <!-- Desktop-only controls -->
@@ -261,6 +283,11 @@ const shareData = computed(() => scoreRef.value?.getShareData())
   <TutorialModal
     v-if="showTutorial"
     @close="showTutorial = false"
+  />
+  <StatsOverview
+    v-if="showStatsModal"
+    :stats="puzzleStats"
+    @close="showStatsModal = false"
   />
 </template>
 

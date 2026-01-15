@@ -1,6 +1,7 @@
 <script setup lang="ts">
 const props = defineProps<{
   modelValue: string // YYYY-MM-DD format
+  hasProgress?: (date: string) => boolean
 }>()
 
 const emit = defineEmits<{
@@ -25,6 +26,17 @@ const monthName = computed(() => {
   return viewDate.value.toLocaleDateString('en', { month: 'long', year: 'numeric' })
 })
 
+interface CalendarDay {
+  date: string
+  day: number
+  isCurrentMonth: boolean
+  isToday: boolean
+  isSelected: boolean
+  isFuture: boolean
+  isPast: boolean
+  hasProgress: boolean
+}
+
 const calendarDays = computed(() => {
   const year = viewYear.value
   const month = viewMonth.value
@@ -32,7 +44,7 @@ const calendarDays = computed(() => {
   const firstDay = new Date(year, month, 1)
   const lastDay = new Date(year, month + 1, 0)
 
-  const days: { date: string, day: number, isCurrentMonth: boolean, isToday: boolean, isSelected: boolean, isFuture: boolean, isPast: boolean }[] = []
+  const days: CalendarDay[] = []
 
   const startPadding = firstDay.getDay()
   const prevMonthLastDay = new Date(year, month, 0).getDate()
@@ -47,6 +59,7 @@ const calendarDays = computed(() => {
       isSelected: date === props.modelValue,
       isFuture: date > today,
       isPast: date < startDate,
+      hasProgress: props.hasProgress?.(date) ?? false,
     })
   }
 
@@ -61,6 +74,7 @@ const calendarDays = computed(() => {
       isSelected: date === props.modelValue,
       isFuture: date > today,
       isPast: date < startDate,
+      hasProgress: props.hasProgress?.(date) ?? false,
     })
   }
 
@@ -75,6 +89,7 @@ const calendarDays = computed(() => {
       isSelected: date === props.modelValue,
       isFuture: date > today,
       isPast: date < startDate,
+      hasProgress: props.hasProgress?.(date) ?? false,
     })
   }
 
@@ -218,7 +233,7 @@ onKeyStroke('Escape', close)
               v-for="day in calendarDays"
               :key="day.date"
               type="button"
-              class="day-button aspect-square flex items-center justify-center text-sm bg-transparent border-1 border-solid border-transparent rounded-lg cursor-pointer transition-colors focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-1"
+              class="day-button relative aspect-square flex items-center justify-center text-sm bg-transparent border-1 border-solid border-transparent rounded-lg cursor-pointer transition-colors focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-1"
               :class="{
                 'bg-primary text-primary font-semibold border-primary': day.isSelected,
                 'bg-primary-subtle text-on-surface border-primary-border font-semibold': day.isToday && !day.isSelected,
@@ -230,6 +245,12 @@ onKeyStroke('Escape', close)
               @click="() => selectDate(day.date)"
             >
               {{ day.day }}
+              <span
+                v-if="day.hasProgress && !day.isFuture && !day.isPast"
+                class="progress-dot absolute bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full"
+                :class="day.isSelected ? 'bg-on-surface/60' : 'bg-primary'"
+                aria-hidden="true"
+              />
             </button>
           </div>
 
