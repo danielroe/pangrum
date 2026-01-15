@@ -71,8 +71,9 @@ export default defineConfig({
         inactive: 'var(--color-progress-inactive)',
       },
 
-      // Semantic text/foreground color
+      // Semantic text/foreground colors
       'on-surface': 'var(--color-on-surface)',
+      'on-primary': 'var(--color-on-primary)',
 
       // Muted colors for subtle UI elements
       'muted': {

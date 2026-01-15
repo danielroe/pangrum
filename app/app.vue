@@ -244,7 +244,7 @@ const shareData = computed(() => scoreRef.value?.getShareData())
   <div class="h-100dvh overflow-hidden">
     <div class="flex flex-col h-full gap-2 px-2 py-2 text-on-surface sm:gap-3 sm:p-3 md:gap-6 md:p-8 ls:grid ls:grid-cols-[minmax(280px,auto)_1fr] ls:grid-rows-[auto_1fr] ls:gap-3 ls:p-2">
       <header class="flex items-center justify-between gap-2 flex-shrink-0 sm:items-start sm:gap-4 ls:col-span-2 ls:gap-3 ls:py-1">
-        <h1 class="text-xs font-normal tracking-[0.12em] lowercase opacity-40 m-0 transition-opacity transition-duration-0.2s sm:text-sm sm:mt-1 md:text-2xl md:font-semibold md:opacity-100 md:tracking-widest hover:opacity-100 ls:hidden">
+        <h1 class="text-xs font-normal tracking-[0.12em] lowercase opacity-60 m-0 transition-opacity transition-duration-0.2s sm:text-sm sm:mt-1 md:text-2xl md:font-semibold md:opacity-100 md:tracking-widest hover:opacity-100 ls:hidden">
           pangrum
           <ClientOnly>
             <span
@@ -313,7 +313,7 @@ const shareData = computed(() => scoreRef.value?.getShareData())
             </template>
           </ClientOnly>
           <HintsToggle />
-          <LazySettingsMenu hydrate-on-interaction />
+          <SettingsMenu />
         </div>
       </header>
 
@@ -560,7 +560,7 @@ html[data-theme='light'] {
   /* Text colors */
   --color-on-surface: #171717;
   --color-muted: rgba(0, 0, 0, 0.06);
-  --color-muted-foreground: rgba(0, 0, 0, 0.5);
+  --color-muted-foreground: rgba(0, 0, 0, 0.6);
 
   /* Letter colors for input */
   --color-letter-centre: #0d9488;

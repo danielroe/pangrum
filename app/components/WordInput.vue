@@ -185,6 +185,7 @@ function addWord() {
           name="word"
           autofocus
           type="text"
+          :aria-label="t('input.label')"
           class="word-input p-2 border-none rounded-none font-mono font-bold text-2xl sm:text-xl uppercase tracking-widest bg-transparent outline-none text-transparent caret-primary ls:p-1 ls:text-base"
         >
         <div

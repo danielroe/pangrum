@@ -97,20 +97,24 @@ onKeyStroke('Escape', handleSkip)
     </div>
 
     <div class="p-6 flex-grow flex flex-col gap-6">
-      <div class="flex justify-center gap-2">
+      <div class="flex justify-center -mx-2">
         <button
           v-for="(_, index) in totalSteps"
           :key="index"
           type="button"
-          class="w-2 h-2 rounded-full border-0 cursor-pointer transition-all duration-200"
-          :class="index === currentStep
-            ? 'bg-primary w-6'
-            : index < currentStep
-              ? 'bg-primary/50 hover:bg-primary/70'
-              : 'bg-muted hover:bg-muted-foreground'"
+          class="step-indicator relative border-0 cursor-pointer bg-transparent p-3"
           :aria-label="t('tutorial.goToStep', { step: index + 1 })"
           @click="currentStep = index"
-        />
+        >
+          <span
+            class="block rounded-full transition-all duration-200"
+            :class="index === currentStep
+              ? 'bg-primary w-6 h-2'
+              : index < currentStep
+                ? 'bg-primary/50 w-2 h-2 hover:bg-primary/70'
+                : 'bg-muted w-2 h-2 hover:bg-muted-foreground'"
+          />
+        </button>
       </div>
 
       <div class="flex justify-center py-4">
@@ -180,7 +184,7 @@ onKeyStroke('Escape', handleSkip)
       </button>
       <button
         type="button"
-        class="flex-1 px-4 py-3 font-mono text-sm rounded-lg border-1 border-solid border-primary bg-primary text-primary-on cursor-pointer transition-colors hover:bg-primary-hover flex items-center justify-center gap-2 focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
+        class="flex-1 px-4 py-3 font-mono text-sm rounded-lg border-1 border-solid border-primary bg-primary text-on-primary cursor-pointer transition-colors hover:bg-primary-hover flex items-center justify-center gap-2 focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
         @click="handleNext"
       >
         {{ isLastStep ? t('tutorial.startPlaying') : t('tutorial.next') }}
