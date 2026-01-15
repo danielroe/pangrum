@@ -204,6 +204,26 @@ const syncButtonIcon = computed(() => {
               </span>
               <span class="text-xs text-muted-foreground">{{ syncEnabled ? 'Connected' : 'Off' }}</span>
             </button>
+
+            <!-- Credits -->
+            <div class="mt-2 pt-2 border-t border-solid border-muted">
+              <div class="flex flex-wrap items-center justify-center gap-x-1.5 gap-y-0.5 text-[10px] text-muted-foreground py-1">
+                <span>made with <span class="text-error-light">&#9829;</span> by</span>
+                <a
+                  href="https://roe.dev"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="hover:text-on-surface transition-colors"
+                >daniel roe</a>
+                <span aria-hidden="true">·</span>
+                <a
+                  :href="`https://github.com/danielroe/pangrum/commit/${$config.public.commitHash}`"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="font-mono opacity-60 hover:opacity-100 transition-opacity"
+                >{{ $config.public.commitHash }}</a>
+              </div>
+            </div>
           </div>
 
           <!-- Theme Section -->

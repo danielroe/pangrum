@@ -267,6 +267,22 @@ const shareData = computed(() => scoreRef.value?.getShareData())
           />
         </section>
       </main>
+      <footer class="hidden sm:flex flex-shrink-0 items-center justify-center gap-1.5 text-[10px] text-muted-foreground pt-1 pb-safe">
+        <span>made with <span class="text-error-light">&#9829;</span> by</span>
+        <a
+          href="https://roe.dev"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="hover:text-on-surface transition-colors"
+        >daniel roe</a>
+        <span aria-hidden="true">·</span>
+        <a
+          :href="`https://github.com/danielroe/pangrum/commit/${$config.public.commitHash}`"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="font-mono opacity-60 hover:opacity-100 transition-opacity"
+        >{{ $config.public.commitHash }}</a>
+      </footer>
     </div>
   </div>
   <DateMismatchModal
