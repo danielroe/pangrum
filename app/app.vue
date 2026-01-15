@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { TheScore } from '#components'
+import { hash } from 'ohash'
 
 const { t } = useI18n()
 const colorMode = useColorMode()
@@ -167,16 +168,14 @@ function handleWordAdded(word: string) {
   sendWord(word)
 
   // Submit to popularity tracking using ohash to get the word's hash
-  import('ohash').then(({ hash }) => {
-    const wordHash = hash(word)
-    if (hashes.value.includes(wordHash)) {
-      const isFirstWord = !hasSubmittedForPuzzle.value
-      if (isFirstWord) {
-        hasSubmittedForPuzzle.value = true
-      }
-      submitToPopularity(wordHash, isFirstWord)
+  const wordHash = hash(word)
+  if (hashes.value.includes(wordHash)) {
+    const isFirstWord = !hasSubmittedForPuzzle.value
+    if (isFirstWord) {
+      hasSubmittedForPuzzle.value = true
     }
-  })
+    submitToPopularity(wordHash, isFirstWord)
+  }
 }
 
 const showDateMismatchModal = ref(false)
