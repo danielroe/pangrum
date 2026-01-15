@@ -101,7 +101,7 @@ const letterPositions = [
         </button>
       </div>
       <button
-        class="hidden sm:flex items-center gap-2 px-4 py-2 bg-surface text-muted-foreground border-1 border-solid border-muted rounded-lg cursor-pointer transition-colors hover:bg-surface-hover hover:text-on-surface active:bg-surface-active focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
+        class="hidden sm:flex items-center gap-2 px-4 py-2 bg-surface text-muted-foreground border-1 border-solid border-muted rounded-lg cursor-pointer transition-colors hover:bg-surface-hover hover:text-on-surface active:bg-surface-active focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2 ls:hidden"
         @click="shuffleLetters"
       >
         <span
@@ -112,36 +112,36 @@ const letterPositions = [
       </button>
     </div>
 
-    <div class="flex flex-col gap-1.5 flex-grow items-center sm:hidden">
+    <div class="flex flex-col gap-1.5 flex-grow items-center sm:hidden ls:flex ls:gap-1.5">
       <button
-        class="w-10 h-10 flex items-center justify-center bg-surface text-muted-foreground border-1 border-solid border-muted rounded-lg cursor-pointer transition-colors hover:bg-surface-hover hover:text-on-surface active:bg-surface-active focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
+        class="w-10 h-10 flex items-center justify-center bg-surface text-muted-foreground border-1 border-solid border-muted rounded-lg cursor-pointer transition-colors hover:bg-surface-hover hover:text-on-surface active:bg-surface-active focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2 ls:w-9 ls:h-9"
         style="-webkit-tap-highlight-color: transparent"
         @click="shuffleLetters"
       >
         <span
-          class="i-lucide-shuffle text-lg"
+          class="i-lucide-shuffle text-lg ls:text-base"
           aria-hidden="true"
         />
         <span class="sr-only">Shuffle letters</span>
       </button>
       <button
-        class="w-10 h-10 flex items-center justify-center bg-surface text-muted-foreground border-1 border-solid border-muted rounded-lg cursor-pointer transition-colors hover:bg-surface-hover hover:text-on-surface active:bg-surface-active focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
+        class="w-10 h-10 flex items-center justify-center bg-surface text-muted-foreground border-1 border-solid border-muted rounded-lg cursor-pointer transition-colors hover:bg-surface-hover hover:text-on-surface active:bg-surface-active focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2 ls:w-9 ls:h-9"
         style="-webkit-tap-highlight-color: transparent"
         @click="deleteLetter"
       >
         <span
-          class="i-lucide-delete text-lg"
+          class="i-lucide-delete text-lg ls:text-base"
           aria-hidden="true"
         />
         <span class="sr-only">Delete character</span>
       </button>
       <button
-        class="w-10 h-10 flex items-center justify-center bg-surface text-muted-foreground border-1 border-solid border-muted rounded-lg cursor-pointer transition-colors hover:bg-surface-hover hover:text-on-surface active:bg-surface-active focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
+        class="w-10 h-10 flex items-center justify-center bg-surface text-muted-foreground border-1 border-solid border-muted rounded-lg cursor-pointer transition-colors hover:bg-surface-hover hover:text-on-surface active:bg-surface-active focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2 ls:w-9 ls:h-9"
         style="-webkit-tap-highlight-color: transparent"
         @click="submitWord"
       >
         <span
-          class="i-lucide-corner-down-left text-lg"
+          class="i-lucide-corner-down-left text-lg ls:text-base"
           aria-hidden="true"
         />
         <span class="sr-only">Submit word</span>
@@ -167,6 +167,15 @@ const letterPositions = [
     --letter-size: 3rem;
     --centre-size: 3.75rem;
     --spread: 3rem;
+  }
+}
+
+/* Phone landscape mode - larger grid using available height */
+@media (orientation: landscape) and (max-height: 500px) and (min-width: 500px) {
+  .letter-cluster {
+    --letter-size: clamp(2.25rem, 18vh, 3rem);
+    --centre-size: clamp(2.75rem, 22vh, 3.5rem);
+    --spread: clamp(2.25rem, 18vh, 3rem);
   }
 }
 

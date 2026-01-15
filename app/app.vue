@@ -2,6 +2,7 @@
 import type { TheScore } from '#components'
 
 const colorMode = useColorMode()
+
 useHead({
   meta: [{
     name: 'theme-color',
@@ -176,8 +177,8 @@ const shareData = computed(() => scoreRef.value?.getShareData())
   <TheToast />
   <ParticleCanvas />
   <div class="h-100dvh overflow-hidden">
-    <div class="flex flex-col h-full gap-2 px-2 py-2 text-on-surface sm:gap-3 sm:p-3 md:gap-6 md:p-8">
-      <header class="flex items-center justify-between gap-2 flex-shrink-0 sm:items-start sm:gap-4">
+    <div class="flex flex-col h-full gap-2 px-2 py-2 text-on-surface sm:gap-3 sm:p-3 md:gap-6 md:p-8 ls:grid ls:grid-cols-[auto_1fr] ls:grid-rows-[auto_1fr] ls:gap-2 ls:p-2">
+      <header class="flex items-center justify-between gap-2 flex-shrink-0 sm:items-start sm:gap-4 ls:col-span-2 ls:gap-2">
         <h1 class="text-xs font-normal tracking-[0.12em] lowercase opacity-40 m-0 transition-opacity transition-duration-0.2s sm:text-sm sm:mt-1 md:text-2xl md:font-semibold md:opacity-100 md:tracking-widest hover:opacity-100">
           pangrum
           <ClientOnly>
@@ -198,7 +199,7 @@ const shareData = computed(() => scoreRef.value?.getShareData())
             <template v-if="puzzleStats.totalDaysPlayed > 0">
               <button
                 type="button"
-                class="flex sm:hidden items-center justify-center w-8 h-8 rounded-lg bg-surface border-1 border-solid border-muted text-on-surface cursor-pointer transition-colors hover:bg-surface-hover focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
+                class="flex sm:hidden items-center justify-center w-8 h-8 rounded-lg bg-surface border-1 border-solid border-muted text-on-surface cursor-pointer transition-colors hover:bg-surface-hover focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2 ls:flex ls:w-7 ls:h-7"
                 aria-label="View statistics"
                 @click="showStatsModal = true"
               >
@@ -209,7 +210,7 @@ const shareData = computed(() => scoreRef.value?.getShareData())
               </button>
               <button
                 type="button"
-                class="hidden sm:flex items-center gap-2 px-3 py-1 text-sm rounded-lg bg-surface border-1 border-solid border-muted text-on-surface cursor-pointer transition-colors hover:bg-surface-hover focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
+                class="hidden sm:flex items-center gap-2 px-3 py-1 text-sm rounded-lg bg-surface border-1 border-solid border-muted text-on-surface cursor-pointer transition-colors hover:bg-surface-hover focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2 ls:hidden"
                 @click="showStatsModal = true"
               >
                 <span
@@ -227,22 +228,32 @@ const shareData = computed(() => scoreRef.value?.getShareData())
 
       <main
         v-if="data"
-        class="flex flex-col flex-1 min-h-0 gap-3 sm:gap-4 md:gap-6"
+        class="app-main flex flex-col flex-1 min-h-0 gap-3 sm:gap-4 md:gap-6 ls:contents"
       >
-        <div class="flex flex-col-reverse gap-4 flex-shrink-0 sm:gap-8 md:flex-row md:items-end md:gap-12">
+        <!-- Left column in landscape: letter grid -->
+        <div class="flex flex-col-reverse gap-4 flex-shrink-0 sm:gap-8 md:flex-row md:items-end md:gap-12 ls:flex-col ls:gap-2 ls:row-start-2 ls:self-center ls:justify-self-center">
           <LetterGrid
             :letters="letters"
             :centre-letter="centreLetter"
           />
           <TheScore
             ref="score"
-            class="flex-grow-1"
+            class="flex-grow-1 ls:hidden"
             :words="words"
             :valid-words="validWords"
             :total-pangrams="totalPangrams"
             :letters="letters"
             :date="selectedDate"
             @share="openShareModal"
+          />
+          <WordInput
+            v-model:words="storedWords"
+            :hashes="hashes"
+            :letters="letters"
+            :centre-letter="centreLetter"
+            :valid-words="validWords"
+            class="input-landscape hidden ls:block ls:w-full"
+            @word-added="handleWordAdded"
           />
         </div>
 
@@ -252,27 +263,39 @@ const shareData = computed(() => scoreRef.value?.getShareData())
           :letters="letters"
           :centre-letter="centreLetter"
           :valid-words="validWords"
-          class="flex-shrink-0"
+          class="flex-shrink-0 ls:hidden"
           @word-added="handleWordAdded"
         />
 
-        <section class="flex-1 min-h-0 overflow-y-auto px-0 py-1 sm:py-2 md:pb-0 words-section">
-          <WordHints
-            v-if="hintsEnabled"
-            :pairs="pairs"
+        <!-- Right column in landscape: score + hints/words -->
+        <section class="flex-1 min-h-0 overflow-y-auto px-0 py-1 sm:py-2 md:pb-0 words-section ls:row-start-2 ls:flex ls:flex-col ls:gap-2 ls:p-0 ls:overflow-hidden">
+          <TheScore
+            class="hidden flex-shrink-0 ls:block"
             :words="words"
             :valid-words="validWords"
-            :letters="letters"
             :total-pangrams="totalPangrams"
-          />
-          <FoundWordsList
-            v-else
-            :words="words"
             :letters="letters"
+            :date="selectedDate"
+            @share="openShareModal"
           />
+          <div class="ls:flex-1 ls:min-h-0 ls:overflow-y-auto">
+            <WordHints
+              v-if="hintsEnabled"
+              :pairs="pairs"
+              :words="words"
+              :valid-words="validWords"
+              :letters="letters"
+              :total-pangrams="totalPangrams"
+            />
+            <FoundWordsList
+              v-else
+              :words="words"
+              :letters="letters"
+            />
+          </div>
         </section>
       </main>
-      <footer class="hidden sm:flex flex-shrink-0 items-center justify-center gap-1.5 text-[10px] text-muted-foreground pt-1 pb-safe">
+      <footer class="hidden sm:flex flex-shrink-0 items-center justify-center gap-1.5 text-[10px] text-muted-foreground pt-1 pb-safe ls:hidden">
         <span>made with <span class="text-error-light">&#9829;</span> by</span>
         <a
           href="https://roe.dev"
@@ -424,7 +447,6 @@ input, textarea {
 
 <style scoped>
 .words-section {
-  /* flex-1 min-h-0 overflow-y-auto px-0 py-2 md:pb-0 */
   padding-bottom: env(safe-area-inset-bottom, 1rem);
 }
 

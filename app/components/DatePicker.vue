@@ -150,21 +150,21 @@ onKeyStroke('Escape', close)
       <button
         ref="trigger"
         type="button"
-        class="trigger-btn flex sm:hidden items-center justify-center w-8 h-8 rounded-lg bg-surface border-1 border-solid text-on-surface cursor-pointer transition-colors hover:bg-surface-hover focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
+        class="flex sm:hidden items-center justify-center w-8 h-8 rounded-lg bg-surface border-1 border-solid text-on-surface cursor-pointer transition-colors hover:bg-surface-hover focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2 ls:flex ls:w-7 ls:h-7"
         :class="isToday ? 'border-muted' : 'border-primary-border'"
         aria-label="Select puzzle date"
         :aria-expanded="isOpen"
         @click="toggle"
       >
         <span
-          class="i-lucide-calendar text-base"
+          class="i-lucide-calendar text-base ls:text-sm"
           aria-hidden="true"
         />
       </button>
 
       <button
         type="button"
-        class="trigger-btn hidden sm:flex items-center justify-center gap-2 px-3 py-1 text-sm rounded-lg bg-surface border-1 border-solid text-on-surface cursor-pointer transition-colors hover:bg-surface-hover focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
+        class="hidden sm:flex items-center justify-center gap-2 px-3 py-1 text-sm rounded-lg bg-surface border-1 border-solid text-on-surface cursor-pointer transition-colors hover:bg-surface-hover focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2 ls:hidden"
         :class="isToday ? 'border-muted' : 'border-primary-border'"
         aria-label="Select puzzle date"
         :aria-expanded="isOpen"

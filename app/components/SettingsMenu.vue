@@ -107,20 +107,20 @@ const syncButtonIcon = computed(() => {
       <button
         ref="trigger"
         type="button"
-        class="w-8 h-8 flex sm:hidden items-center justify-center text-base rounded-lg border-1 border-solid border-muted bg-surface hover:bg-surface-hover transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
+        class="w-8 h-8 flex sm:hidden items-center justify-center text-base rounded-lg border-1 border-solid border-muted bg-surface hover:bg-surface-hover transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2 ls:flex ls:w-7 ls:h-7"
         aria-label="Settings"
         :aria-expanded="isOpen"
         @click="toggle"
       >
         <span
-          class="i-lucide-settings"
+          class="i-lucide-settings ls:text-sm"
           aria-hidden="true"
         />
       </button>
       <!-- Desktop trigger (icon + label) -->
       <button
         type="button"
-        class="hidden sm:flex items-center gap-2 px-3 py-1 text-sm rounded-lg border-1 border-solid border-muted bg-surface hover:bg-surface-hover transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
+        class="hidden sm:flex items-center gap-2 px-3 py-1 text-sm rounded-lg border-1 border-solid border-muted bg-surface hover:bg-surface-hover transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2 ls:hidden"
         aria-label="Settings"
         :aria-expanded="isOpen"
         @click="toggle"

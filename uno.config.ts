@@ -15,6 +15,23 @@ export default defineConfig({
   transformers: [
     transformerDirectives(),
   ],
+  variants: [
+    {
+      name: 'landscape',
+      match(matcher) {
+        if (!matcher.startsWith('ls:'))
+          return
+        return {
+          matcher: matcher.slice(3),
+          handle: (input, next) => next({
+            ...input,
+            parent: `${input.parent ? `${input.parent} $$ ` : ''}@media (orientation: landscape) and (max-height: 500px) and (min-width: 500px)`,
+            parentOrder: 4000,
+          }),
+        }
+      },
+    },
+  ],
   theme: {
     colors: {
       'primary': {

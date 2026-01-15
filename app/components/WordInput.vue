@@ -160,11 +160,11 @@ function addWord() {
 
 <template>
   <form
-    class="flex flex-row items-end gap-4 relative"
+    class="flex flex-row items-end gap-4 relative ls:gap-2"
     @submit.prevent="addWord"
   >
-    <label class="flex flex-col gap-2 flex-1 sm:flex-initial max-w-full overflow-hidden">
-      <span class="hidden sm:block text-sm text-muted-foreground">enter your word</span>
+    <label class="flex flex-col gap-2 flex-1 sm:flex-initial max-w-full overflow-hidden ls:gap-1">
+      <span class="hidden sm:block text-sm text-muted-foreground ls:hidden">enter your word</span>
       <div class="relative flex flex-col">
         <input
           ref="wordInput"
@@ -172,12 +172,12 @@ function addWord() {
           name="word"
           autofocus
           type="text"
-          class="word-input p-2 border-none rounded-none font-mono font-bold text-2xl sm:text-xl uppercase tracking-widest bg-transparent outline-none text-transparent caret-primary"
+          class="word-input p-2 border-none rounded-none font-mono font-bold text-2xl sm:text-xl uppercase tracking-widest bg-transparent outline-none text-transparent caret-primary ls:p-1 ls:text-base"
         >
         <div
           v-if="word"
           aria-hidden="true"
-          class="absolute p-2 font-mono font-bold text-2xl sm:text-xl uppercase tracking-widest pointer-events-none flex"
+          class="absolute p-2 font-mono font-bold text-2xl sm:text-xl uppercase tracking-widest pointer-events-none flex ls:p-1 ls:text-base"
         >
           <span
             v-for="letter, i of wordLetters"
@@ -195,7 +195,7 @@ function addWord() {
     </label>
     <button
       type="submit"
-      class="submit-button hidden sm:block py-2 px-3 text-lg bg-primary text-dark border-1 border-solid border-primary rounded-lg cursor-pointer transition-colors hover:bg-primary-hover focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
+      class="submit-button hidden sm:block py-2 px-3 text-lg bg-primary text-dark border-1 border-solid border-primary rounded-lg cursor-pointer transition-colors hover:bg-primary-hover focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2 ls:hidden"
       aria-label="Submit word"
     >
       <span aria-hidden="true">⏎</span>

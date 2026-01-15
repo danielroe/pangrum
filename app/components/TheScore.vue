@@ -93,19 +93,19 @@ defineExpose({
 </script>
 
 <template>
-  <div class="flex flex-col gap-1">
+  <div class="flex flex-col gap-1 ls:gap-1">
     <!-- Score + Status row -->
     <div class="flex items-center justify-between gap-3">
       <div class="flex items-baseline gap-1.5">
-        <span class="score-value font-mono font-bold">{{ score }}</span>
-        <span class="text-sm font-medium text-on-surface op-70 lowercase tracking-tight">{{ status }}</span>
+        <span class="score-value font-mono font-bold ls:text-xl">{{ score }}</span>
+        <span class="text-sm font-medium text-on-surface op-70 lowercase tracking-tight ls:text-xs">{{ status }}</span>
       </div>
 
       <!-- Share button -->
       <button
         v-if="words.size > 0"
         type="button"
-        class="flex items-center justify-center w-7 h-7 p-0 bg-transparent border-1 border-solid border-muted/60 rounded-md text-muted-foreground cursor-pointer transition-all duration-150 hover:bg-surface-hover hover:text-on-surface hover:border-muted active:scale-95 focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
+        class="flex items-center justify-center w-7 h-7 p-0 bg-transparent border-1 border-solid border-muted/60 rounded-md text-muted-foreground cursor-pointer transition-all duration-150 hover:bg-surface-hover hover:text-on-surface hover:border-muted active:scale-95 focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2 ls:w-6 ls:h-6"
         aria-label="Share results"
         @click="emit('share')"
       >
@@ -391,6 +391,34 @@ defineExpose({
   .progress-fill::after,
   .perfect-sparkle {
     animation: none;
+  }
+}
+
+/* Phone landscape mode - compact progress track sizing */
+@media (orientation: landscape) and (max-height: 500px) and (min-width: 500px) {
+  .progress-track {
+    height: 3px;
+    margin: 0.375rem 0.25rem;
+  }
+
+  .dot-ring {
+    width: 10px;
+    height: 10px;
+  }
+
+  .dot-ring.current {
+    width: 14px;
+    height: 14px;
+  }
+
+  .milestone-dot {
+    width: 4px;
+    height: 4px;
+  }
+
+  .milestone-dot.current {
+    width: 6px;
+    height: 6px;
   }
 }
 </style>
