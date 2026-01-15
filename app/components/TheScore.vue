@@ -113,8 +113,10 @@ defineExpose({
           <span
             v-for="i in totalPangrams"
             :key="i"
-            class="i-lucide-star text-2.5 text-muted-foreground op-30 transition-all duration-300"
-            :class="{ 'text-celebration op-100 star-glow': i <= foundPangrams }"
+            class="i-lucide-star text-2.5 transition-all duration-300"
+            :class="i <= foundPangrams
+              ? 'text-celebration star-glow'
+              : 'text-muted-foreground op-30'"
             aria-hidden="true"
           />
         </span>

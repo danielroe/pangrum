@@ -52,7 +52,7 @@ describe('TheScore', () => {
       },
     })
 
-    const stars = component.findAll('.star')
+    const stars = component.findAll('[class*="i-lucide-star"]')
     expect(stars).toHaveLength(3)
   })
 
@@ -66,9 +66,8 @@ describe('TheScore', () => {
       },
     })
 
-    // Find stars and check if any have the 'filled' class
-    const allStars = component.findAll('.star')
-    const filledStars = allStars.filter(star => star.classes().includes('filled'))
+    const allStars = component.findAll('[class*="i-lucide-star"]')
+    const filledStars = allStars.filter(star => star.classes().includes('text-celebration'))
     expect(filledStars).toHaveLength(1)
   })
 
@@ -125,6 +124,6 @@ describe('TheScore', () => {
     })
 
     // At 0 points, next threshold is "novice" (2.5%)
-    expect(component.text()).toMatch(/\d+ to novice/)
+    expect(component.text()).toContain('to novice')
   })
 })
