@@ -20,7 +20,7 @@ function isPangram(word: string) {
   </div>
   <ul
     v-else
-    class="grid grid-cols-[repeat(auto-fill,minmax(8rem,1fr))] gap-2 p-0 m-0 list-none"
+    class="grid grid-cols-[repeat(auto-fill,minmax(8rem,1fr))] gap-2 p-0 m-0 list-none content-start"
   >
     <li
       v-for="word of sortedWords"
