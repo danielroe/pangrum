@@ -23,10 +23,10 @@ test.describe('Hints Feature', () => {
     // Hints should be enabled
     await expect(page.getByRole('button', { name: /hints on/i })).toBeVisible()
 
-    // The popularity grid should be in the carousel (as 3rd slide)
+    // The popularity grid is on slide 3 of the carousel (0-indexed: slide 2)
     // On mobile, we need to swipe or navigate to it
     // On desktop, it should be visible in the grid layout
-    await expect(page.getByText('Word Popularity')).toBeVisible({ timeout: 10000 })
+    await expect(page.getByText('Popularity data will appear')).toBeVisible({ timeout: 10000 })
   })
 
   test('hints are hidden by default', async ({ page, goto }) => {

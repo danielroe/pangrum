@@ -114,7 +114,7 @@ test.describe('Game Flow', () => {
     await expect(page.locator('.score-value')).toContainText('0')
 
     // Status should be 'beginner' initially
-    await expect(page.getByText('beginner')).toBeVisible()
+    await expect(page.getByRole('main').getByText('beginner')).toBeVisible()
   })
 
   test('can shuffle letters', async ({ page, goto }) => {
