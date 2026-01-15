@@ -87,6 +87,10 @@ function handleTimeChange(event: Event) {
   setNotificationTime(target.value)
 }
 
+function reloadPage() {
+  window.location.reload()
+}
+
 onClickOutside(popoverRef, close, { ignore: [triggerRef] })
 onKeyStroke('Escape', close)
 
@@ -247,12 +251,24 @@ const syncButtonIcon = computed(() => {
                   class="hover:text-on-surface transition-colors"
                 >daniel roe</a>
                 <span aria-hidden="true">·</span>
-                <a
-                  :href="`https://github.com/danielroe/pangrum/commit/${$config.public.commitHash}`"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="font-mono opacity-60 hover:opacity-100 transition-opacity"
-                >{{ $config.public.commitHash }}</a>
+                <span class="inline-flex items-center gap-1 font-mono opacity-60 hover:opacity-100 transition-opacity">
+                  <a
+                    :href="`https://github.com/danielroe/pangrum/commit/${$config.public.commitHash}`"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >{{ $config.public.commitHash }}</a>
+                  <button
+                    type="button"
+                    title="Refresh app to get latest version"
+                    @click="reloadPage"
+                  >
+                    <span
+                      class="i-lucide-refresh-cw text-[10px]"
+                      aria-hidden="true"
+                    />
+                    <span class="sr-only">Refresh app</span>
+                  </button>
+                </span>
               </div>
             </div>
           </div>

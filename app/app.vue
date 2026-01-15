@@ -19,6 +19,7 @@ const isOnline = useOnline()
 const { hintsEnabled } = useHints()
 const { showTutorial, checkFirstVisit } = useTutorial()
 const { hasProgress: checkHasProgress, stats: puzzleStats, reload: reloadHistory } = usePuzzleHistory(language)
+useAutoUpdate()
 
 // Popularity tracking
 const {
@@ -35,6 +36,10 @@ const isViewingToday = computed(() => selectedDate.value === todayDate.value)
 
 function goToToday() {
   selectedDate.value = todayDate.value
+}
+
+function reloadPage() {
+  window.location.reload()
 }
 
 const letters = computed(() => data.value?.letters || [])
@@ -376,12 +381,24 @@ const shareData = computed(() => scoreRef.value?.getShareData())
           class="hover:text-on-surface transition-colors"
         >daniel roe</a>
         <span aria-hidden="true">·</span>
-        <a
-          :href="`https://github.com/danielroe/pangrum/commit/${$config.public.commitHash}`"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="font-mono opacity-60 hover:opacity-100 transition-opacity"
-        >{{ $config.public.commitHash }}</a>
+        <span class="inline-flex items-center gap-1 font-mono opacity-60 hover:opacity-100 transition-opacity">
+          <a
+            :href="`https://github.com/danielroe/pangrum/commit/${$config.public.commitHash}`"
+            target="_blank"
+            rel="noopener noreferrer"
+          >{{ $config.public.commitHash }}</a>
+          <button
+            type="button"
+            title="Refresh app to get latest version"
+            @click="reloadPage"
+          >
+            <span
+              class="i-lucide-refresh-cw text-[10px]"
+              aria-hidden="true"
+            />
+            <span class="sr-only">Refresh app</span>
+          </button>
+        </span>
       </footer>
     </div>
   </div>
