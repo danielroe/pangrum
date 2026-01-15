@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { renderSVG } from 'uqr'
-
 const { t, locale, locales, setLocale } = useI18n()
 
 const colorMode = useColorMode()
@@ -82,8 +80,9 @@ const syncUrl = computed(() => {
   return url.toString()
 })
 
-const qrSvg = computed(() => {
+const qrSvg = computedAsync(async () => {
   if (!syncUrl.value) return ''
+  const { renderSVG } = await import('uqr')
   return renderSVG(syncUrl.value, { border: 1 })
 })
 
