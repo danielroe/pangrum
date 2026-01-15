@@ -7,6 +7,7 @@ const label = computed(() => hintsEnabled.value ? t('hintsToggle.hintsOn') : t('
 
 <template>
   <ClientOnly>
+    <!-- Mobile trigger (icon only) -->
     <button
       type="button"
       class="w-8 h-8 flex sm:hidden items-center justify-center text-base rounded-lg border-1 border-solid bg-surface hover:bg-surface-hover transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2 ls:flex ls:w-7 ls:h-7"
@@ -21,12 +22,7 @@ const label = computed(() => hintsEnabled.value ? t('hintsToggle.hintsOn') : t('
         aria-hidden="true"
       />
     </button>
-    <template #fallback>
-      <div class="w-8 h-8 sm:hidden rounded-lg border-1 border-solid border-muted bg-surface" />
-    </template>
-  </ClientOnly>
-
-  <ClientOnly>
+    <!-- Desktop trigger (icon + label) -->
     <button
       type="button"
       class="hidden sm:flex items-center gap-2 px-3 py-1 text-sm rounded-lg border-1 border-solid bg-surface hover:bg-surface-hover transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2 ls:hidden"
@@ -42,7 +38,13 @@ const label = computed(() => hintsEnabled.value ? t('hintsToggle.hintsOn') : t('
       <span class="text-on-surface">{{ label }}</span>
     </button>
     <template #fallback>
-      <div class="hidden sm:block w-24 h-7 rounded-lg bg-surface border-1 border-solid border-muted" />
+      <!-- Mobile skeleton -->
+      <div class="w-8 h-8 sm:hidden rounded-lg border-1 border-solid border-muted bg-surface ls:flex ls:w-7 ls:h-7" />
+      <!-- Desktop skeleton -->
+      <div class="hidden sm:flex items-center gap-2 px-3 py-1 rounded-lg bg-surface border-1 border-solid border-muted ls:hidden">
+        <div class="w-4 h-4 rounded bg-muted animate-pulse" />
+        <div class="w-14 h-4 rounded bg-muted animate-pulse" />
+      </div>
     </template>
   </ClientOnly>
 </template>

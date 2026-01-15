@@ -268,7 +268,13 @@ onKeyStroke('Escape', close)
       </Transition>
     </div>
     <template #fallback>
-      <div class="w-8 h-8 bg-surface border-1 border-solid border-muted rounded-lg sm:w-9 sm:h-9 md:w-24 md:h-7" />
+      <!-- Mobile skeleton -->
+      <div class="w-8 h-8 sm:hidden rounded-lg bg-surface border-1 border-solid border-muted ls:flex ls:w-7 ls:h-7" />
+      <!-- Desktop skeleton -->
+      <div class="hidden sm:flex items-center gap-2 px-3 py-1 rounded-lg bg-surface border-1 border-solid border-muted ls:hidden">
+        <div class="w-4 h-4 rounded bg-muted animate-pulse" />
+        <div class="w-10 h-4 rounded bg-muted animate-pulse" />
+      </div>
     </template>
   </ClientOnly>
 </template>

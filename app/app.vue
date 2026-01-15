@@ -272,6 +272,16 @@ const shareData = computed(() => scoreRef.value?.getShareData())
             @share="openShareModal"
           />
         </div>
+        <!-- Landscape header skeleton -->
+        <div
+          v-else
+          class="hidden ls:flex items-center gap-3 ls:py-1"
+        >
+          <div class="w-10 h-6 rounded bg-muted animate-pulse" />
+          <div class="w-16 h-4 rounded bg-muted animate-pulse" />
+          <div class="w-15 h-1 rounded-full bg-muted animate-pulse" />
+          <div class="w-12 h-3 rounded bg-muted animate-pulse" />
+        </div>
         <div class="flex gap-1.5 items-center flex-shrink-0 sm:gap-2">
           <DatePicker
             v-model="selectedDate"
@@ -367,6 +377,76 @@ const shareData = computed(() => scoreRef.value?.getShareData())
             :words="words"
             :letters="letters"
           />
+        </section>
+      </main>
+
+      <!-- Loading skeleton shown during SSR and initial client load -->
+      <main
+        v-else
+        class="app-main flex flex-col flex-1 min-h-0 gap-3 sm:gap-4 md:gap-6 ls:contents"
+        aria-busy="true"
+        aria-label="Loading puzzle..."
+      >
+        <!-- Left column skeleton -->
+        <div class="flex flex-col-reverse gap-4 flex-shrink-0 sm:gap-8 md:flex-row md:items-end md:gap-12 ls:flex-col ls:gap-3 ls:row-start-2 ls:self-center ls:justify-self-center">
+          <!-- Letter grid skeleton -->
+          <div
+            class="flex items-center justify-center sm:justify-start gap-4 select-none"
+            style="perspective: 800px"
+          >
+            <div class="flex flex-col items-center flex-grow sm:flex-grow-0 gap-3">
+              <div class="letter-cluster-skeleton">
+                <!-- Centre letter skeleton -->
+                <div class="letter-skeleton centre-skeleton" />
+                <!-- Outer letter skeletons -->
+                <div
+                  v-for="i in 6"
+                  :key="i"
+                  class="letter-skeleton outer-skeleton"
+                  :style="{ '--index': i }"
+                />
+              </div>
+            </div>
+            <!-- Action buttons skeleton (mobile) -->
+            <div class="flex flex-col gap-1.5 flex-grow items-center sm:hidden ls:flex ls:gap-1.5">
+              <div class="w-10 h-10 rounded-lg bg-surface border-1 border-solid border-muted ls:w-9 ls:h-9" />
+              <div class="w-10 h-10 rounded-lg bg-surface border-1 border-solid border-muted ls:w-9 ls:h-9" />
+              <div class="w-10 h-10 rounded-lg bg-surface border-1 border-solid border-muted ls:w-9 ls:h-9" />
+            </div>
+          </div>
+
+          <!-- Score skeleton -->
+          <div class="flex flex-col gap-1 flex-grow-1 ls:hidden">
+            <div class="flex items-center justify-between gap-3">
+              <div class="flex items-baseline gap-1.5">
+                <div class="w-12 h-8 rounded bg-muted animate-pulse" />
+                <div class="w-16 h-4 rounded bg-muted animate-pulse" />
+              </div>
+            </div>
+            <div class="flex flex-col gap-1.5">
+              <div class="h-4 mx-1.5 my-2.5 rounded-full bg-muted animate-pulse" />
+              <div class="flex items-center justify-between px-px">
+                <div class="w-20 h-3 rounded bg-muted animate-pulse" />
+                <div class="w-24 h-3 rounded bg-muted animate-pulse" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Word input skeleton -->
+        <div class="flex flex-row items-end gap-4 flex-shrink-0 ls:hidden">
+          <div class="flex flex-col gap-2 flex-1 sm:flex-initial max-w-full">
+            <div class="hidden sm:block w-20 h-4 rounded bg-muted animate-pulse" />
+            <div class="h-8 border-b-2 border-muted" />
+          </div>
+          <div class="hidden sm:block w-12 h-10 rounded-lg bg-primary/20 animate-pulse" />
+        </div>
+
+        <!-- Words section skeleton -->
+        <section class="flex-1 min-h-0 flex flex-col px-0 py-1 sm:py-2 md:pb-0 words-section ls:row-start-2 ls:p-0">
+          <div class="flex items-center justify-center h-full text-muted-foreground font-mono text-sm text-center p-4">
+            <div class="w-32 h-4 rounded bg-muted animate-pulse" />
+          </div>
         </section>
       </main>
     </div>
@@ -506,6 +586,74 @@ input, textarea {
 <style scoped>
 .words-section {
   padding-bottom: env(safe-area-inset-bottom, 1rem);
+}
+
+/* Letter grid skeleton styles */
+.letter-cluster-skeleton {
+  --letter-size: clamp(2.75rem, 14vw, 3.5rem);
+  --centre-size: clamp(3.25rem, 16vw, 4.25rem);
+  --spread: clamp(2.75rem, 14vw, 3.5rem);
+
+  position: relative;
+  width: calc(var(--centre-size) + var(--spread) * 2.5);
+  height: calc(var(--centre-size) + var(--spread) * 2.3);
+}
+
+@media (min-width: 640px) {
+  .letter-cluster-skeleton {
+    --letter-size: 3rem;
+    --centre-size: 3.75rem;
+    --spread: 3rem;
+  }
+}
+
+@media (orientation: landscape) and (max-height: 500px) and (min-width: 500px) {
+  .letter-cluster-skeleton {
+    --letter-size: clamp(2.25rem, 18vh, 3rem);
+    --centre-size: clamp(2.75rem, 22vh, 3.5rem);
+    --spread: clamp(2.25rem, 18vh, 3rem);
+  }
+}
+
+.letter-skeleton {
+  position: absolute;
+  border-radius: 1rem;
+  background: var(--color-surface-elevated);
+  animation: skeleton-pulse 1.5s ease-in-out infinite;
+}
+
+.centre-skeleton {
+  width: var(--centre-size);
+  height: var(--centre-size);
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--color-primary-muted);
+}
+
+.outer-skeleton {
+  width: var(--letter-size);
+  height: var(--letter-size);
+  border-radius: 0.875rem;
+  left: 50%;
+  top: 50%;
+}
+
+/* Position outer skeletons in hexagonal pattern */
+.outer-skeleton:nth-child(2) { transform: translate(-50%, -50%) translate(calc(-0.88 * var(--spread)), calc(-0.84 * var(--spread))); }
+.outer-skeleton:nth-child(3) { transform: translate(-50%, -50%) translate(calc(0.92 * var(--spread)), calc(-0.88 * var(--spread))); animation-delay: 0.1s; }
+.outer-skeleton:nth-child(4) { transform: translate(-50%, -50%) translate(calc(-1.12 * var(--spread)), calc(0.06 * var(--spread))); animation-delay: 0.15s; }
+.outer-skeleton:nth-child(5) { transform: translate(-50%, -50%) translate(calc(1.08 * var(--spread)), calc(0.02 * var(--spread))); animation-delay: 0.05s; }
+.outer-skeleton:nth-child(6) { transform: translate(-50%, -50%) translate(calc(-0.64 * var(--spread)), calc(0.92 * var(--spread))); animation-delay: 0.2s; }
+.outer-skeleton:nth-child(7) { transform: translate(-50%, -50%) translate(calc(0.72 * var(--spread)), calc(0.88 * var(--spread))); animation-delay: 0.12s; }
+
+@keyframes skeleton-pulse {
+  0%, 100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.7;
+  }
 }
 
 /* Reduced motion preferences */

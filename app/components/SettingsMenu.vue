@@ -618,8 +618,13 @@ const syncButtonIcon = computed(() => {
       </Transition>
     </div>
     <template #fallback>
-      <div class="w-8 h-8 sm:hidden rounded-lg border-1 border-solid border-muted bg-surface" />
-      <div class="hidden sm:block w-24 h-7 rounded-lg border-1 border-solid border-muted bg-surface" />
+      <!-- Mobile skeleton -->
+      <div class="w-8 h-8 sm:hidden rounded-lg border-1 border-solid border-muted bg-surface ls:flex ls:w-7 ls:h-7" />
+      <!-- Desktop skeleton -->
+      <div class="hidden sm:flex items-center gap-2 px-3 py-1 rounded-lg bg-surface border-1 border-solid border-muted ls:hidden">
+        <div class="w-4 h-4 rounded bg-muted animate-pulse" />
+        <div class="w-14 h-4 rounded bg-muted animate-pulse" />
+      </div>
     </template>
   </ClientOnly>
 </template>
