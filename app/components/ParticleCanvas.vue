@@ -41,6 +41,7 @@ onUnmounted(() => {
 <template>
   <canvas
     ref="canvas"
+    aria-hidden="true"
     class="fixed inset-0 pointer-events-none z-100 transition-opacity duration-100"
     :class="isAnimating ? 'opacity-100' : 'opacity-0'"
   />

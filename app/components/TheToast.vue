@@ -3,7 +3,12 @@ const toasts = useToasts()
 </script>
 
 <template>
-  <div class="fixed inset-0 pointer-events-none flex items-center justify-center z-50">
+  <div
+    role="status"
+    aria-live="polite"
+    aria-atomic="true"
+    class="fixed inset-0 pointer-events-none flex items-center justify-center z-50"
+  >
     <Transition
       enter-active-class="transition-all duration-300 ease-out-back"
       enter-from-class="opacity-0 scale-50 blur-sm"
