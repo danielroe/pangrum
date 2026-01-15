@@ -220,9 +220,9 @@ defineExpose({
         <div class="flex items-center gap-2">
           <span class="flex items-baseline gap-0.5 text-2.75 tabular-nums">
             <span class="font-mono font-semibold text-on-surface">{{ wordsFound }}</span>
-            <span class="text-muted-foreground op-40">/</span>
+            <span class="text-muted-foreground">/</span>
             <span class="font-mono text-muted-foreground">{{ totalWords }}</span>
-            <span class="text-muted-foreground op-60 ml-1">{{ t('score.words') }}</span>
+            <span class="text-muted-foreground ml-1">{{ t('score.words') }}</span>
           </span>
 
           <!-- Pangram indicators -->
@@ -250,7 +250,7 @@ defineExpose({
           class="flex items-baseline gap-1 text-2.75"
         >
           <span class="font-mono font-semibold text-muted-foreground tabular-nums">{{ pointsToGo }}</span>
-          <span class="text-muted-foreground op-60">{{ t('score.to') }} {{ nextThreshold.label }}</span>
+          <span class="text-muted-foreground">{{ t('score.to') }} {{ nextThreshold.label }}</span>
         </span>
         <span
           v-else
