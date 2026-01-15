@@ -123,6 +123,28 @@ watch(letters, (newLetters) => {
   }
 }, { immediate: true })
 
+const { sendWord } = useSync({
+  currentPuzzleKey: () => `${language.value}-${selectedDate.value}`,
+  currentWords: storedWords,
+  currentDate: selectedDate,
+  currentLang: language,
+  onNavigateToPuzzle: (date, lang) => {
+    if (date === selectedDate.value && lang === language.value) {
+      return
+    }
+    if (!isLanguage(lang)) {
+      return
+    }
+
+    language.value = lang
+    selectedDate.value = date
+    addToast({
+      message: t('toasts.navigatedToSynced'),
+      type: 'success',
+    })
+  },
+})
+
 async function submitToPopularity(wordHash: string, isFirstWord: boolean) {
   const langValue = language.value
   const dateValue = selectedDate.value
@@ -142,42 +164,8 @@ async function submitToPopularity(wordHash: string, isFirstWord: boolean) {
   }
 }
 
-let sendWord: ((word: string) => void) | undefined
-const { isEnabled } = useSyncCode()
-const unwatch = watch(isEnabled, async (enabled) => {
-  if (enabled) {
-    unwatch()
-    const { useSync } = await import('~/composables/useSync')
-    const sync = useSync({
-      currentPuzzleKey: () => `${language.value}-${selectedDate.value}`,
-      currentWords: storedWords,
-      currentDate: selectedDate,
-      currentLang: language,
-      onNavigateToPuzzle: (date, lang) => {
-        if (date === selectedDate.value && lang === language.value) {
-          return
-        }
-        if (!isLanguage(lang)) {
-          return
-        }
-
-        language.value = lang
-        selectedDate.value = date
-        addToast({
-          message: t('toasts.navigatedToSynced'),
-          type: 'success',
-        })
-      },
-    })
-    sendWord = sync.sendWord
-  }
-  else {
-    sendWord = undefined
-  }
-}, { immediate: true })
-
 function handleWordAdded(word: string) {
-  sendWord?.(word)
+  sendWord(word)
 
   // Submit to popularity tracking using ohash to get the word's hash
   const wordHash = hash(word)
