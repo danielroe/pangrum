@@ -8,6 +8,27 @@ test.describe('Hints Feature', () => {
     })
   })
 
+  test('popularity grid is visible when hints enabled', async ({ page, goto }) => {
+    // Pre-enable hints
+    await page.addInitScript(() => {
+      localStorage.setItem('pangrum-hints-enabled', 'true')
+    })
+
+    await goto('/', { waitUntil: 'hydration' })
+
+    // Wait for puzzle data to load
+    const centreButton = page.locator('.centre-letter')
+    await expect(centreButton).toBeVisible()
+
+    // Hints should be enabled
+    await expect(page.getByRole('button', { name: /hints on/i })).toBeVisible()
+
+    // The popularity grid should be in the carousel (as 3rd slide)
+    // On mobile, we need to swipe or navigate to it
+    // On desktop, it should be visible in the grid layout
+    await expect(page.getByText('Word Popularity')).toBeVisible({ timeout: 10000 })
+  })
+
   test('hints are hidden by default', async ({ page, goto }) => {
     await goto('/', { waitUntil: 'hydration' })
 

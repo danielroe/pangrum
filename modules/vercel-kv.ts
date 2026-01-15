@@ -11,6 +11,8 @@ export default defineNuxtModule({
         nitroConfig.storage ||= {}
         nitroConfig.storage.words ||= {}
         nitroConfig.storage.words.driver = 'vercel-kv'
+        nitroConfig.storage.popularity ||= {}
+        nitroConfig.storage.popularity.driver = 'vercel-kv'
       })
     }
   },

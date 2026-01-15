@@ -62,7 +62,8 @@
     "simple-git-hooks": "2.13.1",
     "typescript": "5.9.3",
     "vitest": "4.0.16",
-    "vue-tsc": "3.2.2"
+    "vue-tsc": "3.2.2",
+    "workbox-background-sync": "^7.4.0"
   },
   "simple-git-hooks": {
     "pre-commit": "npx lint-staged"

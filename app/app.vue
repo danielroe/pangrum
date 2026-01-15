@@ -20,6 +20,14 @@ const { hintsEnabled } = useHints()
 const { showTutorial, checkFirstVisit } = useTutorial()
 const { hasProgress: checkHasProgress, stats: puzzleStats, reload: reloadHistory } = usePuzzleHistory(language)
 
+// Popularity tracking
+const {
+  data: popularityData,
+  loading: popularityLoading,
+  fetchPopularity,
+} = usePopularity(language, selectedDate)
+const { queueSubmission, processQueue, hasBackgroundSyncSupport } = usePopularityQueue()
+
 defineOgImageComponent('Default')
 
 const todayDate = computed(() => new Date().toISOString().slice(0, 10))
@@ -36,6 +44,10 @@ const validWords = computed(() => data.value?.words || [])
 const pairs = computed(() => data.value?.pairs || {})
 const totalPangrams = computed(() => data.value?.pangrams || 0)
 const puzzleDate = computed(() => data.value?.date || '')
+
+// Track whether we've submitted for this puzzle (for player count)
+const popularitySubmittedKey = computed(() => `pangrum-${language.value}-${selectedDate.value}-popularity-submitted`)
+const hasSubmittedForPuzzle = useLocalStorage(popularitySubmittedKey, false, { initOnMounted: true })
 
 const storedWords = useLocalStorage<Set<string>>(() => `pangrum-${language.value}-${selectedDate.value}`, new Set(), {
   initOnMounted: true,
@@ -130,8 +142,39 @@ const { sendWord } = useSync({
   },
 })
 
+async function submitToPopularity(wordHash: string, isFirstWord: boolean) {
+  const langValue = language.value
+  const dateValue = selectedDate.value
+
+  try {
+    await $fetch(`/api/popularity/${langValue}/${dateValue}`, {
+      method: 'POST',
+      body: { wordHash, isFirstWord },
+    })
+  }
+  catch {
+    // If Background Sync isn't available, use localStorage fallback queue
+    if (!hasBackgroundSyncSupport()) {
+      queueSubmission(langValue, dateValue, wordHash, isFirstWord)
+    }
+    // Otherwise, the service worker's Background Sync will handle retry
+  }
+}
+
 function handleWordAdded(word: string) {
   sendWord(word)
+
+  // Submit to popularity tracking using ohash to get the word's hash
+  import('ohash').then(({ hash }) => {
+    const wordHash = hash(word)
+    if (hashes.value.includes(wordHash)) {
+      const isFirstWord = !hasSubmittedForPuzzle.value
+      if (isFirstWord) {
+        hasSubmittedForPuzzle.value = true
+      }
+      submitToPopularity(wordHash, isFirstWord)
+    }
+  })
 }
 
 const showDateMismatchModal = ref(false)
@@ -159,6 +202,27 @@ onNuxtReady(checkDateMismatch)
 const { pause } = useIntervalFn(checkDateMismatch, 60000)
 
 onNuxtReady(checkFirstVisit)
+
+// Fetch popularity data when hints are enabled or puzzle changes
+watch([hintsEnabled, selectedDate, language], ([hints]) => {
+  if (hints) {
+    fetchPopularity()
+  }
+}, { immediate: true })
+
+// Process offline popularity queue on mount and when coming back online
+onMounted(() => {
+  processQueue()
+  if (import.meta.client) {
+    window.addEventListener('online', processQueue)
+  }
+})
+
+onUnmounted(() => {
+  if (import.meta.client) {
+    window.removeEventListener('online', processQueue)
+  }
+})
 
 // ... as well as when window regains focus)
 if (import.meta.client) {
@@ -289,10 +353,12 @@ const shareData = computed(() => scoreRef.value?.getShareData())
           <WordHints
             v-if="hintsEnabled"
             :pairs="pairs"
+            :hashes="hashes"
             :words="words"
             :valid-words="validWords"
             :letters="letters"
-            :total-pangrams="totalPangrams"
+            :popularity="popularityData"
+            :popularity-loading="popularityLoading"
           />
           <FoundWordsList
             v-else

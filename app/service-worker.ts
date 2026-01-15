@@ -1,7 +1,8 @@
 import { cleanupOutdatedCaches, precacheAndRoute } from 'workbox-precaching'
 import { clientsClaim } from 'workbox-core'
-import { NetworkFirst } from 'workbox-strategies'
+import { NetworkFirst, NetworkOnly } from 'workbox-strategies'
 import { NavigationRoute, registerRoute } from 'workbox-routing'
+import { BackgroundSyncPlugin } from 'workbox-background-sync'
 
 declare let self: ServiceWorkerGlobalScope
 
@@ -20,6 +21,21 @@ registerRoute(
     cacheName: WORDS_CACHE_NAME,
     networkTimeoutSeconds: 5,
   }),
+)
+
+// Background sync queue for popularity submissions
+const popularityQueue = new BackgroundSyncPlugin('popularity-queue', {
+  maxRetentionTime: 24 * 60, // Retry for up to 24 hours (in minutes)
+})
+
+// Register route for popularity POST requests with background sync
+registerRoute(
+  ({ url, request }) =>
+    url.pathname.startsWith('/api/popularity/') && request.method === 'POST',
+  new NetworkOnly({
+    plugins: [popularityQueue],
+  }),
+  'POST',
 )
 
 const navigationRoute = new NavigationRoute(

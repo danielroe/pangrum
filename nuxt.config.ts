@@ -22,6 +22,10 @@ export default defineNuxtConfig({
           driver: 'fsLite',
           base: '.nuxt/words',
         },
+        popularity: {
+          driver: 'fsLite',
+          base: '.nuxt/popularity',
+        },
       },
     },
   },

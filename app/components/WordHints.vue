@@ -1,21 +1,32 @@
 <script setup lang="ts">
+import type { PopularityData } from '~/composables/usePopularity'
+
 const props = defineProps<{
   validWords: string[]
+  hashes: string[]
   words: Set<string>
   pairs: Record<string, number>
   letters: string[]
+  popularity: PopularityData | null
+  popularityLoading: boolean
 }>()
 
+const SLIDE_COUNT = 4
 const carousel = useTemplateRef('carousel')
 const activeSlide = ref(0)
 
-const slideLabels = ['Word grid showing counts by prefix and length', 'Two-letter pairs grid', 'Found words list']
+const slideLabels = [
+  'Word grid showing counts by prefix and length',
+  'Two-letter pairs grid',
+  'Word popularity showing how many players found each word',
+  'Found words list',
+]
 
 function updateActiveSlide() {
   if (!carousel.value) return
   const scrollLeft = carousel.value.scrollLeft
   const slideWidth = carousel.value.offsetWidth
-  activeSlide.value = Math.round(scrollLeft / slideWidth) % 3
+  activeSlide.value = Math.round(scrollLeft / slideWidth) % SLIDE_COUNT
 }
 
 function handleKeydown(event: KeyboardEvent) {
@@ -25,7 +36,7 @@ function handleKeydown(event: KeyboardEvent) {
     event.preventDefault()
     goToSlide(activeSlide.value - 1)
   }
-  else if (event.key === 'ArrowRight' && activeSlide.value < 2) {
+  else if (event.key === 'ArrowRight' && activeSlide.value < SLIDE_COUNT - 1) {
     event.preventDefault()
     goToSlide(activeSlide.value + 1)
   }
@@ -100,12 +111,12 @@ function closeModal() {
   <div class="select-none h-full min-h-0 flex flex-col">
     <div
       ref="carousel"
-      class="flex-1 min-h-0 flex overflow-x-auto snap-x snap-mandatory scroll-smooth touch-pan-x lg:grid lg:grid-cols-2 lg:gap-8 lg:overflow-x-visible lg:overflow-y-auto lg:snap-none motion-reduce:scroll-auto focus:outline-none"
-      style="grid-template-areas: 'word-grid pairs-grid' 'word-list word-list'"
+      class="flex-1 min-h-0 flex overflow-x-auto snap-x snap-mandatory scroll-smooth touch-pan-x lg:grid lg:grid-cols-2 lg:gap-8 lg:overflow-x-visible lg:overflow-y-auto lg:snap-none motion-reduce:scroll-auto focus:outline-none ls:flex-col ls:overflow-x-visible ls:overflow-y-auto ls:snap-none ls:gap-2"
+      style="grid-template-areas: 'word-grid pairs-grid' 'popularity-grid word-list'"
       role="region"
       aria-label="Word hints carousel"
       aria-live="polite"
-      :aria-roledescription="`${slideLabels[activeSlide]} (panel ${activeSlide + 1} of 3)`"
+      :aria-roledescription="`${slideLabels[activeSlide]} (panel ${activeSlide + 1} of ${SLIDE_COUNT})`"
       tabindex="0"
       @scroll.passive="updateActiveSlide"
       @keydown="handleKeydown"
@@ -140,10 +151,26 @@ function closeModal() {
       </div>
 
       <div
-        class="min-w-full snap-center overflow-y-auto p-2 lg:min-w-0 lg:snap-align-none lg:p-0"
-        style="grid-area: word-list"
+        class="min-w-full snap-center overflow-y-auto p-2 lg:min-w-0 lg:snap-align-none lg:p-0 ls:min-w-0 ls:snap-align-none ls:p-0"
+        style="grid-area: popularity-grid"
         :inert="activeSlide !== 2 || undefined"
         :aria-hidden="activeSlide !== 2"
+      >
+        <PopularityGrid
+          :valid-words="validWords"
+          :hashes="hashes"
+          :words="words"
+          :letters="letters"
+          :popularity="popularity"
+          :loading="popularityLoading"
+        />
+      </div>
+
+      <div
+        class="min-w-full snap-center overflow-y-auto p-2 lg:min-w-0 lg:snap-align-none lg:p-0 ls:min-w-0 ls:snap-align-none ls:p-0"
+        style="grid-area: word-list"
+        :inert="activeSlide !== 3 || undefined"
+        :aria-hidden="activeSlide !== 3"
       >
         <FoundWordsList
           :words="words"
@@ -158,7 +185,7 @@ function closeModal() {
       aria-label="Carousel navigation"
     >
       <button
-        v-for="i in 3"
+        v-for="i in SLIDE_COUNT"
         :key="i"
         type="button"
         role="tab"
@@ -170,7 +197,7 @@ function closeModal() {
             ? 'w-6 h-2 bg-primary scale-110'
             : 'w-2 h-2 bg-muted hover:bg-muted-foreground hover:scale-125',
         ]"
-        :aria-label="`Go to ${i === 1 ? 'word grid' : i === 2 ? 'two-letter pairs' : 'word list'}`"
+        :aria-label="`Go to ${['word grid', 'two-letter pairs', 'popularity', 'word list'][i - 1]}`"
         @click="goToSlide(i - 1)"
       />
     </div>
