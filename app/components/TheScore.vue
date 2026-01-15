@@ -101,40 +101,19 @@ defineExpose({
         <span class="text-sm font-medium text-on-surface op-70 lowercase tracking-tight">{{ status }}</span>
       </div>
 
-      <div class="flex items-center gap-4">
-        <!-- Pangram indicators -->
+      <!-- Share button -->
+      <button
+        v-if="words.size > 0"
+        type="button"
+        class="flex items-center justify-center w-7 h-7 p-0 bg-transparent border-1 border-solid border-muted/60 rounded-md text-muted-foreground cursor-pointer transition-all duration-150 hover:bg-surface-hover hover:text-on-surface hover:border-muted active:scale-95 focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
+        aria-label="Share results"
+        @click="emit('share')"
+      >
         <span
-          v-if="totalPangrams > 0"
-          class="flex items-center gap-px"
-          role="img"
-          :aria-label="`${foundPangrams} of ${totalPangrams} pangrams found`"
-        >
-          <span class="sr-only">{{ foundPangrams }} of {{ totalPangrams }} pangrams found</span>
-          <span
-            v-for="i in totalPangrams"
-            :key="i"
-            class="i-lucide-star text-2.5 transition-all duration-300"
-            :class="i <= foundPangrams
-              ? 'text-celebration star-glow'
-              : 'text-muted-foreground op-30'"
-            aria-hidden="true"
-          />
-        </span>
-
-        <!-- Share button -->
-        <button
-          v-if="words.size > 0"
-          type="button"
-          class="flex items-center justify-center w-7 h-7 p-0 bg-transparent border-1 border-solid border-muted/60 rounded-md text-muted-foreground cursor-pointer transition-all duration-150 hover:bg-surface-hover hover:text-on-surface hover:border-muted active:scale-95 focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
-          aria-label="Share results"
-          @click="emit('share')"
-        >
-          <span
-            class="i-lucide-share-2 text-sm"
-            aria-hidden="true"
-          />
-        </button>
-      </div>
+          class="i-lucide-share-2 text-sm"
+          aria-hidden="true"
+        />
+      </button>
     </div>
 
     <!-- Progress timeline -->
@@ -176,12 +155,33 @@ defineExpose({
 
       <!-- Info row -->
       <div class="flex items-center justify-between px-px">
-        <span class="flex items-baseline gap-0.5 text-2.75 tabular-nums">
-          <span class="font-mono font-semibold text-on-surface">{{ wordsFound }}</span>
-          <span class="text-muted-foreground op-40">/</span>
-          <span class="font-mono text-muted-foreground">{{ totalWords }}</span>
-          <span class="text-muted-foreground op-60 ml-1">words</span>
-        </span>
+        <div class="flex items-center gap-2">
+          <span class="flex items-baseline gap-0.5 text-2.75 tabular-nums">
+            <span class="font-mono font-semibold text-on-surface">{{ wordsFound }}</span>
+            <span class="text-muted-foreground op-40">/</span>
+            <span class="font-mono text-muted-foreground">{{ totalWords }}</span>
+            <span class="text-muted-foreground op-60 ml-1">words</span>
+          </span>
+
+          <!-- Pangram indicators -->
+          <span
+            v-if="totalPangrams > 0"
+            class="flex items-center gap-px"
+            role="img"
+            :aria-label="`${foundPangrams} of ${totalPangrams} pangrams found`"
+          >
+            <span class="sr-only">{{ foundPangrams }} of {{ totalPangrams }} pangrams found</span>
+            <span
+              v-for="i in totalPangrams"
+              :key="i"
+              class="i-lucide-star text-2.5 transition-all duration-300"
+              :class="i <= foundPangrams
+                ? 'text-celebration star-glow'
+                : 'text-muted-foreground op-30'"
+              aria-hidden="true"
+            />
+          </span>
+        </div>
 
         <span
           v-if="status !== 'perfect'"
