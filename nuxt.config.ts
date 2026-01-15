@@ -75,6 +75,7 @@ export default defineNuxtConfig({
     '/': { prerender: true },
     '/__og-image__/**': { prerender: true },
   },
+  sourcemap: true,
   compatibilityDate: '2025-07-15',
   eslint: {
     config: {
