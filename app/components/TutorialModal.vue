@@ -80,7 +80,10 @@ onKeyStroke('Escape', handleSkip)
   >
     <div class="flex justify-between items-center p-4 border-b-1 border-solid border-muted">
       <div class="flex items-center gap-3">
-        <span class="text-on-surface/70 font-mono text-sm">
+        <span
+          class="text-on-surface/70 font-mono text-sm"
+          aria-hidden="true"
+        >
           {{ currentStep + 1 }}/{{ totalSteps }}
         </span>
         <h3 class="text-on-surface font-mono font-bold text-lg m-0">
@@ -185,6 +188,7 @@ onKeyStroke('Escape', handleSkip)
       <button
         type="button"
         class="flex-1 px-4 py-3 font-mono text-sm rounded-lg border-1 border-solid border-primary bg-primary text-on-primary cursor-pointer transition-colors hover:bg-primary-hover flex items-center justify-center gap-2 focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
+        :aria-label="isLastStep ? t('tutorial.startPlaying') : t('tutorial.goToStep', { step: currentStep + 2 })"
         @click="handleNext"
       >
         {{ isLastStep ? t('tutorial.startPlaying') : t('tutorial.next') }}
