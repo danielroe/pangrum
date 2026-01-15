@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { renderSVG } from 'uqr'
+
 const { t, locale, locales, setLocale } = useI18n()
 
 const colorMode = useColorMode()
@@ -20,24 +22,70 @@ const {
   setNotificationTime,
 } = useNotifications()
 
-const {
-  syncCode,
-  isEnabled: syncEnabled,
-  isConnecting,
-  canEnableSync,
-  isUnavailable,
-  inputCode,
-  showInput,
-  isWaitingForDevice,
-  isSynced,
-  statusText,
-  syncUrl,
-  qrSvg,
-  resetInput,
-  handleEnable,
-  handleDisable,
-  copyCode,
-} = useSyncUI()
+const { syncCode, isEnabled: syncEnabled, enable, disable } = useSyncCode()
+const { connectedDevices, isConnected, isConnecting, connectionError, hasEverSynced } = useSyncState()
+const isOnline = useOnline()
+
+const inputCode = ref('')
+const showInput = ref(false)
+
+const canEnableSync = computed(() => isOnline.value)
+
+const isUnavailable = computed(() =>
+  !isOnline.value || (syncEnabled.value && !isConnected.value && !isConnecting.value && connectionError.value !== null),
+)
+
+function resetInput() {
+  inputCode.value = ''
+  showInput.value = false
+}
+
+function handleEnable() {
+  if (showInput.value && inputCode.value.trim()) {
+    enable(inputCode.value.trim())
+  }
+  else {
+    enable()
+  }
+}
+
+function handleDisable() {
+  disable()
+}
+
+function copyCode() {
+  if (syncCode.value) {
+    navigator.clipboard.writeText(syncCode.value)
+  }
+}
+
+// Waiting for another device if connected but no device has ever synced data
+const isWaitingForDevice = computed(() => isConnected.value && !hasEverSynced.value)
+// Show "synced" state when data has been synced
+const isSynced = computed(() => isConnected.value && hasEverSynced.value)
+// Other devices count (subtract self)
+const otherDevices = computed(() => Math.max(0, connectedDevices.value - 1))
+
+const statusText = computed(() => {
+  if (otherDevices.value > 0) {
+    return `${otherDevices.value} other device${otherDevices.value > 1 ? 's' : ''} connected`
+  }
+  return 'Synced'
+})
+
+// QR code for sync URL
+const syncUrl = computed(() => {
+  if (!syncCode.value || !import.meta.client) return ''
+  const url = new URL(window.location.href)
+  url.search = ''
+  url.searchParams.set('sync', syncCode.value)
+  return url.toString()
+})
+
+const qrSvg = computed(() => {
+  if (!syncUrl.value) return ''
+  return renderSVG(syncUrl.value, { border: 1 })
+})
 
 const isOpen = ref(false)
 const activeSection = ref<'main' | 'theme' | 'ui-language' | 'puzzle-language' | 'notifications' | 'sync'>('main')
