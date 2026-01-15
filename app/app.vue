@@ -195,28 +195,33 @@ const shareData = computed(() => scoreRef.value?.getShareData())
             :has-progress="checkHasProgress"
           />
           <ClientOnly>
-            <button
-              v-if="puzzleStats.totalDaysPlayed > 0"
-              type="button"
-              class="flex items-center justify-center w-8 h-8 rounded-lg bg-surface border-1 border-solid border-muted text-on-surface cursor-pointer transition-colors hover:bg-surface-hover focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
-              aria-label="View statistics"
-              @click="showStatsModal = true"
-            >
-              <span
-                class="i-lucide-bar-chart-2 text-base"
-                aria-hidden="true"
-              />
-            </button>
+            <template v-if="puzzleStats.totalDaysPlayed > 0">
+              <button
+                type="button"
+                class="flex sm:hidden items-center justify-center w-8 h-8 rounded-lg bg-surface border-1 border-solid border-muted text-on-surface cursor-pointer transition-colors hover:bg-surface-hover focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
+                aria-label="View statistics"
+                @click="showStatsModal = true"
+              >
+                <span
+                  class="i-lucide-bar-chart-2 text-base"
+                  aria-hidden="true"
+                />
+              </button>
+              <button
+                type="button"
+                class="hidden sm:flex items-center gap-2 px-3 py-1 text-sm rounded-lg bg-surface border-1 border-solid border-muted text-on-surface cursor-pointer transition-colors hover:bg-surface-hover focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
+                @click="showStatsModal = true"
+              >
+                <span
+                  class="i-lucide-bar-chart-2 text-sm"
+                  aria-hidden="true"
+                />
+                <span>Statistics</span>
+              </button>
+            </template>
           </ClientOnly>
-          <TutorialButton />
           <HintsToggle />
-          <!-- Desktop-only controls -->
-          <LazySyncToggle hydrate-on-media-query="(min-width: 40rem)" />
-          <LazyNotificationToggle hydrate-on-media-query="(min-width: 40rem)" />
-          <LazyThemeSelector hydrate-on-media-query="(min-width: 40rem)" />
-          <LazyLanguageSelector hydrate-on-media-query="(min-width: 40rem)" />
-          <!-- Mobile settings menu -->
-          <LazyMobileSettingsMenu hydrate-on-media-query="(max-width: 39.99rem)" />
+          <SettingsMenu />
         </div>
       </header>
 

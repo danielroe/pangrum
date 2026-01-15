@@ -28,12 +28,14 @@ const label = computed(() => hintsEnabled.value ? 'Hints on' : 'Hints off')
   <ClientOnly>
     <button
       type="button"
-      class="hidden sm:flex items-center gap-2 px-3 py-1 text-sm rounded-lg border-1 border-solid border-muted bg-surface hover:bg-surface-hover transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
+      class="hidden sm:flex items-center gap-2 px-3 py-1 text-sm rounded-lg border-1 border-solid bg-surface hover:bg-surface-hover transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
+      :class="hintsEnabled ? 'border-primary-border' : 'border-muted'"
       :aria-pressed="hintsEnabled"
       @click="toggleHints"
     >
       <span
         class="i-lucide-lightbulb text-sm"
+        :class="hintsEnabled ? 'text-primary' : 'text-on-surface'"
         aria-hidden="true"
       />
       <span class="text-on-surface">{{ label }}</span>

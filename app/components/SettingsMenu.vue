@@ -1,6 +1,7 @@
 <script setup lang="ts">
 const colorMode = useColorMode()
 const language = useLanguage()
+const { startTutorial } = useTutorial()
 const {
   settings: notificationSettings,
   permission,
@@ -101,11 +102,12 @@ const syncButtonIcon = computed(() => {
 
 <template>
   <ClientOnly>
-    <div class="relative sm:hidden">
+    <div class="relative">
+      <!-- Mobile trigger (icon only) -->
       <button
         ref="trigger"
         type="button"
-        class="w-8 h-8 flex items-center justify-center text-base rounded-lg border-1 border-solid border-muted bg-surface hover:bg-surface-hover transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
+        class="w-8 h-8 flex sm:hidden items-center justify-center text-base rounded-lg border-1 border-solid border-muted bg-surface hover:bg-surface-hover transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
         aria-label="Settings"
         :aria-expanded="isOpen"
         @click="toggle"
@@ -114,6 +116,20 @@ const syncButtonIcon = computed(() => {
           class="i-lucide-settings"
           aria-hidden="true"
         />
+      </button>
+      <!-- Desktop trigger (icon + label) -->
+      <button
+        type="button"
+        class="hidden sm:flex items-center gap-2 px-3 py-1 text-sm rounded-lg border-1 border-solid border-muted bg-surface hover:bg-surface-hover transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
+        aria-label="Settings"
+        :aria-expanded="isOpen"
+        @click="toggle"
+      >
+        <span
+          class="i-lucide-settings text-sm"
+          aria-hidden="true"
+        />
+        <span class="text-on-surface">Settings</span>
       </button>
       <Transition
         enter-active-class="transition duration-150 ease-out"
@@ -203,6 +219,21 @@ const syncButtonIcon = computed(() => {
                 <span>Sync</span>
               </span>
               <span class="text-xs text-muted-foreground">{{ syncEnabled ? 'Connected' : 'Off' }}</span>
+            </button>
+
+            <!-- Tutorial -->
+            <button
+              type="button"
+              class="flex items-center w-full px-3 py-2.5 text-sm rounded-lg hover:bg-surface-hover transition-colors text-on-surface"
+              @click="() => { startTutorial(); close() }"
+            >
+              <span class="flex items-center gap-3">
+                <span
+                  class="i-lucide-circle-help text-base"
+                  aria-hidden="true"
+                />
+                <span>How to play</span>
+              </span>
             </button>
 
             <!-- Credits -->
@@ -506,6 +537,7 @@ const syncButtonIcon = computed(() => {
     </div>
     <template #fallback>
       <div class="w-8 h-8 sm:hidden rounded-lg border-1 border-solid border-muted bg-surface" />
+      <div class="hidden sm:block w-24 h-7 rounded-lg border-1 border-solid border-muted bg-surface" />
     </template>
   </ClientOnly>
 </template>
