@@ -10,6 +10,7 @@
 - 🔄 Cross-device progress sync (no login required)
 - 🏆 Social sharing of your results
 - 📲 Use offline (+ install as a PWA)
+- 🟢 Streak tracking
 - 🌒 Light and dark mode
 
 ## Tech Stack
@@ -25,7 +26,6 @@
 
 ## 🚧 Roadmap
 
-- [ ] Streak tracking
 - [ ] Keyboard shortcuts
 - [ ] Internationalisation
 
