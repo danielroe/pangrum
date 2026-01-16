@@ -15,15 +15,14 @@ const SLIDE_COUNT = 4
 const carousel = useTemplateRef('carousel')
 const activeSlide = ref(0)
 
-// Track if we're in carousel mode (mobile) vs grid mode (desktop/landscape)
+// Track if we're in carousel mode (mobile/landscape) vs grid mode (desktop)
 // In grid mode, all slides are visible so we don't want to use inert
 const isCarouselMode = ref(true)
 function updateCarouselMode() {
   if (!import.meta.client) return
-  // lg breakpoint is 1024px, ls is landscape with max-height 500px and min-width 500px
+  // lg breakpoint is 1024px - only desktop shows grid layout
   const isDesktop = window.matchMedia('(min-width: 1024px)').matches
-  const isLandscape = window.matchMedia('(orientation: landscape) and (max-height: 500px) and (min-width: 500px)').matches
-  isCarouselMode.value = !isDesktop && !isLandscape
+  isCarouselMode.value = !isDesktop
 }
 
 onMounted(() => {
@@ -133,7 +132,7 @@ function closeModal() {
   <div class="select-none h-full min-h-0 flex flex-col">
     <div
       ref="carousel"
-      class="flex-1 min-h-0 flex overflow-x-auto snap-x snap-mandatory scroll-smooth touch-pan-x lg:grid lg:grid-cols-2 lg:gap-8 lg:overflow-x-visible lg:overflow-y-auto lg:snap-none motion-reduce:scroll-auto focus:outline-none ls:flex-col ls:overflow-x-visible ls:overflow-y-auto ls:snap-none ls:gap-2"
+      class="flex-1 min-h-0 flex overflow-x-auto snap-x snap-mandatory scroll-smooth touch-pan-x lg:grid lg:grid-cols-2 lg:gap-8 lg:overflow-x-visible lg:overflow-y-auto lg:snap-none motion-reduce:scroll-auto focus:outline-none"
       style="grid-template-areas: 'word-grid pairs-grid' 'popularity-grid word-list'"
       role="region"
       aria-label="Word hints carousel"
@@ -144,7 +143,7 @@ function closeModal() {
       @keydown="handleKeydown"
     >
       <div
-        class="hint-slide min-w-full snap-center touch-pan-y p-2 lg:min-w-0 lg:snap-align-none lg:p-0 ls:min-w-0 ls:snap-align-none ls:p-0"
+        class="hint-slide min-w-full snap-center touch-pan-y p-2 lg:min-w-0 lg:snap-align-none lg:p-0"
         style="grid-area: word-grid"
         :inert="isCarouselMode && activeSlide !== 0 || undefined"
         :aria-hidden="isCarouselMode && activeSlide !== 0"
@@ -160,7 +159,7 @@ function closeModal() {
       </div>
 
       <div
-        class="hint-slide min-w-full snap-center touch-pan-y p-2 lg:min-w-0 lg:snap-align-none lg:p-0 ls:min-w-0 ls:snap-align-none ls:p-0"
+        class="hint-slide min-w-full snap-center touch-pan-y p-2 lg:min-w-0 lg:snap-align-none lg:p-0"
         style="grid-area: pairs-grid"
         :inert="isCarouselMode && activeSlide !== 1 || undefined"
         :aria-hidden="isCarouselMode && activeSlide !== 1"
@@ -173,7 +172,7 @@ function closeModal() {
       </div>
 
       <div
-        class="hint-slide min-w-full snap-center touch-pan-y p-2 lg:min-w-0 lg:snap-align-none lg:p-0 ls:min-w-0 ls:snap-align-none ls:p-0"
+        class="hint-slide min-w-full snap-center touch-pan-y p-2 lg:min-w-0 lg:snap-align-none lg:p-0"
         style="grid-area: popularity-grid"
         :inert="isCarouselMode && activeSlide !== 2 || undefined"
         :aria-hidden="isCarouselMode && activeSlide !== 2"
@@ -189,7 +188,7 @@ function closeModal() {
       </div>
 
       <div
-        class="hint-slide min-w-full snap-center touch-pan-y p-2 lg:min-w-0 lg:snap-align-none lg:p-0 ls:min-w-0 ls:snap-align-none ls:p-0"
+        class="hint-slide min-w-full snap-center touch-pan-y p-2 lg:min-w-0 lg:snap-align-none lg:p-0"
         style="grid-area: word-list"
         :inert="isCarouselMode && activeSlide !== 3 || undefined"
         :aria-hidden="isCarouselMode && activeSlide !== 3"
@@ -202,7 +201,7 @@ function closeModal() {
     </div>
 
     <div
-      class="flex justify-center gap-2 mt-3 mb-8 shrink-0 lg:hidden ls:mt-2 ls:mb-2"
+      class="flex justify-center gap-2 mt-3 mb-8 shrink-0 lg:hidden ls:mt-1 ls:mb-1"
       role="tablist"
       aria-label="Carousel navigation"
     >

@@ -239,7 +239,19 @@ const statusMessage = computed(() => {
   inset: auto 0 0 0;
 }
 
-@media (min-width: 640px) {
+/* Landscape: drawer from right */
+@media (orientation: landscape) and (max-height: 500px) and (min-width: 500px) {
+  .dialog-modal {
+    inset: 0 0 0 auto;
+    max-width: 70%;
+    max-height: 100vh;
+    height: 100%;
+    border-radius: 0.5rem 0 0 0.5rem;
+  }
+}
+
+/* Desktop: centered modal */
+@media (min-width: 640px) and (not ((orientation: landscape) and (max-height: 500px) and (min-width: 500px))) {
   .dialog-modal {
     inset: 50% auto auto 50%;
     transform: translate(-50%, -50%);
