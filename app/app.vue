@@ -241,7 +241,7 @@ const shareData = computed(() => scoreRef.value?.getShareData())
   <NuxtPwaAssets />
   <TheToast />
   <ParticleCanvas />
-  <div class="h-100dvh overflow-hidden">
+  <div class="h-100dvh overflow-hidden touch-none">
     <div class="flex flex-col h-full gap-2 px-2 py-2 text-on-surface sm:gap-3 sm:p-3 md:gap-6 md:p-8 ls:grid ls:grid-cols-[minmax(280px,auto)_1fr] ls:grid-rows-[auto_1fr] ls:gap-3 ls:p-2">
       <header class="flex items-center justify-between gap-2 flex-shrink-0 sm:items-start sm:gap-4 ls:col-span-2 ls:gap-3 ls:py-1">
         <h1 class="text-xs font-normal tracking-[0.12em] lowercase opacity-60 m-0 transition-opacity transition-duration-0.2s sm:text-sm sm:mt-1 md:text-2xl md:font-semibold md:opacity-100 md:tracking-widest hover:opacity-100 ls:hidden">
@@ -378,7 +378,7 @@ const shareData = computed(() => scoreRef.value?.getShareData())
         />
 
         <!-- Right column in landscape: hints/words slider -->
-        <section class="flex-1 min-h-0 flex flex-col px-0 py-1 sm:py-2 md:pb-0 words-section ls:row-start-2 ls:p-0">
+        <section class="flex-1 min-h-0 flex flex-col px-0 py-1 sm:py-2 md:pb-0 words-section touch-pan-y ls:row-start-2 ls:p-0">
           <LazyWordHints
             v-if="hintsEnabled"
             :hydrate-when="hintsEnabled"
@@ -461,7 +461,7 @@ const shareData = computed(() => scoreRef.value?.getShareData())
         </div>
 
         <!-- Words section skeleton -->
-        <section class="flex-1 min-h-0 flex flex-col px-0 py-1 sm:py-2 md:pb-0 words-section ls:row-start-2 ls:p-0">
+        <section class="flex-1 min-h-0 flex flex-col px-0 py-1 sm:py-2 md:pb-0 words-section touch-pan-y ls:row-start-2 ls:p-0">
           <div class="flex items-center justify-center h-full text-muted-foreground font-mono text-sm text-center p-4">
             <div class="w-32 h-4 rounded bg-muted animate-pulse" />
           </div>
@@ -590,9 +590,14 @@ html, body {
   margin: 0;
   -webkit-user-select: none;
   user-select: none;
-  /* Prevent double-tap zoom - feel like native app */
-  touch-action: manipulation;
   -webkit-touch-callout: none;
+  /* prevent iOS bounce scrolling by locking the viewport */
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  overscroll-behavior: none;
+  /* interactive elements opt-in with touch-action: manipulation */
+  touch-action: none;
 }
 
 /* Ensure all buttons and interactive elements don't trigger zoom */

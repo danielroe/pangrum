@@ -122,7 +122,7 @@ function closeModal() {
       @keydown="handleKeydown"
     >
       <div
-        class="min-w-full snap-center overflow-y-auto p-2 lg:min-w-0 lg:snap-align-none lg:p-0 flex justify-center items-start"
+        class="min-w-full snap-center overflow-y-auto touch-pan-y p-2 lg:min-w-0 lg:snap-align-none lg:p-0 flex justify-center items-start"
         style="grid-area: word-grid"
         :inert="activeSlide !== 0 || undefined"
         :aria-hidden="activeSlide !== 0"
@@ -138,7 +138,7 @@ function closeModal() {
       </div>
 
       <div
-        class="min-w-full snap-center overflow-y-auto p-2 px-4 lg:min-w-0 lg:snap-align-none lg:p-0"
+        class="min-w-full snap-center overflow-y-auto touch-pan-y p-2 px-4 lg:min-w-0 lg:snap-align-none lg:p-0"
         style="grid-area: pairs-grid"
         :inert="activeSlide !== 1 || undefined"
         :aria-hidden="activeSlide !== 1"
@@ -151,7 +151,7 @@ function closeModal() {
       </div>
 
       <div
-        class="min-w-full snap-center overflow-y-auto p-2 lg:min-w-0 lg:snap-align-none lg:p-0 ls:min-w-0 ls:snap-align-none ls:p-0"
+        class="min-w-full snap-center overflow-y-auto touch-pan-y p-2 lg:min-w-0 lg:snap-align-none lg:p-0 ls:min-w-0 ls:snap-align-none ls:p-0"
         style="grid-area: popularity-grid"
         :inert="activeSlide !== 2 || undefined"
         :aria-hidden="activeSlide !== 2"
@@ -167,7 +167,7 @@ function closeModal() {
       </div>
 
       <div
-        class="min-w-full snap-center overflow-y-auto p-2 lg:min-w-0 lg:snap-align-none lg:p-0 ls:min-w-0 ls:snap-align-none ls:p-0"
+        class="min-w-full snap-center overflow-y-auto touch-pan-y p-2 lg:min-w-0 lg:snap-align-none lg:p-0 ls:min-w-0 ls:snap-align-none ls:p-0"
         style="grid-area: word-list"
         :inert="activeSlide !== 3 || undefined"
         :aria-hidden="activeSlide !== 3"
