@@ -11,6 +11,8 @@ const emit = defineEmits<{
   close: []
 }>()
 
+const { t } = useI18n()
+
 function redactWord(word: string): string {
   return word.split('').map((char, i) => i === 0 ? char : '_').join('')
 }
@@ -72,7 +74,7 @@ function handleClick(event: MouseEvent) {
       <button
         type="button"
         class="w-8 h-8 flex items-center justify-center text-on-surface text-xl leading-none rounded-lg border-1 border-solid border-transparent bg-transparent cursor-pointer hover:bg-surface-hover transition-colors focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
-        aria-label="Close"
+        :aria-label="t('common.close')"
         @click="emit('close')"
       >
         ×
@@ -81,13 +83,13 @@ function handleClick(event: MouseEvent) {
 
     <div class="p-4 overflow-y-auto flex-grow">
       <p class="text-on-surface font-mono text-sm mb-4">
-        {{ foundWords.length }} / {{ totalWords.length }} words found
+        {{ t('wordStats.wordsFound', { found: foundWords.length, total: totalWords.length }) }}
       </p>
 
       <div class="space-y-4">
         <div v-if="foundWords.length > 0">
           <h4 class="text-primary font-mono text-sm mb-2">
-            Found ({{ foundWords.length }})
+            {{ t('wordStats.found', { count: foundWords.length }) }}
           </h4>
           <ul class="p-0 grid grid-cols-[repeat(auto-fill,minmax(8rem,1fr))] gap-1 text-sm text-on-surface m-0">
             <li
@@ -97,7 +99,7 @@ function handleClick(event: MouseEvent) {
               :class="isPangram(word)
                 ? 'border-celebration bg-celebration-bg text-celebration font-semibold'
                 : 'border-primary bg-primary/20'"
-              :title="isPangram(word) ? 'Pangram!' : ''"
+              :title="isPangram(word) ? t('foundWords.pangram') : ''"
             >
               {{ word.toLowerCase() }}
             </li>
@@ -106,7 +108,7 @@ function handleClick(event: MouseEvent) {
 
         <div v-if="showRemaining && remainingCount > 0">
           <h4 class="text-muted-foreground font-mono text-sm mb-2">
-            Remaining ({{ remainingCount }})
+            {{ t('wordStats.remaining', { count: remainingCount }) }}
           </h4>
           <ul
             v-if="sortedRemainingWords.length > 0"
@@ -117,7 +119,7 @@ function handleClick(event: MouseEvent) {
               :key="word"
               class="list-none font-mono px-2 py-1 border-1 border-solid border-muted bg-muted transition-colors duration-150"
             >
-              {{ word.replace(/_/g, '-').toLowerCase() }}
+              {{ formatWordHint(word) }}
             </li>
           </ul>
         </div>

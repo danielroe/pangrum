@@ -188,7 +188,10 @@
   "wordStats": {
     "letters": "{count} letras",
     "allLengths": "todas las longitudes",
-    "allPrefixes": "todos los prefijos"
+    "allPrefixes": "todos los prefijos",
+    "wordsFound": "{found} / {total} palabras encontradas",
+    "found": "Encontradas ({count})",
+    "remaining": "Restantes ({count})"
   },
   "footer": {
     "madeWith": "hecho con",

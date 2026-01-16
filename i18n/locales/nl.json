@@ -188,7 +188,10 @@
   "wordStats": {
     "letters": "{count} letters",
     "allLengths": "alle lengtes",
-    "allPrefixes": "alle prefixen"
+    "allPrefixes": "alle prefixen",
+    "wordsFound": "{found} / {total} woorden gevonden",
+    "found": "Gevonden ({count})",
+    "remaining": "Resterend ({count})"
   },
   "footer": {
     "madeWith": "gemaakt met",
