@@ -27,7 +27,8 @@
 
 ## 🚧 Roadmap
 
-- [ ] Keyboard shortcuts
+- [ ] Keyboard shortcuts on desktop
+- [ ] Mobile app (using [Capacitor](https://capacitorjs.com/))
 
 ## Try it out locally
 
