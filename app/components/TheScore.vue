@@ -154,7 +154,7 @@ defineExpose({
   <!-- Full mode -->
   <div
     v-else
-    class="flex flex-col gap-1 ls:gap-1"
+    class="flex flex-col gap-1 ls:gap-1 px-1 sm:p-0"
   >
     <!-- Score + Status row -->
     <div class="flex items-center justify-between gap-3">

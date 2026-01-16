@@ -244,7 +244,7 @@ function openShareModal() {
   <ParticleCanvas />
   <div class="h-100dvh overflow-hidden touch-none">
     <div class="flex flex-col h-full gap-2 px-2 py-2 text-on-surface sm:gap-3 sm:p-3 md:gap-6 md:p-8 ls:grid ls:grid-cols-[minmax(280px,auto)_1fr] ls:grid-rows-[auto_1fr] ls:gap-3 ls:p-2">
-      <header class="flex items-center justify-between gap-2 flex-shrink-0 sm:items-start sm:gap-4 ls:col-span-2 ls:gap-3 ls:py-1">
+      <header class="flex items-center justify-between gap-2 flex-shrink-0 sm:items-start sm:gap-4 ls:col-span-2 ls:gap-3 ls:py-1 px-1 sm:p-0">
         <h1 class="text-xs font-normal tracking-[0.12em] lowercase opacity-60 m-0 transition-opacity transition-duration-0.2s sm:text-sm sm:mt-1 md:text-2xl md:font-semibold md:opacity-100 md:tracking-widest hover:opacity-100 ls:hidden">
           pangrum
           <ClientOnly>
@@ -393,6 +393,7 @@ function openShareModal() {
           />
           <FoundWordsList
             v-else
+            class="px-2 pt-2 sm:p-0"
             :words="words"
             :letters="letters"
           />
