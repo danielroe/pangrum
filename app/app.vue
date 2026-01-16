@@ -379,7 +379,7 @@ function openShareModal() {
         />
 
         <!-- Right column in landscape: hints/words slider -->
-        <section class="flex-1 min-h-0 flex flex-col px-0 py-1 sm:py-2 md:pb-0 words-section touch-pan-y ls:row-start-2 ls:p-0">
+        <section class="flex-1 min-h-0 min-w-0 flex flex-col px-0 py-1 sm:py-2 md:pb-0 words-section touch-pan-y ls:row-start-2 ls:p-0">
           <WordHints
             v-if="hintsEnabled"
             :pairs="pairs"
