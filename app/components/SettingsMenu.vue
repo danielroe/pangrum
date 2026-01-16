@@ -25,6 +25,7 @@ const {
 const { syncCode, isEnabled: syncEnabled, enable, disable } = useSyncCode()
 const { connectedDevices, isConnected, isConnecting, connectionError, hasEverSynced } = useSyncState()
 const isOnline = useOnline()
+const { hasAnyCachedData, getClosestAvailableDate } = useCachedDates()
 
 const inputCode = ref('')
 const showInput = ref(false)
@@ -125,9 +126,22 @@ function setTheme(value: string) {
   activeSection.value = 'main'
 }
 
+const emit = defineEmits<{
+  'request-date-change': [date: string]
+}>()
+
 function setPuzzleLanguageValue(lang: Language) {
+  const previousLang = puzzleLanguage.value
   puzzleLanguage.value = lang
   activeSection.value = 'main'
+
+  if (!isOnline.value && previousLang !== lang) {
+    const today = new Date().toISOString().slice(0, 10)
+    const closestDate = getClosestAvailableDate(lang, today)
+    if (closestDate !== today) {
+      emit('request-date-change', closestDate)
+    }
+  }
 }
 
 async function setUILocale(code: string) {
@@ -445,13 +459,24 @@ const syncButtonIcon = computed(() => {
                 v-for="(label, lang) in SUPPORTED_LANGUAGES"
                 :key="lang"
                 type="button"
-                class="flex items-center gap-3 w-full px-3 py-2.5 text-sm rounded-lg border-1 border-solid transition-colors"
-                :class="puzzleLanguage === lang
-                  ? 'bg-primary-subtle border-primary-border text-on-surface'
-                  : 'bg-transparent border-transparent hover:bg-surface-hover text-on-surface'"
+                class="flex items-center justify-between gap-3 w-full px-3 py-2.5 text-sm rounded-lg border-1 border-solid transition-colors"
+                :class="[
+                  puzzleLanguage === lang
+                    ? 'bg-primary-subtle border-primary-border text-on-surface'
+                    : 'bg-transparent border-transparent text-on-surface',
+                  !isOnline && !hasAnyCachedData(lang)
+                    ? 'opacity-40 cursor-not-allowed'
+                    : 'hover:bg-surface-hover cursor-pointer',
+                ]"
+                :disabled="!isOnline && !hasAnyCachedData(lang)"
                 @click="setPuzzleLanguageValue(lang)"
               >
-                {{ label }}
+                <span>{{ label }}</span>
+                <span
+                  v-if="!isOnline && !hasAnyCachedData(lang)"
+                  class="i-lucide-cloud-off text-xs opacity-60"
+                  aria-hidden="true"
+                />
               </button>
             </div>
           </div>

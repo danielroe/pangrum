@@ -285,6 +285,7 @@ function openShareModal() {
         <div class="flex gap-1.5 items-center flex-shrink-0 sm:gap-2">
           <DatePicker
             v-model="selectedDate"
+            :language="language"
             :has-progress="checkHasProgress"
           />
           <ClientOnly>
@@ -332,7 +333,7 @@ function openShareModal() {
             </template>
           </ClientOnly>
           <HintsToggle />
-          <SettingsMenu />
+          <SettingsMenu @request-date-change="(date) => selectedDate = date" />
         </div>
       </header>
 

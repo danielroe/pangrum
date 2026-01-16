@@ -3,6 +3,7 @@ const { t, locale } = useI18n()
 
 const props = defineProps<{
   modelValue: string // YYYY-MM-DD format
+  language: Language
   hasProgress?: (date: string) => boolean
 }>()
 
@@ -17,6 +18,9 @@ const popoverRef = useTemplateRef<HTMLDivElement>('popover')
 const today = new Date().toISOString().slice(0, 10)
 const startDate = '2026-01-01'
 const isToday = computed(() => props.modelValue === today)
+
+const isOnline = useOnline()
+const { isAvailable } = useCachedDates()
 
 // Current view month for calendar navigation
 const viewDate = ref(new Date(props.modelValue || today))
@@ -37,6 +41,7 @@ interface CalendarDay {
   isFuture: boolean
   isPast: boolean
   hasProgress: boolean
+  isUnavailable: boolean
 }
 
 const calendarDays = computed(() => {
@@ -48,51 +53,41 @@ const calendarDays = computed(() => {
 
   const days: CalendarDay[] = []
 
+  function createDay(date: string, day: number, isCurrentMonth: boolean): CalendarDay {
+    const isFuture = date > today
+    const isPast = date < startDate
+    const isValidDate = !isFuture && !isPast
+    return {
+      date,
+      day,
+      isCurrentMonth,
+      isToday: date === today,
+      isSelected: date === props.modelValue,
+      isFuture,
+      isPast,
+      hasProgress: props.hasProgress?.(date) ?? false,
+      isUnavailable: isValidDate && !isOnline.value && !isAvailable(props.language, date),
+    }
+  }
+
   const startPadding = firstDay.getDay()
   const prevMonthLastDay = new Date(year, month, 0).getDate()
   for (let i = startPadding - 1; i >= 0; i--) {
     const d = prevMonthLastDay - i
     const date = new Date(year, month - 1, d).toISOString().slice(0, 10)
-    days.push({
-      date,
-      day: d,
-      isCurrentMonth: false,
-      isToday: date === today,
-      isSelected: date === props.modelValue,
-      isFuture: date > today,
-      isPast: date < startDate,
-      hasProgress: props.hasProgress?.(date) ?? false,
-    })
+    days.push(createDay(date, d, false))
   }
 
   // Add days of current month
   for (let d = 1; d <= lastDay.getDate(); d++) {
     const date = new Date(year, month, d).toISOString().slice(0, 10)
-    days.push({
-      date,
-      day: d,
-      isCurrentMonth: true,
-      isToday: date === today,
-      isSelected: date === props.modelValue,
-      isFuture: date > today,
-      isPast: date < startDate,
-      hasProgress: props.hasProgress?.(date) ?? false,
-    })
+    days.push(createDay(date, d, true))
   }
 
   const endPadding = 42 - days.length // 6 rows * 7 days
   for (let d = 1; d <= endPadding; d++) {
     const date = new Date(year, month + 1, d).toISOString().slice(0, 10)
-    days.push({
-      date,
-      day: d,
-      isCurrentMonth: false,
-      isToday: date === today,
-      isSelected: date === props.modelValue,
-      isFuture: date > today,
-      isPast: date < startDate,
-      hasProgress: props.hasProgress?.(date) ?? false,
-    })
+    days.push(createDay(date, d, false))
   }
 
   return days
@@ -109,9 +104,9 @@ function close() {
   isOpen.value = false
 }
 
-function selectDate(date: string) {
-  if (date > today || date < startDate) return
-  emit('update:modelValue', date)
+function selectDate(day: CalendarDay) {
+  if (day.isFuture || day.isPast || day.isUnavailable) return
+  emit('update:modelValue', day.date)
   close()
 }
 
@@ -237,14 +232,15 @@ onKeyStroke('Escape', close)
               type="button"
               class="day-button relative aspect-square flex items-center justify-center text-sm bg-transparent border-1 border-solid border-transparent rounded-lg cursor-pointer transition-colors focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-1"
               :class="{
-                'bg-primary text-primary font-semibold border-primary': day.isSelected,
-                'bg-primary-subtle text-on-surface border-primary-border font-semibold': day.isToday && !day.isSelected,
+                'bg-primary text-primary font-semibold border-primary': day.isSelected && !day.isUnavailable,
+                'bg-primary-subtle text-on-surface border-primary-border font-semibold': day.isToday && !day.isSelected && !day.isUnavailable,
                 'text-muted-foreground cursor-not-allowed': day.isFuture || day.isPast,
-                'text-muted-foreground': !day.isCurrentMonth && !day.isFuture && !day.isPast,
-                'text-on-surface hover:bg-surface-hover hover:border-muted': day.isCurrentMonth && !day.isSelected && !day.isToday && !day.isFuture && !day.isPast,
+                'text-muted-foreground opacity-40 cursor-not-allowed line-through': day.isUnavailable,
+                'text-muted-foreground': !day.isCurrentMonth && !day.isFuture && !day.isPast && !day.isUnavailable,
+                'text-on-surface hover:bg-surface-hover hover:border-muted': day.isCurrentMonth && !day.isSelected && !day.isToday && !day.isFuture && !day.isPast && !day.isUnavailable,
               }"
-              :disabled="day.isFuture || day.isPast"
-              @click="() => selectDate(day.date)"
+              :disabled="day.isFuture || day.isPast || day.isUnavailable"
+              @click="() => selectDate(day)"
             >
               {{ day.day }}
               <span
