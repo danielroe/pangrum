@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { hash } from 'ohash'
 import type { PopularityData } from '~/composables/usePopularity'
 
 const props = defineProps<{
@@ -16,18 +17,23 @@ function isPangram(word: string) {
   return props.letters.every(l => word.includes(l))
 }
 
-function isFound(word: string) {
-  return props.words.has(word)
-}
-
 function getPercentage(wordHash: string): number | null {
   if (!props.popularity || props.popularity.totalPlayers === 0) return null
   const count = props.popularity.counts[wordHash] || 0
   return Math.round((count / props.popularity.totalPlayers) * 100)
 }
 
+const foundWordsByHash = computed(() => {
+  const map = new Map<string, string>()
+  for (const word of props.words) {
+    map.set(hash(word), word)
+  }
+  return map
+})
+
 interface WordWithPopularity {
   word: string
+  displayWord: string
   hash: string
   percentage: number | null
   found: boolean
@@ -35,13 +41,19 @@ interface WordWithPopularity {
 }
 
 const wordsWithPopularity = computed<WordWithPopularity[]>(() => {
-  return props.validWords.map((word, index) => ({
-    word,
-    hash: props.hashes[index] || '',
-    percentage: getPercentage(props.hashes[index] || ''),
-    found: isFound(word),
-    pangram: isPangram(word),
-  })).sort((a, b) => {
+  return props.validWords.map((redactedWord, index) => {
+    const wordHash = props.hashes[index] || ''
+    const foundWord = foundWordsByHash.value.get(wordHash)
+
+    return {
+      word: redactedWord,
+      displayWord: foundWord || redactedWord,
+      hash: wordHash,
+      percentage: getPercentage(wordHash),
+      found: !!foundWord,
+      pangram: foundWord ? isPangram(foundWord) : false,
+    }
+  }).sort((a, b) => {
     // Sort by popularity (most popular first), then alphabetically
     const aPercent = a.percentage ?? -1
     const bPercent = b.percentage ?? -1
@@ -52,10 +64,6 @@ const wordsWithPopularity = computed<WordWithPopularity[]>(() => {
 
 const foundCount = computed(() => props.words.size)
 const totalWords = computed(() => props.validWords.length)
-
-function redactWord(word: string): string {
-  return word.replace(/^(.)(.*)/, (_, first, rest) => first + rest.replace(/./g, '_'))
-}
 </script>
 
 <template>
@@ -103,52 +111,39 @@ function redactWord(word: string): string {
     </div>
 
     <template v-else>
-      <ul class="flex-1 overflow-y-auto space-y-1 pr-1 m-0 p-0 list-none">
+      <ul class="flex-1 overflow-y-auto space-y-0.5 pr-1 m-0 p-0 list-none">
         <li
           v-for="item in wordsWithPopularity"
           :key="item.hash"
-          class="flex items-center gap-2 px-2 py-1.5 rounded-lg transition-colors duration-150"
-          :class="item.pangram
-            ? 'bg-celebration-bg/50'
-            : item.found
-              ? 'bg-surface-elevated'
-              : 'bg-surface hover:bg-surface-hover'"
+          class="flex items-center gap-2 px-2 py-1.5 rounded transition-colors duration-150"
         >
-          <span
-            class="w-5 text-center shrink-0"
-            :class="item.found ? 'text-primary' : 'text-muted'"
-          >
-            <span v-if="item.found">✓</span>
+          <span class="w-5 text-center shrink-0">
             <span
-              v-else
-              class="opacity-30"
-            >·</span>
+              v-if="item.found"
+              class="i-lucide-check text-sm"
+              :class="item.pangram ? 'text-celebration' : 'text-primary'"
+              aria-hidden="true"
+            />
           </span>
 
           <span
-            class="font-mono text-sm flex-1 min-w-0"
-            :class="item.pangram
-              ? 'text-celebration font-semibold'
-              : item.found
-                ? 'text-on-surface'
-                : 'text-muted-foreground'"
+            class="font-mono text-sm flex-1/2 min-w-0"
+            :class="item.found
+              ? (item.pangram ? 'text-celebration font-semibold' : 'text-on-surface')
+              : 'text-muted-foreground'"
           >
-            {{ item.found ? item.word.toLowerCase() : redactWord(item.word).toLowerCase() }}
+            {{ item.found ? item.displayWord.toLowerCase() : formatWordHint(item.word) }}
           </span>
 
-          <div class="flex items-center gap-2 shrink-0">
+          <div class="flex items-center gap-2 flex-1/2 shrink-0 justify-end">
             <div
-              class="w-16 h-1.5 rounded-full overflow-hidden"
-              :class="item.found ? 'bg-muted/30' : 'bg-muted/15'"
+              class="w-32 h-4 rounded overflow-hidden"
+              :class="item.found ? (item.pangram ? 'bg-celebration/20' : 'bg-primary/20') : 'bg-muted/30'"
               :title="t('popularity.foundPercent', { percent: item.percentage ?? 0 })"
             >
               <div
-                class="h-full rounded-full transition-all duration-300"
-                :class="item.pangram && item.found
-                  ? 'bg-celebration'
-                  : item.found
-                    ? 'bg-primary'
-                    : 'bg-muted-foreground/40'"
+                class="h-full transition-all duration-300"
+                :class="item.found ? (item.pangram ? 'bg-celebration' : 'bg-primary') : 'bg-muted-foreground/50'"
                 :style="{ width: `${item.percentage ?? 0}%` }"
               />
             </div>
