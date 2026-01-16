@@ -230,11 +230,12 @@ if (import.meta.client) {
   window.addEventListener('focus', checkDateMismatch)
 }
 
+const shareData = shallowRef<ReturnType<InstanceType<typeof TheScore>['getShareData']>>()
+
 function openShareModal() {
+  shareData.value = scoreRef.value?.getShareData()
   showShareModal.value = true
 }
-
-const shareData = computed(() => scoreRef.value?.getShareData())
 </script>
 
 <template>
@@ -477,7 +478,7 @@ const shareData = computed(() => scoreRef.value?.getShareData())
   <ShareResultsModal
     v-if="showShareModal && shareData"
     :data="shareData"
-    @close="showShareModal = false"
+    @close="showShareModal = false; shareData = undefined"
   />
   <TutorialModal
     v-if="showTutorial"
