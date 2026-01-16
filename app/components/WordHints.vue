@@ -15,6 +15,28 @@ const SLIDE_COUNT = 4
 const carousel = useTemplateRef('carousel')
 const activeSlide = ref(0)
 
+// Track if we're in carousel mode (mobile) vs grid mode (desktop/landscape)
+// In grid mode, all slides are visible so we don't want to use inert
+const isCarouselMode = ref(true)
+function updateCarouselMode() {
+  if (!import.meta.client) return
+  // lg breakpoint is 1024px, ls is landscape with max-height 500px and min-width 500px
+  const isDesktop = window.matchMedia('(min-width: 1024px)').matches
+  const isLandscape = window.matchMedia('(orientation: landscape) and (max-height: 500px) and (min-width: 500px)').matches
+  isCarouselMode.value = !isDesktop && !isLandscape
+}
+
+onMounted(() => {
+  updateCarouselMode()
+  window.addEventListener('resize', updateCarouselMode)
+})
+
+onUnmounted(() => {
+  if (import.meta.client) {
+    window.removeEventListener('resize', updateCarouselMode)
+  }
+})
+
 const slideLabels = [
   'Word grid showing counts by prefix and length',
   'Two-letter pairs grid',
@@ -122,10 +144,10 @@ function closeModal() {
       @keydown="handleKeydown"
     >
       <div
-        class="min-w-full snap-center overflow-y-auto touch-pan-y p-2 lg:min-w-0 lg:snap-align-none lg:p-0 flex justify-center items-start"
+        class="hint-slide min-w-full snap-center touch-pan-y p-2 lg:min-w-0 lg:snap-align-none lg:p-0 ls:min-w-0 ls:snap-align-none ls:p-0"
         style="grid-area: word-grid"
-        :inert="activeSlide !== 0 || undefined"
-        :aria-hidden="activeSlide !== 0"
+        :inert="isCarouselMode && activeSlide !== 0 || undefined"
+        :aria-hidden="isCarouselMode && activeSlide !== 0"
       >
         <WordGrid
           :valid-words="validWords"
@@ -138,10 +160,10 @@ function closeModal() {
       </div>
 
       <div
-        class="min-w-full snap-center overflow-y-auto touch-pan-y p-2 px-4 lg:min-w-0 lg:snap-align-none lg:p-0"
+        class="hint-slide min-w-full snap-center touch-pan-y p-2 lg:min-w-0 lg:snap-align-none lg:p-0 ls:min-w-0 ls:snap-align-none ls:p-0"
         style="grid-area: pairs-grid"
-        :inert="activeSlide !== 1 || undefined"
-        :aria-hidden="activeSlide !== 1"
+        :inert="isCarouselMode && activeSlide !== 1 || undefined"
+        :aria-hidden="isCarouselMode && activeSlide !== 1"
       >
         <PairsGrid
           :pairs="pairs"
@@ -151,10 +173,10 @@ function closeModal() {
       </div>
 
       <div
-        class="min-w-full snap-center overflow-y-auto touch-pan-y p-2 lg:min-w-0 lg:snap-align-none lg:p-0 ls:min-w-0 ls:snap-align-none ls:p-0"
+        class="hint-slide min-w-full snap-center touch-pan-y p-2 lg:min-w-0 lg:snap-align-none lg:p-0 ls:min-w-0 ls:snap-align-none ls:p-0"
         style="grid-area: popularity-grid"
-        :inert="activeSlide !== 2 || undefined"
-        :aria-hidden="activeSlide !== 2"
+        :inert="isCarouselMode && activeSlide !== 2 || undefined"
+        :aria-hidden="isCarouselMode && activeSlide !== 2"
       >
         <PopularityGrid
           :valid-words="validWords"
@@ -167,10 +189,10 @@ function closeModal() {
       </div>
 
       <div
-        class="min-w-full snap-center overflow-y-auto touch-pan-y p-2 lg:min-w-0 lg:snap-align-none lg:p-0 ls:min-w-0 ls:snap-align-none ls:p-0"
+        class="hint-slide min-w-full snap-center touch-pan-y p-2 lg:min-w-0 lg:snap-align-none lg:p-0 ls:min-w-0 ls:snap-align-none ls:p-0"
         style="grid-area: word-list"
-        :inert="activeSlide !== 3 || undefined"
-        :aria-hidden="activeSlide !== 3"
+        :inert="isCarouselMode && activeSlide !== 3 || undefined"
+        :aria-hidden="isCarouselMode && activeSlide !== 3"
       >
         <FoundWordsList
           :words="words"

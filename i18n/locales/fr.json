@@ -37,7 +37,13 @@
     "twoLetterPairs": "Grille des paires de deux lettres",
     "popularity": "Popularité des mots montrant combien de joueurs ont trouvé chaque mot",
     "wordList": "Liste des mots trouvés",
-    "goTo": "Aller à {panel}"
+    "goTo": "Aller à {panel}",
+    "panels": {
+      "wordGrid": "Grille de mots",
+      "twoLetterPairs": "Paires de lettres",
+      "popularity": "Popularité",
+      "foundWords": "Mots trouvés"
+    }
   },
   "popularity": {
     "loading": "Chargement des données de popularité...",

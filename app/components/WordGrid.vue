@@ -11,6 +11,8 @@ const emit = defineEmits<{
   showGridStats: [prefix: string, length: number]
 }>()
 
+const { t } = useI18n()
+
 const longestWordLength = computed(() => props.validWords.reduce((acc, w) => w.length > acc ? w.length : acc, 0))
 
 const prefixes = computed(() => {
@@ -20,6 +22,7 @@ const prefixes = computed(() => {
   }
   return set
 })
+
 const remainingWords = computed(() => {
   const r: Record<string, Record<string, number>> = {}
   for (const prefix of prefixes.value) {
@@ -38,48 +41,99 @@ const remainingWords = computed(() => {
   }
   return r
 })
+
+const totalRemaining = computed(() => {
+  let count = 0
+  for (const prefix in remainingWords.value) {
+    for (const length in remainingWords.value[prefix]) {
+      count += remainingWords.value[prefix][length] || 0
+    }
+  }
+  return count
+})
+
+const totalWords = computed(() => props.validWords.length)
+const foundCount = computed(() => totalWords.value - totalRemaining.value)
 </script>
 
 <template>
-  <table class="text-on-surface text-center tabular-nums border-collapse">
-    <tbody>
-      <tr>
-        <td />
-        <td
-          v-for="i of longestWordLength - 3"
-          :key="`header-${i + 3}`"
-          class="font-mono text-xs text-muted-foreground pb-2 cursor-pointer hover:text-on-surface transition-colors duration-150"
-          @click="emit('showLengthStats', i + 3)"
-        >
-          {{ i + 3 }}
-        </td>
-      </tr>
-      <tr
-        v-for="(counts, prefix) in remainingWords"
-        :key="`row-${prefix}`"
-      >
-        <td
-          class="uppercase font-mono text-xs text-muted-foreground pr-3 tracking-widest text-right cursor-pointer hover:text-on-surface transition-colors duration-150"
-          @click="emit('showPrefixStats', prefix)"
-        >
-          {{ prefix }}
-        </td>
-        <td
-          v-for="l of longestWordLength - 3"
-          :key="`cell-${prefix}-${l + 3}`"
-          class="grid-cell w-7 h-7 relative text-xs sm:text-sm font-mono transition-colors duration-150"
-          :class="{
-            'cell-remaining cursor-pointer text-on-surface': counts[l + 3] !== undefined && counts[l + 3]! > 0,
-            'cell-complete cursor-pointer text-primary': counts[l + 3] === 0,
-            'text-muted cursor-default': counts[l + 3] === undefined,
-          }"
-          @click="counts[l + 3] !== undefined ? emit('showGridStats', prefix, l + 3) : null"
-        >
-          {{ counts[l + 3] === undefined ? '' : counts[l + 3] === 0 ? '✓' : counts[l + 3] }}
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="hint-panel flex flex-col h-full">
+    <header class="hint-panel-header flex items-center gap-2 mb-3">
+      <span
+        class="i-lucide-grid-3x3 text-primary text-base"
+        aria-hidden="true"
+      />
+      <h3 class="text-sm font-medium text-on-surface m-0">
+        {{ t('hints.panels.wordGrid') }}
+      </h3>
+      <span class="text-xs text-muted-foreground ml-auto tabular-nums">
+        {{ foundCount }}/{{ totalWords }}
+      </span>
+    </header>
+
+    <div class="flex-1 min-h-0 overflow-y-auto pl-1">
+      <table class="text-on-surface text-center tabular-nums border-collapse">
+        <tbody>
+          <tr>
+            <td />
+            <td
+              v-for="i of longestWordLength - 3"
+              :key="`header-${i + 3}`"
+              class="p-0"
+            >
+              <button
+                type="button"
+                class="w-full h-full font-mono text-xs text-muted-foreground pb-2 cursor-pointer hover:text-on-surface focus:text-on-surface focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 rounded transition-colors duration-150 bg-transparent border-0"
+                @click="emit('showLengthStats', i + 3)"
+              >
+                {{ i + 3 }}
+              </button>
+            </td>
+          </tr>
+          <tr
+            v-for="(counts, prefix) in remainingWords"
+            :key="`row-${prefix}`"
+          >
+            <td class="p-0">
+              <button
+                type="button"
+                class="w-full h-full uppercase font-mono text-xs text-muted-foreground pr-3 tracking-widest text-right cursor-pointer hover:text-on-surface focus:text-on-surface focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 rounded transition-colors duration-150 bg-transparent border-0"
+                @click="emit('showPrefixStats', prefix)"
+              >
+                {{ prefix }}
+              </button>
+            </td>
+            <td
+              v-for="l of longestWordLength - 3"
+              :key="`cell-${prefix}-${l + 3}`"
+              class="grid-cell w-7 h-7 relative p-0"
+            >
+              <button
+                v-if="counts[l + 3] !== undefined"
+                type="button"
+                class="w-full h-full flex items-center justify-center text-xs font-mono transition-colors duration-150 bg-transparent border-0 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-inset"
+                :class="counts[l + 3] === 0 ? 'cell-complete' : 'cell-remaining text-on-surface'"
+                @click="emit('showGridStats', prefix, l + 3)"
+              >
+                <span
+                  v-if="counts[l + 3] === 0"
+                  class="i-lucide-check text-primary text-sm"
+                  aria-hidden="true"
+                />
+                <template v-else>
+                  {{ counts[l + 3] }}
+                </template>
+              </button>
+              <span
+                v-else
+                class="w-full h-full flex items-center justify-center text-muted"
+              />
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </template>
 
 <style scoped>
@@ -102,6 +156,10 @@ tbody tr:first-child + tr .grid-cell::after {
 
 .cell-remaining:hover {
   background: color-mix(in oklch, var(--color-primary) 10%, transparent);
+}
+
+.cell-complete {
+  background: color-mix(in oklch, var(--color-primary) 8%, transparent);
 }
 
 .cell-complete:hover {

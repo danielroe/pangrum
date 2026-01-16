@@ -37,7 +37,13 @@
     "twoLetterPairs": "Zwei-Buchstaben-Paare",
     "popularity": "Wortbeliebtheit - wie viele Spieler jedes Wort gefunden haben",
     "wordList": "Liste gefundener Wörter",
-    "goTo": "Gehe zu {panel}"
+    "goTo": "Gehe zu {panel}",
+    "panels": {
+      "wordGrid": "Wortgitter",
+      "twoLetterPairs": "Buchstabenpaare",
+      "popularity": "Beliebtheit",
+      "foundWords": "Gefundene Wörter"
+    }
   },
   "popularity": {
     "loading": "Lade Beliebtheitsdaten...",

@@ -37,7 +37,13 @@
     "twoLetterPairs": "Two-letter pairs grid",
     "popularity": "Word popularity showing how many players found each word",
     "wordList": "Found words list",
-    "goTo": "Go to {panel}"
+    "goTo": "Go to {panel}",
+    "panels": {
+      "wordGrid": "Word grid",
+      "twoLetterPairs": "Two-letter pairs",
+      "popularity": "Popularity",
+      "foundWords": "Found words"
+    }
   },
   "popularity": {
     "loading": "Loading popularity data...",

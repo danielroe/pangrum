@@ -37,7 +37,13 @@
     "twoLetterPairs": "Twee-letter paren rooster",
     "popularity": "Woordpopulariteit toont hoeveel spelers elk woord hebben gevonden",
     "wordList": "Gevonden woordenlijst",
-    "goTo": "Ga naar {panel}"
+    "goTo": "Ga naar {panel}",
+    "panels": {
+      "wordGrid": "Woordrooster",
+      "twoLetterPairs": "Letterparen",
+      "popularity": "Populariteit",
+      "foundWords": "Gevonden woorden"
+    }
   },
   "popularity": {
     "loading": "Populariteitsgegevens laden...",

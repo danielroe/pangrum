@@ -37,7 +37,13 @@
     "twoLetterPairs": "Cuadrícula de pares de dos letras",
     "popularity": "Popularidad de palabras mostrando cuántos jugadores encontraron cada palabra",
     "wordList": "Lista de palabras encontradas",
-    "goTo": "Ir a {panel}"
+    "goTo": "Ir a {panel}",
+    "panels": {
+      "wordGrid": "Cuadrícula",
+      "twoLetterPairs": "Pares de letras",
+      "popularity": "Popularidad",
+      "foundWords": "Palabras encontradas"
+    }
   },
   "popularity": {
     "loading": "Cargando datos de popularidad...",
