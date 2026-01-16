@@ -190,7 +190,7 @@ onKeyStroke('Escape', close)
         <div
           v-if="isOpen"
           ref="popover"
-          class="popover fixed sm:absolute top-14 sm:top-full right-3 sm:right-auto sm:left-0 mt-0 sm:mt-2 z-50 bg-surface-elevated border-1 border-solid border-muted rounded-xl p-4 w-[min(18rem,calc(100vw-1.5rem))] shadow-xl"
+          class="popover fixed sm:absolute mt-0 sm:mt-2 z-50 bg-surface-elevated border-1 border-solid border-muted rounded-xl p-4 shadow-xl"
         >
           <div class="flex items-center justify-between mb-3">
             <button
@@ -283,3 +283,28 @@ onKeyStroke('Escape', close)
     </template>
   </ClientOnly>
 </template>
+
+<style scoped>
+.popover {
+  top: 3rem;
+  right: 0.75rem;
+  width: min(18rem, calc(100vw - 1.5rem));
+}
+
+@media (orientation: landscape) and (max-height: 500px) and (min-width: 500px) {
+  .popover {
+    top: 1.75rem;
+    right: 0rem;
+  }
+}
+
+@media (min-width: 640px) and (not ((orientation: landscape) and (max-height: 500px) and (min-width: 500px))) {
+  .popover {
+    position: absolute;
+    top: 100%;
+    right: auto;
+    left: 0;
+    margin-top: 0.5rem;
+  }
+}
+</style>
