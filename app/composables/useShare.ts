@@ -10,6 +10,33 @@ export interface ShareData {
   letters: string[]
 }
 
+function calculateFillWidth(percentage: number): number {
+  const thresholds = LEVEL_KEYS.map(key => [key, LEVEL_THRESHOLDS[key]] as const)
+  const thresholdCount = thresholds.length
+
+  const statusKey = getLevelKey(percentage)
+  const currentIdx = thresholds.findIndex(([key]) => key === statusKey)
+  const nextIdx = currentIdx + 1
+
+  if (nextIdx >= thresholdCount) {
+    return 100 // Perfect score
+  }
+
+  const currentThreshold = thresholds[currentIdx]![1]
+  const nextThresholdVal = thresholds[nextIdx]![1]
+
+  // Progress within current segment (0-1)
+  const segmentProgress = (percentage - currentThreshold) / (nextThresholdVal - currentThreshold)
+  const clampedProgress = Math.max(0, Math.min(1, segmentProgress))
+
+  // Dots are evenly spaced
+  const getDotPosition = (index: number) => (index / (thresholdCount - 1)) * 100
+  const startPos = getDotPosition(currentIdx)
+  const endPos = getDotPosition(nextIdx)
+
+  return startPos + (endPos - startPos) * clampedProgress
+}
+
 export function useShare() {
   const isShareSupported = computed(() => {
     if (!import.meta.client) return false
@@ -145,7 +172,8 @@ export function useShare() {
     const barWidth = width - 100
     const barHeight = 8
     const barX = 50
-    const progress = data.score / data.maxScore
+    const percentage = Math.min(Math.ceil(100 * data.score / data.maxScore), 100)
+    const fillWidth = calculateFillWidth(percentage)
 
     // Background bar
     ctx.fillStyle = '#333333'
@@ -154,12 +182,13 @@ export function useShare() {
     ctx.fill()
 
     // Progress fill
-    const gradient = ctx.createLinearGradient(barX, 0, barX + barWidth * progress, 0)
+    const fillPixelWidth = barWidth * (fillWidth / 100)
+    const gradient = ctx.createLinearGradient(barX, 0, barX + fillPixelWidth, 0)
     gradient.addColorStop(0, '#14b8a6')
     gradient.addColorStop(1, 'rgba(20, 184, 166, 0.4)')
     ctx.fillStyle = gradient
     ctx.beginPath()
-    ctx.roundRect(barX, barY, barWidth * progress, barHeight, 4)
+    ctx.roundRect(barX, barY, fillPixelWidth, barHeight, 4)
     ctx.fill()
 
     // Convert to blob
