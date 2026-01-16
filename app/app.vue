@@ -379,9 +379,8 @@ const shareData = computed(() => scoreRef.value?.getShareData())
 
         <!-- Right column in landscape: hints/words slider -->
         <section class="flex-1 min-h-0 flex flex-col px-0 py-1 sm:py-2 md:pb-0 words-section touch-pan-y ls:row-start-2 ls:p-0">
-          <LazyWordHints
+          <WordHints
             v-if="hintsEnabled"
-            :hydrate-when="hintsEnabled"
             :pairs="pairs"
             :hashes="hashes"
             :words="words"
