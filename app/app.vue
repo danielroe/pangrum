@@ -469,16 +469,14 @@ const shareData = computed(() => scoreRef.value?.getShareData())
       </main>
     </div>
   </div>
-  <LazyDateMismatchModal
+  <DateMismatchModal
     v-if="data && showDateMismatchModal"
-    :hydrate-when="data && showDateMismatchModal"
     :puzzle-date="puzzleDate"
     :on-refresh="goToToday"
     @close="closeDateMismatchModal"
   />
-  <LazyShareResultsModal
+  <ShareResultsModal
     v-if="showShareModal && shareData"
-    :hydrate-when="shareData && showShareModal"
     :data="shareData"
     @close="showShareModal = false"
   />
@@ -486,9 +484,8 @@ const shareData = computed(() => scoreRef.value?.getShareData())
     v-if="showTutorial"
     @close="showTutorial = false"
   />
-  <LazyStatsOverview
+  <StatsOverview
     v-if="showStatsModal"
-    :hydrate-when="showStatsModal"
     :stats="puzzleStats"
     @close="showStatsModal = false"
   />
