@@ -246,9 +246,10 @@ export function useSync(options: UseSyncOptions) {
     localStorage.setItem(HAS_SYNCED_KEY, 'true')
 
     // On first sync, navigate to the last active puzzle if we have date info
-    if (isInitialSync && hadPreviouslyCompletedSync && lastActiveDate && lastActiveLang) {
+    if (isInitialSync && !hadPreviouslyCompletedSync && lastActiveDate && lastActiveLang) {
       options.onNavigateToPuzzle?.(lastActiveDate, lastActiveLang)
     }
+
     hasCompletedInitialSync = true
   }
 
