@@ -36,6 +36,7 @@
     "@vite-pwa/nuxt": "1.1.0",
     "@vueuse/nuxt": "14.1.0",
     "beasties": "^0.3.5",
+    "estree-walker": "^3.0.3",
     "language-packages": "^1.0.1",
     "nuxt": "^4.2.2",
     "nuxt-og-image": "^5.1.13",
@@ -69,6 +70,16 @@
     "vue-tsc": "3.2.2",
     "workbox-background-sync": "^7.4.0"
   },
+  "pnpm": {
+    "packageExtensions": {
+      "@nuxt/scripts": {
+        "dependencies": {
+          "estree-walker": "^3.0.3"
+        }
+      }
+    }
+  },
+  "packageManager": "pnpm@10.28.0",
   "simple-git-hooks": {
     "pre-commit": "npx lint-staged"
   },
