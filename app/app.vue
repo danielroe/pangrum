@@ -164,6 +164,8 @@ async function submitToPopularity(wordHash: string, isFirstWord: boolean) {
   }
 }
 
+const hasTrackedStreakThisSession = ref(false)
+
 function handleWordAdded(word: string) {
   sendWord(word)
 
@@ -175,6 +177,11 @@ function handleWordAdded(word: string) {
       hasSubmittedForPuzzle.value = true
     }
     submitToPopularity(wordHash, isFirstWord)
+
+    if (isFirstWord && isViewingToday.value && !hasTrackedStreakThisSession.value) {
+      hasTrackedStreakThisSession.value = true
+      nextTick(() => trackStreakAchieved(puzzleStats.value.currentStreak))
+    }
   }
 }
 

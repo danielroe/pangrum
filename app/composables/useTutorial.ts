@@ -13,9 +13,12 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
 
 const STORAGE_KEY = 'pangrum-tutorial-seen'
 
-function markTutorialSeen() {
+function markTutorialSeen(trackCompletion: boolean) {
   if (import.meta.client) {
     localStorage.setItem(STORAGE_KEY, 'true')
+    if (trackCompletion) {
+      trackTutorialCompleted()
+    }
   }
 }
 
@@ -51,12 +54,12 @@ export function useTutorial() {
   }
 
   function completeTutorial() {
-    markTutorialSeen()
+    markTutorialSeen(true)
     showTutorial.value = false
   }
 
   function skipTutorial() {
-    markTutorialSeen()
+    markTutorialSeen(false)
     showTutorial.value = false
   }
 

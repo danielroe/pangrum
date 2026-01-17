@@ -18,6 +18,8 @@ const words = defineModel<Set<string>>('words', { required: true })
 const { t } = useI18n()
 const language = useLanguage()
 
+const hasTrackedFirstWord = ref(false)
+
 const incorrectGuesses = useLocalStorage<Record<string, string>>(
   () => `pangrum-${language.value}-incorrect-${props.letters.join('')}`,
   {},
@@ -118,7 +120,13 @@ function addWord() {
     const isPangram = props.letters.every(letter => normalisedWord.includes(letter))
     const points = scoreWord(normalisedWord)
 
+    if (!hasTrackedFirstWord.value) {
+      hasTrackedFirstWord.value = true
+      trackFirstWord(language.value)
+    }
+
     if (isPangram) {
+      trackPangramFound(language.value, words.value.size)
       triggerCelebration()
       addToast({
         message: t('toasts.pangram', { points }),
@@ -139,6 +147,8 @@ function addWord() {
     }
 
     if (didLevelUp) {
+      trackLevelReached(levelAfter, language.value)
+      trackPuzzleCompleted(language.value, percentage.value)
       addToast({
         message: t('toasts.levelUp', { level: t(`levels.${levelAfter}`) }),
         type: 'celebration',

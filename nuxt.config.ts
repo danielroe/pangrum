@@ -16,6 +16,7 @@ export default defineNuxtConfig({
     'nuxt-og-image',
     '@nuxtjs/i18n',
     '@nuxt/a11y',
+    '@nuxt/scripts',
   ],
   $development: {
     nitro: {

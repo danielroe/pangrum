@@ -42,6 +42,7 @@ function resetInput() {
 }
 
 function handleEnable() {
+  trackSyncEnabled()
   if (showInput.value && inputCode.value.trim()) {
     enable(inputCode.value.trim())
   }
@@ -132,6 +133,9 @@ const emit = defineEmits<{
 
 function setPuzzleLanguageValue(lang: Language) {
   const previousLang = puzzleLanguage.value
+  if (previousLang !== lang) {
+    trackLanguageChanged(previousLang, lang)
+  }
   puzzleLanguage.value = lang
   activeSection.value = 'main'
 

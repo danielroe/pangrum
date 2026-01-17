@@ -57,12 +57,14 @@ async function handleShare() {
   try {
     const result = await shareResults(props.data)
     if (result.shared) {
+      trackShareCompleted('native')
       shareStatus.value = 'shared'
       setTimeout(() => emit('close'), 1000)
     }
     else if (result.blob) {
       // Native share not available, download instead
       await downloadImage(result.blob, `pangrum-${props.data.date}.png`)
+      trackShareCompleted('download')
       shareStatus.value = 'downloaded'
     }
   }
@@ -74,6 +76,7 @@ async function handleShare() {
 async function handleCopyText() {
   try {
     await copyTextToClipboard(props.data)
+    trackShareCompleted('copy_text')
     shareStatus.value = 'copied'
   }
   catch {
@@ -87,11 +90,13 @@ async function handleCopyImage() {
     const blob = generatedBlob.value || await generateShareImage(props.data)
     const success = await copyImageToClipboard(blob)
     if (success) {
+      trackShareCompleted('copy_image')
       shareStatus.value = 'copied-image'
     }
     else {
       // Fallback to download if clipboard doesn't support images
       await downloadImage(blob, `pangrum-${props.data.date}.png`)
+      trackShareCompleted('download')
       shareStatus.value = 'downloaded'
     }
   }
