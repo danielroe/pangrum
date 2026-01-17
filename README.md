@@ -18,11 +18,11 @@
 
 <p align="center">
   <a href="https://pangrum.com/">
-    <img height="400" alt="Pangrum mobile screenshot" src="https://github.com/user-attachments/assets/bd32f0ec-0db4-46ab-9fce-3b7b08b49279" />
+    <img height="300" alt="Pangrum mobile screenshot" src="https://github.com/user-attachments/assets/bd32f0ec-0db4-46ab-9fce-3b7b08b49279" />
   </a>
   &nbsp;&nbsp;
   <a href="https://pangrum.com/">
-    <img height="400" alt="Pangrum desktop screenshot" src="https://github.com/user-attachments/assets/59559065-5fc8-4984-870e-c35073910ec3" />
+    <img height="300" alt="Pangrum desktop screenshot" src="https://github.com/user-attachments/assets/59559065-5fc8-4984-870e-c35073910ec3" />
   </a>
 </p>
 
@@ -30,7 +30,7 @@
   <a href="https://pangrum.com/"><strong>👉 Play now</strong></a>
 </p>
 
-## Features
+## ✨ Features
 
 - 🇺🇸🇬🇧🇩🇪🇳🇱🇫🇷🇪🇸 Play in multiple languages
 - 🔄 Cross-device progress sync (no login required)
@@ -39,7 +39,25 @@
 - 🟢 Streak tracking
 - 🌒 Light and dark mode
 
-## Tech Stack
+## 📲 Install as an App
+
+Pangrum works offline and can be installed as a PWA (Progressive Web App) on your device.
+
+### iOS (Safari)
+
+1. Open [pangrum.com](https://pangrum.com) in Safari
+2. Tap the **Share** button (square with arrow)
+3. Scroll down and tap **Add to Home Screen**
+4. Tap **Add** to confirm
+
+### Android (Chrome)
+
+1. Open [pangrum.com](https://pangrum.com) in Chrome
+2. Tap the **three-dot menu** (⋮)
+3. Tap **Add to Home Screen** or **Install app**
+4. Tap **Install** to confirm
+
+## 🛠️ Tech Stack
 
 - [Nuxt](https://nuxt.com/) - of course!
 - [Nitro](https://nuxt.com/docs/guide/concepts/server-engine#server-engine) - server engine
@@ -56,7 +74,7 @@
 - [ ] Keyboard shortcuts on desktop
 - [ ] Mobile app (using [Capacitor](https://capacitorjs.com/))
 
-## Try it out locally
+## 🧑‍💻 Try it out locally
 
 ### Setup
 
