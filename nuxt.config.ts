@@ -52,6 +52,8 @@ export default defineNuxtConfig({
         { name: 'keywords', content: 'word game, puzzle, daily puzzle, spelling, pangram, word finder, vocabulary game, brain game' },
         { name: 'author', content: 'Pangrum' },
         { name: 'robots', content: 'index, follow' },
+        { property: 'og:title', content: 'Pangrum - Daily Word Puzzle Game' },
+        { property: 'og:description', content: 'Challenge yourself with Pangrum, a daily word puzzle game. Find words using seven letters, with one special centre letter that must appear in every word. How many can you find?' },
         { property: 'og:type', content: 'website' },
         { property: 'og:site_name', content: 'Pangrum' },
         { property: 'og:locale', content: 'en_US' },
