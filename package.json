@@ -36,6 +36,7 @@
     "@vite-pwa/nuxt": "1.1.0",
     "@vueuse/nuxt": "14.1.0",
     "beasties": "^0.3.5",
+    "estree-walker": "^3.0.3",
     "language-packages": "^1.0.1",
     "nuxt": "^4.2.2",
     "nuxt-og-image": "^5.1.13",
