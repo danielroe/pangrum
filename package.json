@@ -70,6 +70,15 @@
     "vue-tsc": "3.2.2",
     "workbox-background-sync": "^7.4.0"
   },
+  "pnpm": {
+    "packageExtensions": {
+      "@nuxt/scripts": {
+        "dependencies": {
+          "estree-walker": "^3.0.3"
+        }
+      }
+    }
+  },
   "packageManager": "pnpm@10.28.0",
   "simple-git-hooks": {
     "pre-commit": "npx lint-staged"
