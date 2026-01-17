@@ -13,8 +13,6 @@ export default defineNuxtPlugin({
     useScript({
       'src': '/_v/script.js',
       'data-endpoint': '/_v',
-      // (as we only have one route)
-      'data-disable-auto-track': '1',
     })
   },
 })
