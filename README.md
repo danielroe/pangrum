@@ -1,27 +1,34 @@
-# pangrum
+<p align="center">
+  <a href="https://pangrum.com/">
+    <img width="80" src="https://pangrum.com/logo.svg" alt="Pangrum logo">
+  </a>
+</p>
 
-> A daily word puzzle game.
+<h1 align="center">pangrum</h1>
 
-<table>
-  <tbody>
-    <tr>
-      <td>
-        <a href="https://pangrum.com/">
-          <img height="400" alt="image" src="https://github.com/user-attachments/assets/bd32f0ec-0db4-46ab-9fce-3b7b08b49279" />
-        </a>
-      </td>
-      <td>
-        <a href="https://pangrum.com/">
-          <img height="400" alt="image" src="https://github.com/user-attachments/assets/59559065-5fc8-4984-870e-c35073910ec3" />
-        </a>
-      </td>
-    </tr>
-    <tr>
-    </tr>
-  </tbody>
-</table>
+<p align="center">
+  A daily word puzzle game.
+</p>
 
-[👉 &nbsp;Play now](https://pangrum.com/)
+<p align="center">
+  <img src="https://img.shields.io/badge/nuxt-4-00DC82?logo=nuxt.js" alt="Nuxt 4">
+  <img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT License">
+  <a href="https://page-speed.dev/pangrum.com"><img src="https://page-speed.dev/badge/pangrum.com" alt="Core Web Vitals"></a>
+</p>
+
+<p align="center">
+  <a href="https://pangrum.com/">
+    <img height="400" alt="Pangrum mobile screenshot" src="https://github.com/user-attachments/assets/bd32f0ec-0db4-46ab-9fce-3b7b08b49279" />
+  </a>
+  &nbsp;&nbsp;
+  <a href="https://pangrum.com/">
+    <img height="400" alt="Pangrum desktop screenshot" src="https://github.com/user-attachments/assets/59559065-5fc8-4984-870e-c35073910ec3" />
+  </a>
+</p>
+
+<p align="center">
+  <a href="https://pangrum.com/"><strong>👉 Play now</strong></a>
+</p>
 
 ## Features
 
