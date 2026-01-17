@@ -2,6 +2,25 @@
 
 > A daily word puzzle game.
 
+<table>
+  <tbody>
+    <tr>
+      <td>
+        <a href="https://pangrum.com/">
+          <img height="400" alt="image" src="https://github.com/user-attachments/assets/bd32f0ec-0db4-46ab-9fce-3b7b08b49279" />
+        </a>
+      </td>
+      <td>
+        <a href="https://pangrum.com/">
+          <img height="400" alt="image" src="https://github.com/user-attachments/assets/59559065-5fc8-4984-870e-c35073910ec3" />
+        </a>
+      </td>
+    </tr>
+    <tr>
+    </tr>
+  </tbody>
+</table>
+
 [👉 &nbsp;Play now](https://pangrum.com/)
 
 ## Features
