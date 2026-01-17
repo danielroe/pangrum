@@ -71,8 +71,9 @@ Pangrum works offline and can be installed as a PWA (Progressive Web App) on you
 
 ## 🚧 Roadmap
 
-- [ ] Keyboard shortcuts on desktop
-- [ ] Mobile app (using [Capacitor](https://capacitorjs.com/))
+- [ ] keyboard shortcuts on desktop
+- [ ] mobile app (using [Capacitor](https://capacitorjs.com/))
+- [ ] or maybe [you have another idea](https://github.com/danielroe/pangrum/issues/new)?
 
 ## 🧑‍💻 Try it out locally
 
