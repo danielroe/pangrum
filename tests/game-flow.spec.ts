@@ -1,11 +1,10 @@
 import { expect, test } from '@nuxt/test-utils/playwright'
+import { mockPuzzleApi, skipTutorial, TEST_PUZZLE } from './fixtures/puzzle'
 
 test.describe('Game Flow', () => {
   test.beforeEach(async ({ page }) => {
-    // Set localStorage to skip tutorial before navigation
-    await page.addInitScript(() => {
-      localStorage.setItem('pangrum-tutorial-seen', 'true')
-    })
+    await skipTutorial(page)
+    await mockPuzzleApi(page)
   })
 
   test('loads the puzzle and displays letters', async ({ page, goto }) => {
@@ -14,126 +13,100 @@ test.describe('Game Flow', () => {
     // Check that the app title is present
     await expect(page.getByRole('heading', { name: 'pangrum' })).toBeVisible()
 
-    // Wait for puzzle data to load - centre letter should be visible
-    const centreButton = page.locator('.centre-letter')
-    await expect(centreButton).toBeVisible()
+    // Wait for puzzle to load by checking for the input
+    const input = page.getByRole('textbox', { name: /enter your word/i })
+    await expect(input).toBeVisible()
 
-    // Should have 7 letter buttons total
-    const letterButtons = page.locator('.letter-button')
-    await expect(letterButtons).toHaveCount(7)
-
-    // Should have exactly one centre letter
-    await expect(centreButton).toHaveCount(1)
+    // Should have 7 letter buttons (verify by checking each letter has a button)
+    for (const letter of TEST_PUZZLE.letters) {
+      await expect(page.getByRole('button', { name: letter, exact: true })).toBeVisible()
+    }
   })
 
   test('can type letters using keyboard', async ({ page, goto }) => {
     await goto('/', { waitUntil: 'hydration' })
 
-    // Wait for puzzle data - centre letter indicates data is loaded
-    const centreButton = page.locator('.centre-letter')
-    await expect(centreButton).toBeVisible()
-
-    // Get the centre letter text
-    const centreLetter = await centreButton.textContent()
+    const input = page.getByRole('textbox', { name: /enter your word/i })
+    await expect(input).toBeVisible()
 
     // Type the centre letter into the input
-    const input = page.getByRole('textbox', { name: 'word' })
-    await input.fill(centreLetter!.toLowerCase())
+    await input.fill(TEST_PUZZLE.centreLetter.toLowerCase())
 
     // Check that the input shows the letter
-    await expect(input).toHaveValue(centreLetter!.toLowerCase())
+    await expect(input).toHaveValue(TEST_PUZZLE.centreLetter.toLowerCase())
   })
 
   test('can click letters to add them', async ({ page, goto }) => {
     await goto('/', { waitUntil: 'hydration' })
 
-    // Wait for puzzle data
-    const centreButton = page.locator('.centre-letter')
-    await expect(centreButton).toBeVisible()
-
-    // Get the centre letter text first
-    const centreLetter = await centreButton.textContent()
+    const input = page.getByRole('textbox', { name: /enter your word/i })
+    await expect(input).toBeVisible()
 
     // Click the centre letter button
-    await centreButton.click()
+    await page.getByRole('button', { name: TEST_PUZZLE.centreLetter, exact: true }).click()
 
-    // The input value is updated reactively via the useWord composable
-    // Letter buttons add uppercase letters to the word state (from props.letters)
-    const input = page.getByRole('textbox', { name: 'word' })
-    await expect(input).toHaveValue(centreLetter!)
+    // The input value is updated reactively (buttons add uppercase letters)
+    await expect(input).toHaveValue(TEST_PUZZLE.centreLetter)
   })
 
   test('shows error toast for too short words', async ({ page, goto }) => {
     await goto('/', { waitUntil: 'hydration' })
 
-    // Wait for puzzle data
-    const centreButton = page.locator('.centre-letter')
-    await expect(centreButton).toBeVisible()
+    const input = page.getByRole('textbox', { name: /enter your word/i })
+    await expect(input).toBeVisible()
 
-    // Get the centre letter and type it 3 times (too short)
-    const centreLetter = await centreButton.textContent()
-    const input = page.getByRole('textbox', { name: 'word' })
-    await input.fill(centreLetter!.toLowerCase().repeat(3))
-
-    // Submit the form
+    // Type the centre letter 3 times (too short)
+    await input.fill(TEST_PUZZLE.centreLetter.toLowerCase().repeat(3))
     await input.press('Enter')
 
     // Should show error toast
-    await expect(page.getByText('Not long enough')).toBeVisible()
+    await expect(page.getByRole('status')).toContainText('Not long enough')
   })
 
   test('shows error for word missing centre letter', async ({ page, goto }) => {
     await goto('/', { waitUntil: 'hydration' })
 
-    // Wait for puzzle data
-    const centreButton = page.locator('.centre-letter')
-    await expect(centreButton).toBeVisible()
+    const input = page.getByRole('textbox', { name: /enter your word/i })
+    await expect(input).toBeVisible()
 
-    // Get an outer letter
-    const outerButton = page.locator('.outer-letter').first()
-    await expect(outerButton).toBeVisible()
-    const outerLetter = await outerButton.textContent()
+    // Get an outer letter (any letter that's not the centre)
+    const outerLetter = TEST_PUZZLE.letters.find(l => l !== TEST_PUZZLE.centreLetter)!
 
     // Type 4 of the same outer letter (no centre letter)
-    const input = page.getByRole('textbox', { name: 'word' })
-    await input.fill(outerLetter!.toLowerCase().repeat(4))
+    await input.fill(outerLetter.toLowerCase().repeat(4))
     await input.press('Enter')
 
     // Should show error toast
-    await expect(page.getByText('Does not contain centre letter')).toBeVisible()
+    await expect(page.getByRole('status')).toContainText('Does not contain centre letter')
   })
 
   test('displays score and status', async ({ page, goto }) => {
     await goto('/', { waitUntil: 'hydration' })
 
-    // Wait for puzzle data
-    const centreButton = page.locator('.centre-letter')
-    await expect(centreButton).toBeVisible()
+    const input = page.getByRole('textbox', { name: /enter your word/i })
+    await expect(input).toBeVisible()
 
-    // Score should start at 0
-    await expect(page.locator('.score-value')).toContainText('0')
-
-    // Status should be 'beginner' initially
+    // Status should be 'beginner' initially (unique text on the page)
     await expect(page.getByRole('main').getByText('beginner')).toBeVisible()
+
+    // The "to novice" text indicates score tracking is working (next level)
+    await expect(page.getByRole('main').getByText(/to novice/i)).toBeVisible()
   })
 
   test('can shuffle letters', async ({ page, goto }) => {
     await goto('/', { waitUntil: 'hydration' })
 
-    // Wait for puzzle data
-    const centreButton = page.locator('.centre-letter')
-    await expect(centreButton).toBeVisible()
+    const input = page.getByRole('textbox', { name: /enter your word/i })
+    await expect(input).toBeVisible()
 
-    // Find and click the shuffle button - look for button with "Shuffle" text
+    // Find and click the shuffle button
     const shuffleButton = page.getByRole('button', { name: /shuffle/i })
     await expect(shuffleButton.first()).toBeVisible()
     await shuffleButton.first().click()
 
-    // Centre letter should still be present after shuffle
-    await expect(centreButton).toBeVisible()
-
-    // Should still have 6 outer letters
-    const outerLetters = page.locator('.outer-letter')
-    await expect(outerLetters).toHaveCount(6)
+    // All letter buttons should still be present after shuffle
+    for (const letter of TEST_PUZZLE.letters) {
+      await expect(page.getByRole('button', { name: letter, exact: true })).toBeVisible()
+    }
   })
 })

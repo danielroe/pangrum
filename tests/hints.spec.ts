@@ -1,40 +1,34 @@
 import { expect, test } from '@nuxt/test-utils/playwright'
+import { enableHints, mockPuzzleApi, skipTutorial } from './fixtures/puzzle'
 
 test.describe('Hints Feature', () => {
   test.beforeEach(async ({ page }) => {
-    // Skip tutorial for all tests
-    await page.addInitScript(() => {
-      localStorage.setItem('pangrum-tutorial-seen', 'true')
-    })
+    await skipTutorial(page)
+    await mockPuzzleApi(page)
   })
 
   test('popularity grid is visible when hints enabled', async ({ page, goto }) => {
-    // Pre-enable hints
-    await page.addInitScript(() => {
-      localStorage.setItem('pangrum-hints-enabled', 'true')
-    })
+    await enableHints(page)
 
     await goto('/', { waitUntil: 'hydration' })
 
-    // Wait for puzzle data to load
-    const centreButton = page.locator('.centre-letter')
-    await expect(centreButton).toBeVisible()
+    // Wait for puzzle to load
+    const input = page.getByRole('textbox', { name: /enter your word/i })
+    await expect(input).toBeVisible()
 
     // Hints should be enabled
     await expect(page.getByRole('button', { name: /hints on/i })).toBeVisible()
 
-    // The popularity grid is on slide 3 of the carousel (0-indexed: slide 2)
-    // On mobile, we need to swipe or navigate to it
-    // On desktop, it should be visible in the grid layout
+    // The popularity grid shows a message when no data is available
     await expect(page.getByText('Popularity data will appear')).toBeVisible({ timeout: 10000 })
   })
 
   test('hints are hidden by default', async ({ page, goto }) => {
     await goto('/', { waitUntil: 'hydration' })
 
-    // Wait for puzzle data to load
-    const centreButton = page.locator('.centre-letter')
-    await expect(centreButton).toBeVisible()
+    // Wait for puzzle to load
+    const input = page.getByRole('textbox', { name: /enter your word/i })
+    await expect(input).toBeVisible()
 
     // Should show the "Make a guess to get started" message (hints disabled by default)
     await expect(page.getByText('Make a guess to get started')).toBeVisible()
@@ -46,9 +40,9 @@ test.describe('Hints Feature', () => {
   test('can toggle hints button state', async ({ page, goto }) => {
     await goto('/', { waitUntil: 'hydration' })
 
-    // Wait for puzzle data to load
-    const centreButton = page.locator('.centre-letter')
-    await expect(centreButton).toBeVisible()
+    // Wait for puzzle to load
+    const input = page.getByRole('textbox', { name: /enter your word/i })
+    await expect(input).toBeVisible()
 
     // Find and click the hints toggle button (shows "Hints off" initially)
     const hintsOffButton = page.getByRole('button', { name: /hints off/i })
@@ -62,9 +56,9 @@ test.describe('Hints Feature', () => {
   test('hints toggle persists state in localStorage', async ({ page, goto }) => {
     await goto('/', { waitUntil: 'hydration' })
 
-    // Wait for puzzle data
-    const centreButton = page.locator('.centre-letter')
-    await expect(centreButton).toBeVisible()
+    // Wait for puzzle to load
+    const input = page.getByRole('textbox', { name: /enter your word/i })
+    await expect(input).toBeVisible()
 
     // Enable hints by clicking the toggle
     const hintsButton = page.getByRole('button', { name: /hints off/i })
