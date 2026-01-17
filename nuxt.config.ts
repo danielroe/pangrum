@@ -79,6 +79,7 @@ export default defineNuxtConfig({
   routeRules: {
     '/': { prerender: true },
     '/__og-image__/**': { prerender: true },
+    '/_v/**': { proxy: 'https://pangrum.com/_vercel/insights/' },
   },
   sourcemap: true,
   compatibilityDate: '2025-07-15',
