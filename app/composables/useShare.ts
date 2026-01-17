@@ -172,7 +172,7 @@ export function useShare() {
     const barWidth = width - 100
     const barHeight = 8
     const barX = 50
-    const percentage = Math.min(Math.ceil(100 * data.score / data.maxScore), 100)
+    const percentage = calculatePercentage(data.score, data.maxScore)
     const fillWidth = calculateFillWidth(percentage)
 
     // Background bar

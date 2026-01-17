@@ -30,6 +30,15 @@ export const LEVEL_THRESHOLDS: Record<LevelKey, number> = {
 
 const THRESHOLDS_REVERSED = LEVEL_KEYS.slice().reverse().map(key => [key, LEVEL_THRESHOLDS[key]] as const)
 
+export function calculatePercentage(score: number, maxScore: number): number {
+  if (maxScore === 0) return 0
+  const hasPerfectScore = score >= maxScore
+  if (hasPerfectScore) return 100
+
+  // cap at 99
+  return Math.min(Math.round(100 * score / maxScore), 99)
+}
+
 export function getLevelKey(percentage: number): LevelKey {
   for (const [key, threshold] of THRESHOLDS_REVERSED) {
     if (threshold <= percentage) {
@@ -42,7 +51,7 @@ export function getLevelKey(percentage: number): LevelKey {
 export function useScore(words: MaybeRefOrGetter<Set<string> | undefined>, validWords: MaybeRefOrGetter<string[]>) {
   const maxScore = computed(() => toValue(validWords).reduce((sum, word) => sum + scoreWord(word), 0))
   const score = computed(() => [...toValue(words) || []].reduce((sum, word) => sum + scoreWord(word), 0))
-  const percentage = computed(() => Math.min(Math.ceil(100 * score.value / maxScore.value), 100))
+  const percentage = computed(() => calculatePercentage(score.value, maxScore.value))
 
   return {
     score,

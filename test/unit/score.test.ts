@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { scoreWord } from '../../app/utils/score'
+import { calculatePercentage, scoreWord } from '../../app/utils/score'
 
 describe('scoreWord', () => {
   it('scores 4-letter words as 1 point', () => {
@@ -34,5 +34,37 @@ describe('scoreWord', () => {
     // 7 letters but only 6 unique (repeated A)
     expect(scoreWord('AABCDEF')).toBe(7)
     expect(scoreWord('AAAAAAA')).toBe(7)
+  })
+})
+
+describe('calculatePercentage', () => {
+  it('returns 0 when maxScore is 0', () => {
+    expect(calculatePercentage(0, 0)).toBe(0)
+    expect(calculatePercentage(10, 0)).toBe(0)
+  })
+
+  it('returns 100 only when score equals maxScore', () => {
+    expect(calculatePercentage(100, 100)).toBe(100)
+    expect(calculatePercentage(200, 200)).toBe(100)
+  })
+
+  it('returns 100 when score exceeds maxScore', () => {
+    expect(calculatePercentage(101, 100)).toBe(100)
+  })
+
+  it('caps at 99 when close to but not at 100%', () => {
+    // 99.5% should round to 100 with Math.round, but we cap at 99
+    expect(calculatePercentage(199, 200)).toBe(99)
+    // 99.9% should also cap at 99
+    expect(calculatePercentage(999, 1000)).toBe(99)
+  })
+
+  it('rounds normally for other percentages', () => {
+    // 50% exactly
+    expect(calculatePercentage(50, 100)).toBe(50)
+    // 49.5% rounds to 50
+    expect(calculatePercentage(99, 200)).toBe(50)
+    // 49.4% rounds to 49
+    expect(calculatePercentage(494, 1000)).toBe(49)
   })
 })
