@@ -175,7 +175,7 @@ export function usePopularity(
       loading.value = false
     }
     else if (message.type === 'update') {
-      counts.value[message.wordHash] = message.count
+      counts.value = { ...counts.value, [message.wordHash]: message.count }
       totalPlayers.value = message.totalPlayers
     }
   }
