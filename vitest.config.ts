@@ -22,6 +22,7 @@ export default defineConfig({
             nuxt: {
               rootDir: fileURLToPath(new URL('.', import.meta.url)),
               overrides: {
+                vue: { runtimeCompiler: true },
                 ogImage: { enabled: false },
               },
             },
