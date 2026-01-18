@@ -1,5 +1,5 @@
 import { expect, test } from '@nuxt/test-utils/playwright'
-import { enableHints, mockPuzzleApi, skipTutorial } from './fixtures/puzzle'
+import { enableHints, mockPartyKitConnection, mockPuzzleApi, skipTutorial } from './fixtures/puzzle'
 
 test.describe('Hints Feature', () => {
   test.beforeEach(async ({ page }) => {
@@ -9,6 +9,7 @@ test.describe('Hints Feature', () => {
 
   test('popularity grid is visible when hints enabled', async ({ page, goto }) => {
     await enableHints(page)
+    await mockPartyKitConnection(page)
 
     await goto('/', { waitUntil: 'hydration' })
 
@@ -38,6 +39,7 @@ test.describe('Hints Feature', () => {
   })
 
   test('can toggle hints button state', async ({ page, goto }) => {
+    await mockPartyKitConnection(page)
     await goto('/', { waitUntil: 'hydration' })
 
     // Wait for puzzle to load
@@ -54,6 +56,7 @@ test.describe('Hints Feature', () => {
   })
 
   test('hints toggle persists state in localStorage', async ({ page, goto }) => {
+    await mockPartyKitConnection(page)
     await goto('/', { waitUntil: 'hydration' })
 
     // Wait for puzzle to load
