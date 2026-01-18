@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { calculatePercentage, scoreWord } from '../../app/utils/score'
+import { calculatePercentage, getLevelKey, scoreWord } from '../../app/utils/score'
 
 describe('scoreWord', () => {
   it('scores 4-letter words as 1 point', () => {
@@ -66,5 +66,49 @@ describe('calculatePercentage', () => {
     expect(calculatePercentage(99, 200)).toBe(50)
     // 49.4% rounds to 49
     expect(calculatePercentage(494, 1000)).toBe(49)
+  })
+})
+
+describe('getLevelKey', () => {
+  it('returns beginner for 0%', () => {
+    expect(getLevelKey(0)).toBe('beginner')
+  })
+
+  it('returns perfect for 100%', () => {
+    expect(getLevelKey(100)).toBe('perfect')
+  })
+
+  it('returns correct level at each threshold boundary', () => {
+    // At exact threshold values
+    expect(getLevelKey(2.5)).toBe('novice')
+    expect(getLevelKey(5)).toBe('movingUp')
+    expect(getLevelKey(8)).toBe('good')
+    expect(getLevelKey(15)).toBe('solid')
+    expect(getLevelKey(25)).toBe('nice')
+    expect(getLevelKey(40)).toBe('great')
+    expect(getLevelKey(50)).toBe('amazing')
+    expect(getLevelKey(70)).toBe('genius')
+  })
+
+  it('returns previous level just below threshold', () => {
+    expect(getLevelKey(2.4)).toBe('beginner')
+    expect(getLevelKey(4.9)).toBe('novice')
+    expect(getLevelKey(7.9)).toBe('movingUp')
+    expect(getLevelKey(14.9)).toBe('good')
+    expect(getLevelKey(24.9)).toBe('solid')
+    expect(getLevelKey(39.9)).toBe('nice')
+    expect(getLevelKey(49.9)).toBe('great')
+    expect(getLevelKey(69.9)).toBe('amazing')
+    expect(getLevelKey(99.9)).toBe('genius')
+  })
+
+  it('returns beginner for negative percentages', () => {
+    expect(getLevelKey(-1)).toBe('beginner')
+    expect(getLevelKey(-100)).toBe('beginner')
+  })
+
+  it('returns perfect for percentages above 100', () => {
+    expect(getLevelKey(101)).toBe('perfect')
+    expect(getLevelKey(200)).toBe('perfect')
   })
 })
