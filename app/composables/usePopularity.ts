@@ -125,26 +125,33 @@ export function usePopularity(
     loading.value = true
     error.value = null
 
-    socket.value = new PartySocket({
+    const newSocket = new PartySocket({
       host: config.public.partykit.host,
       party: 'popularity',
       room: `${langValue}-${dateValue}`,
     })
 
-    socket.value.addEventListener('open', () => {
+    socket.value = newSocket
+
+    newSocket.addEventListener('open', () => {
+      if (socket.value !== newSocket) return
       isConnected.value = true
       processQueue()
     })
 
-    socket.value.addEventListener('message', (event) => {
+    newSocket.addEventListener('message', (event) => {
+      if (socket.value !== newSocket) return
       handleMessage(event.data)
     })
 
-    socket.value.addEventListener('close', () => {
+    newSocket.addEventListener('close', () => {
+      if (socket.value !== newSocket) return
       isConnected.value = false
       socket.value = null
     })
-    socket.value.addEventListener('error', () => {
+
+    newSocket.addEventListener('error', () => {
+      if (socket.value !== newSocket) return
       error.value = new Error('WebSocket connection error')
       loading.value = false
       isConnected.value = false
