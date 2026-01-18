@@ -103,8 +103,7 @@ export default defineNuxtConfig({
     langDir: 'locales',
     strategy: 'no_prefix',
     detectBrowserLanguage: {
-      useCookie: true,
-      cookieKey: 'pangrum-ui-lang',
+      useCookie: false,
       fallbackLocale: 'en',
     },
   },

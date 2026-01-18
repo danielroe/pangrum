@@ -57,6 +57,13 @@ Pangrum works offline and can be installed as a PWA (Progressive Web App) on you
 3. Tap **Add to Home Screen** or **Install app**
 4. Tap **Install** to confirm
 
+## 🔒 Privacy
+
+- **No account** - Progress lives in your browser.
+- **No cookies** - We don't use any.
+- **Privacy-first analytics** - We use [Vercel Analytics](https://vercel.com/docs/analytics/privacy-policy) to see aggregate stats (like "how many puzzles were completed"). It's anonymous, cookieless, and collects no personal data.
+- **Sync is optional** - If you enable it, only your word lists are shared (anonymously, via a code you control).
+
 ## 🛠️ Tech Stack
 
 - [Nuxt](https://nuxt.com/) - of course!
@@ -73,7 +80,8 @@ Pangrum works offline and can be installed as a PWA (Progressive Web App) on you
 
 - [ ] keyboard shortcuts on desktop
 - [ ] mobile app (using [Capacitor](https://capacitorjs.com/))
-- [ ] or maybe [you have another idea](https://github.com/danielroe/pangrum/issues/new)?
+
+... or maybe [you have another idea](https://github.com/danielroe/pangrum/issues/new)?
 
 ## 🧑‍💻 Try it out locally
 
