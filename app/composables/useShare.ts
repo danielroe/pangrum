@@ -1,41 +1,4 @@
-export interface ShareData {
-  date: string
-  score: number
-  maxScore: number
-  wordsFound: number
-  totalWords: number
-  status: string
-  pangrams: number
-  totalPangrams: number
-  letters: string[]
-}
-
-function calculateFillWidth(percentage: number): number {
-  const thresholds = LEVEL_KEYS.map(key => [key, LEVEL_THRESHOLDS[key]] as const)
-  const thresholdCount = thresholds.length
-
-  const statusKey = getLevelKey(percentage)
-  const currentIdx = thresholds.findIndex(([key]) => key === statusKey)
-  const nextIdx = currentIdx + 1
-
-  if (nextIdx >= thresholdCount) {
-    return 100 // Perfect score
-  }
-
-  const currentThreshold = thresholds[currentIdx]![1]
-  const nextThresholdVal = thresholds[nextIdx]![1]
-
-  // Progress within current segment (0-1)
-  const segmentProgress = (percentage - currentThreshold) / (nextThresholdVal - currentThreshold)
-  const clampedProgress = Math.max(0, Math.min(1, segmentProgress))
-
-  // Dots are evenly spaced
-  const getDotPosition = (index: number) => (index / (thresholdCount - 1)) * 100
-  const startPos = getDotPosition(currentIdx)
-  const endPos = getDotPosition(nextIdx)
-
-  return startPos + (endPos - startPos) * clampedProgress
-}
+import { calculateFillWidth, formatShareText, type ShareData } from '../utils/share'
 
 export function useShare() {
   const isShareSupported = computed(() => {
@@ -224,7 +187,7 @@ export function useShare() {
 
     const shareData = {
       title: 'Pangrum',
-      text: `Pangrum ${data.date}\nScore: ${data.score} (${data.status})\n${data.wordsFound}/${data.totalWords} words${data.totalPangrams > 0 ? ` | ${data.pangrams}/${data.totalPangrams} pangrams` : ''}\n\npangrum.com`,
+      text: formatShareText(data),
       files: [file],
     }
 
@@ -249,8 +212,7 @@ export function useShare() {
   }
 
   async function copyTextToClipboard(data: ShareData) {
-    const text = `Pangrum ${data.date}\nScore: ${data.score} (${data.status})\n${data.wordsFound}/${data.totalWords} words${data.totalPangrams > 0 ? ` | ${data.pangrams}/${data.totalPangrams} pangrams` : ''}\n\npangrum.com`
-    await navigator.clipboard.writeText(text)
+    await navigator.clipboard.writeText(formatShareText(data))
   }
 
   async function copyImageToClipboard(blob: Blob): Promise<boolean> {

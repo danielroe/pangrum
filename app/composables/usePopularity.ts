@@ -205,13 +205,11 @@ export function usePopularity(
   }
 
   function getPercentage(wordHash: string): number | null {
-    if (totalPlayers.value === 0) return null
-    const count = counts.value[wordHash] || 0
-    return Math.round((count / totalPlayers.value) * 100)
+    return calculateWordPercentage(counts.value, totalPlayers.value, wordHash)
   }
 
   function getCount(wordHash: string): number {
-    return counts.value[wordHash] || 0
+    return getWordCount(counts.value, wordHash)
   }
 
   // TODO: remove after migration to partykit is complete

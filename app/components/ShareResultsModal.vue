@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ShareData } from '~/composables/useShare'
+import type { ShareData } from '~/utils/share'
 
 const props = defineProps<{
   data: ShareData

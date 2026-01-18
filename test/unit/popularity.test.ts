@@ -1,126 +1,43 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { describe, expect, it } from 'vitest'
+import { calculateWordPercentage, getWordCount } from '../../app/utils/popularity'
 
-// Mock localStorage
-const localStorageMock = (() => {
-  let store: Record<string, string> = {}
-  return {
-    getItem: vi.fn((key: string) => store[key] || null),
-    setItem: vi.fn((key: string, value: string) => { store[key] = value }),
-    // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-    removeItem: vi.fn((key: string) => { delete store[key] }),
-    clear: () => { store = {} },
-  }
-})()
-
-Object.defineProperty(globalThis, 'localStorage', { value: localStorageMock })
-
-describe('popularity queue localStorage', () => {
-  const QUEUE_KEY = 'pangrum-popularity-queue'
-
-  interface QueuedSubmission {
-    lang: string
-    date: string
-    wordHash: string
-    isFirstWord: boolean
-    timestamp: number
-  }
-
-  function getQueue(): QueuedSubmission[] {
-    try {
-      return JSON.parse(localStorage.getItem(QUEUE_KEY) || '[]')
-    }
-    catch {
-      return []
-    }
-  }
-
-  function saveQueue(queue: QueuedSubmission[]) {
-    localStorage.setItem(QUEUE_KEY, JSON.stringify(queue))
-  }
-
-  function queueSubmission(lang: string, date: string, wordHash: string, isFirstWord: boolean) {
-    const queue = getQueue()
-    queue.push({
-      lang,
-      date,
-      wordHash,
-      isFirstWord,
-      timestamp: Date.now(),
-    })
-    saveQueue(queue)
-  }
-
-  beforeEach(() => {
-    localStorageMock.clear()
-    vi.clearAllMocks()
-  })
-
-  it('queues submissions to localStorage', () => {
-    queueSubmission('en', '2024-01-15', 'hash123', true)
-
-    expect(localStorageMock.setItem).toHaveBeenCalled()
-    const savedQueue = JSON.parse(localStorageMock.setItem.mock.calls[0][1])
-    expect(savedQueue).toHaveLength(1)
-    expect(savedQueue[0]).toMatchObject({
-      lang: 'en',
-      date: '2024-01-15',
-      wordHash: 'hash123',
-      isFirstWord: true,
-    })
-  })
-
-  it('queues multiple submissions', () => {
-    queueSubmission('en', '2024-01-15', 'hash1', true)
-    queueSubmission('en', '2024-01-15', 'hash2', false)
-    queueSubmission('de', '2024-01-16', 'hash3', true)
-
-    const calls = localStorageMock.setItem.mock.calls
-    const lastSavedQueue = JSON.parse(calls[calls.length - 1][1])
-    expect(lastSavedQueue).toHaveLength(3)
-  })
-
-  it('retrieves queue from localStorage', () => {
-    const mockQueue = [
-      { lang: 'en', date: '2024-01-15', wordHash: 'hash1', isFirstWord: true, timestamp: 1234567890 },
-    ]
-    localStorageMock.getItem.mockReturnValueOnce(JSON.stringify(mockQueue))
-
-    const queue = getQueue()
-    expect(queue).toEqual(mockQueue)
-  })
-
-  it('returns empty array for invalid JSON', () => {
-    localStorageMock.getItem.mockReturnValueOnce('invalid json')
-
-    const queue = getQueue()
-    expect(queue).toEqual([])
-  })
-})
-
-describe('popularity percentage calculation', () => {
-  function calculatePercentage(counts: Record<string, number>, totalPlayers: number, wordHash: string): number | null {
-    if (totalPlayers === 0) return null
-    const count = counts[wordHash] || 0
-    return Math.round((count / totalPlayers) * 100)
-  }
-
+describe('calculateWordPercentage', () => {
   it('computes percentage correctly', () => {
     const counts = { hash1: 75, hash2: 50, hash3: 10 }
     const totalPlayers = 100
 
-    expect(calculatePercentage(counts, totalPlayers, 'hash1')).toBe(75)
-    expect(calculatePercentage(counts, totalPlayers, 'hash2')).toBe(50)
-    expect(calculatePercentage(counts, totalPlayers, 'hash3')).toBe(10)
-    expect(calculatePercentage(counts, totalPlayers, 'hashUnknown')).toBe(0)
+    expect(calculateWordPercentage(counts, totalPlayers, 'hash1')).toBe(75)
+    expect(calculateWordPercentage(counts, totalPlayers, 'hash2')).toBe(50)
+    expect(calculateWordPercentage(counts, totalPlayers, 'hash3')).toBe(10)
   })
 
-  it('handles zero total players', () => {
-    expect(calculatePercentage({ hash1: 10 }, 0, 'hash1')).toBeNull()
+  it('returns 0 for unknown word hashes', () => {
+    expect(calculateWordPercentage({ hash1: 75 }, 100, 'hashUnknown')).toBe(0)
+  })
+
+  it('returns null when totalPlayers is zero', () => {
+    expect(calculateWordPercentage({ hash1: 10 }, 0, 'hash1')).toBeNull()
   })
 
   it('rounds percentages correctly', () => {
-    expect(calculatePercentage({ hash1: 33 }, 100, 'hash1')).toBe(33)
-    expect(calculatePercentage({ hash1: 1 }, 3, 'hash1')).toBe(33)
-    expect(calculatePercentage({ hash1: 2 }, 3, 'hash1')).toBe(67)
+    expect(calculateWordPercentage({ hash1: 33 }, 100, 'hash1')).toBe(33)
+    expect(calculateWordPercentage({ hash1: 1 }, 3, 'hash1')).toBe(33)
+    expect(calculateWordPercentage({ hash1: 2 }, 3, 'hash1')).toBe(67)
+  })
+})
+
+describe('getWordCount', () => {
+  it('returns count for known word hash', () => {
+    const counts = { hash1: 42, hash2: 10 }
+    expect(getWordCount(counts, 'hash1')).toBe(42)
+    expect(getWordCount(counts, 'hash2')).toBe(10)
+  })
+
+  it('returns 0 for unknown word hash', () => {
+    expect(getWordCount({ hash1: 42 }, 'unknown')).toBe(0)
+  })
+
+  it('returns 0 for empty counts', () => {
+    expect(getWordCount({}, 'hash1')).toBe(0)
   })
 })
