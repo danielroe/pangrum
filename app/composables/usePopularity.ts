@@ -214,6 +214,26 @@ export function usePopularity(
     return counts.value[wordHash] || 0
   }
 
+  // TODO: remove after migration to partykit is complete
+  function reconcileFoundWords(foundWordHashes: string[]) {
+    if (!socket.value || socket.value.readyState !== WebSocket.OPEN) return
+    if (totalPlayers.value === 0 || foundWordHashes.length === 0) return
+
+    const hasMissingWord = foundWordHashes.some(
+      wordHash => (counts.value[wordHash] || 0) === 0,
+    )
+
+    if (!hasMissingWord) return
+
+    foundWordHashes.forEach((wordHash, index) => {
+      socket.value!.send(JSON.stringify({
+        type: 'word',
+        wordHash,
+        isFirstWord: index === 0,
+      }))
+    })
+  }
+
   watch(
     [() => toValue(lang), () => toValue(date)],
     () => {
@@ -251,5 +271,6 @@ export function usePopularity(
     submitWord,
     getPercentage,
     getCount,
+    reconcileFoundWords,
   }
 }

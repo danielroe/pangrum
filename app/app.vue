@@ -29,6 +29,7 @@ const {
   loading: popularityLoading,
   connect: connectPopularity,
   submitWord: submitToPopularity,
+  reconcileFoundWords,
 } = usePopularity(language, selectedDate)
 
 const popularityData = computed(() => {
@@ -206,6 +207,16 @@ watch([hintsEnabled, selectedDate, language], ([hints]) => {
     connectPopularity()
   }
 }, { immediate: true })
+
+// TODO: remove after migration to partykit is complete
+// Reconcile found words with server data when popularity data arrives
+// This resubmits any words showing 0% that the user has found
+watch(popularityTotalPlayers, (players) => {
+  if (players > 0 && words.value.size > 0) {
+    const foundHashes = [...words.value].map(word => hash(word))
+    reconcileFoundWords(foundHashes)
+  }
+})
 
 // ... as well as when window regains focus)
 if (import.meta.client) {

@@ -55,6 +55,13 @@ export default class PopularityServer implements Party.Server {
       }
     }
 
+    // TODO: remove after migration to partykit is complete
+    for (const hash of Object.keys(counts)) {
+      if (counts[hash] > totalPlayers) {
+        counts[hash] = totalPlayers
+      }
+    }
+
     conn.send(JSON.stringify({
       type: 'init',
       counts,
@@ -101,12 +108,18 @@ export default class PopularityServer implements Party.Server {
    * Seed data from the HTTP API (which reads from KV) on first access.
    */
   private async maybeSeedFromAPI() {
-    const values = await this.room.storage.get(['seeded', 'players'])
-    if (values.get('seeded')) return
+    const shouldSeed = await this.room.storage.transaction(async (txn) => {
+      const values = await txn.get(['seeded', 'players'])
+      if (values.get('seeded')) return false
 
-    await this.room.storage.put('seeded', true)
+      await txn.put('seeded', true)
 
-    if ((values.get('players') as number) > 0) return
+      if ((values.get('players') as number) > 0) return false
+
+      return true
+    })
+
+    if (!shouldSeed) return
 
     // Parse room ID to get lang and date (format: "lang-date", e.g., "en-2026-01-18")
     const roomId = this.room.id
@@ -138,26 +151,32 @@ export default class PopularityServer implements Party.Server {
     const { wordHash, isFirstWord } = data
     const countKey = `count:${wordHash}`
 
-    const values = await this.room.storage.get([countKey, 'players'])
-    const currentCount = (values.get(countKey) as number) || 0
-    let totalPlayers = (values.get('players') as number) || 0
+    const result = await this.room.storage.transaction(async (txn) => {
+      const values = await txn.get([countKey, 'players'])
+      const currentCount = (values.get(countKey) as number) || 0
+      let totalPlayers = (values.get('players') as number) || 0
 
-    const newCount = currentCount + 1
-    if (isFirstWord) {
-      totalPlayers += 1
-    }
+      const newCount = currentCount + 1
+      if (isFirstWord) {
+        totalPlayers += 1
+      }
 
-    const updates: Record<string, number> = { [countKey]: newCount }
-    if (isFirstWord) {
-      updates.players = totalPlayers
-    }
-    await this.room.storage.put(updates)
+      const updates: Record<string, number> = { [countKey]: newCount }
+      if (isFirstWord) {
+        updates.players = totalPlayers
+      }
+      await txn.put(updates)
+
+      return { newCount, totalPlayers }
+    })
+
+    const sanitizedCount = Math.min(result.newCount, result.totalPlayers)
 
     this.room.broadcast(JSON.stringify({
       type: 'update',
       wordHash,
-      count: newCount,
-      totalPlayers,
+      count: sanitizedCount,
+      totalPlayers: result.totalPlayers,
     } satisfies UpdateMessage))
   }
 }
