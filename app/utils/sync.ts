@@ -27,3 +27,14 @@ export function mergeWordSets(local: string[], remote: string[]): { merged: stri
 
   return { merged: [...localSet], added }
 }
+
+const SYNC_CODE_CHARS = 'abcdefghjkmnpqrstuvwxyz23456789'
+const SYNC_CODE_LENGTH = 6
+
+export function generateSyncCode(): string {
+  let code = ''
+  for (let i = 0; i < SYNC_CODE_LENGTH; i++) {
+    code += SYNC_CODE_CHARS[Math.floor(Math.random() * SYNC_CODE_CHARS.length)]
+  }
+  return code
+}

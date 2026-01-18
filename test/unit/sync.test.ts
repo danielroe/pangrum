@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { isValidPuzzleKey, mergeWordSets, normalizeRoomId } from '../../app/utils/sync'
+import { generateSyncCode, isValidPuzzleKey, mergeWordSets, normalizeRoomId } from '../../app/utils/sync'
 
 describe('normalizeRoomId', () => {
   it('converts to lowercase', () => {
@@ -107,5 +107,47 @@ describe('mergeWordSets', () => {
     const { merged, added } = mergeWordSets(['apple'], ['banana', 'banana', 'banana'])
     expect(merged).toHaveLength(2)
     expect(added).toBe(1) // Only one banana added despite 3 in remote
+  })
+})
+
+describe('generateSyncCode', () => {
+  const VALID_CHARS = 'abcdefghjkmnpqrstuvwxyz23456789'
+  const EXCLUDED_CHARS = ['i', 'l', 'o', '0', '1']
+
+  it('generates a 6-character code', () => {
+    expect(generateSyncCode()).toHaveLength(6)
+  })
+
+  it('generates codes with only valid characters', () => {
+    for (let i = 0; i < 50; i++) {
+      const code = generateSyncCode()
+      for (const char of code) {
+        expect(VALID_CHARS).toContain(char)
+      }
+    }
+  })
+
+  it('never includes confusing characters', () => {
+    for (let i = 0; i < 50; i++) {
+      const code = generateSyncCode()
+      for (const char of EXCLUDED_CHARS) {
+        expect(code).not.toContain(char)
+      }
+    }
+  })
+
+  it('generates lowercase codes', () => {
+    for (let i = 0; i < 20; i++) {
+      const code = generateSyncCode()
+      expect(code).toBe(code.toLowerCase())
+    }
+  })
+
+  it('generates unique codes (randomness check)', () => {
+    const codes = new Set<string>()
+    for (let i = 0; i < 50; i++) {
+      codes.add(generateSyncCode())
+    }
+    expect(codes.size).toBeGreaterThan(45)
   })
 })

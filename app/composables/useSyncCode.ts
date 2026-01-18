@@ -1,7 +1,5 @@
-/**
- * Composable for managing the sync code used for cross-device progress sync.
- * The sync code is a user-chosen or generated identifier that links devices together.
- */
+import { generateSyncCode } from '../utils/sync'
+
 export function useSyncCode() {
   const syncCode = useLocalStorage<string | null>('pangrum-sync-code', null, {
     initOnMounted: true,
@@ -9,18 +7,8 @@ export function useSyncCode() {
 
   const isEnabled = computed(() => syncCode.value !== null && syncCode.value.length > 0)
 
-  function generateCode(): string {
-    // Exclude confusing chars: i, l, o, 0, 1
-    const chars = 'abcdefghjkmnpqrstuvwxyz23456789'
-    let code = ''
-    for (let i = 0; i < 6; i++) {
-      code += chars[Math.floor(Math.random() * chars.length)]
-    }
-    return code
-  }
-
   function enable(code?: string) {
-    syncCode.value = code?.toLowerCase().trim() || generateCode()
+    syncCode.value = code?.toLowerCase().trim() || generateSyncCode()
   }
 
   function disable() {
@@ -52,6 +40,6 @@ export function useSyncCode() {
     isEnabled,
     enable,
     disable,
-    generateCode,
+    generateCode: generateSyncCode,
   }
 }
