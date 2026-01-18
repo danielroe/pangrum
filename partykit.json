@@ -2,5 +2,8 @@
   "$schema": "https://www.partykit.io/schema.json",
   "name": "pangrum",
   "main": "party/index.ts",
+  "parties": {
+    "popularity": "party/popularity.ts"
+  },
   "compatibilityDate": "2026-01-13"
 }

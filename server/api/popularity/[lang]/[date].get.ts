@@ -45,8 +45,6 @@ export default defineCachedEventHandler(async (event) => {
     totalPlayers,
   }
 }, {
-  // cache for 24 hours (invalidated on POST)
-  maxAge: 60 * 60 * 24,
   getKey: (event) => {
     const lang = getRouterParam(event, 'lang') || ''
     const date = getRouterParam(event, 'date') || ''

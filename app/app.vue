@@ -23,13 +23,21 @@ const { showTutorial, checkFirstVisit } = useTutorial()
 const { hasProgress: checkHasProgress, stats: puzzleStats, reload: reloadHistory } = usePuzzleHistory(language)
 useAutoUpdate()
 
-// Popularity tracking
 const {
-  data: popularityData,
+  counts: popularityCounts,
+  totalPlayers: popularityTotalPlayers,
   loading: popularityLoading,
-  fetchPopularity,
+  connect: connectPopularity,
+  submitWord: submitToPopularity,
 } = usePopularity(language, selectedDate)
-const { queueSubmission, processQueue, hasBackgroundSyncSupport } = usePopularityQueue()
+
+const popularityData = computed(() => {
+  if (popularityTotalPlayers.value === 0) return null
+  return {
+    counts: popularityCounts.value,
+    totalPlayers: popularityTotalPlayers.value,
+  }
+})
 
 defineOgImageComponent('Default')
 
@@ -145,25 +153,6 @@ const { sendWord } = useSync({
   },
 })
 
-async function submitToPopularity(wordHash: string, isFirstWord: boolean) {
-  const langValue = language.value
-  const dateValue = selectedDate.value
-
-  try {
-    await $fetch(`/api/popularity/${langValue}/${dateValue}`, {
-      method: 'POST',
-      body: { wordHash, isFirstWord },
-    })
-  }
-  catch {
-    // If Background Sync isn't available, use localStorage fallback queue
-    if (!hasBackgroundSyncSupport()) {
-      queueSubmission(langValue, dateValue, wordHash, isFirstWord)
-    }
-    // Otherwise, the service worker's Background Sync will handle retry
-  }
-}
-
 const hasTrackedStreakThisSession = ref(false)
 
 function handleWordAdded(word: string) {
@@ -211,26 +200,12 @@ const { pause } = useIntervalFn(checkDateMismatch, 60000)
 
 onNuxtReady(checkFirstVisit)
 
-// Fetch popularity data when hints are enabled or puzzle changes
+// Connect to popularity tracking when hints are enabled or puzzle changes
 watch([hintsEnabled, selectedDate, language], ([hints]) => {
   if (hints) {
-    fetchPopularity()
+    connectPopularity()
   }
 }, { immediate: true })
-
-// Process offline popularity queue on mount and when coming back online
-onMounted(() => {
-  processQueue()
-  if (import.meta.client) {
-    window.addEventListener('online', processQueue)
-  }
-})
-
-onUnmounted(() => {
-  if (import.meta.client) {
-    window.removeEventListener('online', processQueue)
-  }
-})
 
 // ... as well as when window regains focus)
 if (import.meta.client) {
