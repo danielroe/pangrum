@@ -28,14 +28,6 @@ interface SyncStatusMessage {
 
 type ServerMessage = SyncAllMessage | SyncPuzzleMessage | WordMessage | SyncStatusMessage
 
-const STORAGE_PREFIX = 'pangrum-'
-const STORAGE_INCORRECT_MARKER = '-incorrect-'
-const DATE_KEY_PATTERN = /^[a-z]{2}-\d{4}-\d{2}-\d{2}$/
-
-function normalizeRoomId(code: string): string {
-  return code.toLowerCase().trim()
-}
-
 function getAllLocalPuzzles(): Record<string, string[]> {
   const puzzles: Record<string, string[]> = {}
 
