@@ -28,7 +28,7 @@ export function useCachedDates() {
 
       for (const request of keys) {
         const url = new URL(request.url)
-        const match = url.pathname.match(/^\/api\/words\/([^/]+)\/(\d{4}-\d{2}-\d{2})$/)
+        const match = url.pathname.match(WORDS_API_URL_PATTERN)
         if (match) {
           const lang = match[1] as Language
           const date = match[2]!
@@ -75,22 +75,7 @@ export function useCachedDates() {
     if (isOnline.value) return targetDate
     if (isCached(lang, targetDate)) return targetDate
 
-    const cachedDates = getCachedDates(lang)
-    if (cachedDates.size === 0) return targetDate
-
-    const targetTime = new Date(targetDate).getTime()
-    let closestDate = targetDate
-    let closestDiff = Infinity
-
-    for (const date of cachedDates) {
-      const diff = Math.abs(new Date(date).getTime() - targetTime)
-      if (diff < closestDiff) {
-        closestDiff = diff
-        closestDate = date
-      }
-    }
-
-    return closestDate
+    return getClosestDate(getCachedDates(lang), targetDate)
   }
 
   // Load cache on mount and refresh periodically
