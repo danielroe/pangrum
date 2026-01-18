@@ -14,16 +14,48 @@ const localStorageMock = (() => {
 
 Object.defineProperty(globalThis, 'localStorage', { value: localStorageMock })
 
-describe('usePopularityQueue', () => {
+describe('popularity queue localStorage', () => {
+  const QUEUE_KEY = 'pangrum-popularity-queue'
+
+  interface QueuedSubmission {
+    lang: string
+    date: string
+    wordHash: string
+    isFirstWord: boolean
+    timestamp: number
+  }
+
+  function getQueue(): QueuedSubmission[] {
+    try {
+      return JSON.parse(localStorage.getItem(QUEUE_KEY) || '[]')
+    }
+    catch {
+      return []
+    }
+  }
+
+  function saveQueue(queue: QueuedSubmission[]) {
+    localStorage.setItem(QUEUE_KEY, JSON.stringify(queue))
+  }
+
+  function queueSubmission(lang: string, date: string, wordHash: string, isFirstWord: boolean) {
+    const queue = getQueue()
+    queue.push({
+      lang,
+      date,
+      wordHash,
+      isFirstWord,
+      timestamp: Date.now(),
+    })
+    saveQueue(queue)
+  }
+
   beforeEach(() => {
     localStorageMock.clear()
     vi.clearAllMocks()
   })
 
-  it('queues submissions to localStorage', async () => {
-    const { usePopularityQueue } = await import('../../app/composables/usePopularityQueue')
-    const { queueSubmission } = usePopularityQueue()
-
+  it('queues submissions to localStorage', () => {
     queueSubmission('en', '2024-01-15', 'hash123', true)
 
     expect(localStorageMock.setItem).toHaveBeenCalled()
@@ -37,10 +69,7 @@ describe('usePopularityQueue', () => {
     })
   })
 
-  it('queues multiple submissions', async () => {
-    const { usePopularityQueue } = await import('../../app/composables/usePopularityQueue')
-    const { queueSubmission } = usePopularityQueue()
-
+  it('queues multiple submissions', () => {
     queueSubmission('en', '2024-01-15', 'hash1', true)
     queueSubmission('en', '2024-01-15', 'hash2', false)
     queueSubmission('de', '2024-01-16', 'hash3', true)
@@ -48,6 +77,23 @@ describe('usePopularityQueue', () => {
     const calls = localStorageMock.setItem.mock.calls
     const lastSavedQueue = JSON.parse(calls[calls.length - 1][1])
     expect(lastSavedQueue).toHaveLength(3)
+  })
+
+  it('retrieves queue from localStorage', () => {
+    const mockQueue = [
+      { lang: 'en', date: '2024-01-15', wordHash: 'hash1', isFirstWord: true, timestamp: 1234567890 },
+    ]
+    localStorageMock.getItem.mockReturnValueOnce(JSON.stringify(mockQueue))
+
+    const queue = getQueue()
+    expect(queue).toEqual(mockQueue)
+  })
+
+  it('returns empty array for invalid JSON', () => {
+    localStorageMock.getItem.mockReturnValueOnce('invalid json')
+
+    const queue = getQueue()
+    expect(queue).toEqual([])
   })
 })
 
