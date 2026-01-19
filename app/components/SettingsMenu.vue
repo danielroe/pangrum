@@ -356,6 +356,7 @@ const syncButtonIcon = computed(() => {
                   >{{ $config.public.commitHash }}</a>
                   <button
                     type="button"
+                    class="bg-transparent border-0 cursor-pointer focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-1 rounded"
                     :title="t('footer.refreshApp')"
                     @click="reloadPage"
                   >
@@ -606,11 +607,15 @@ const syncButtonIcon = computed(() => {
                     </code>
                     <button
                       type="button"
-                      class="p-2 rounded-lg bg-surface hover:bg-surface-hover border-1 border-solid border-muted transition-colors"
+                      class="p-2 rounded-lg bg-surface hover:bg-surface-hover border-1 border-solid border-muted transition-colors focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
                       :title="t('settings.sync.copyCode')"
+                      :aria-label="t('settings.sync.copyCode')"
                       @click="copyCode"
                     >
-                      <span class="i-lucide-copy text-sm text-on-surface" />
+                      <span
+                        class="i-lucide-copy text-sm text-on-surface"
+                        aria-hidden="true"
+                      />
                     </button>
                   </div>
                 </div>
@@ -642,7 +647,10 @@ const syncButtonIcon = computed(() => {
                   <input
                     v-model="inputCode"
                     type="text"
+                    name="sync-code"
+                    autocomplete="off"
                     :placeholder="t('settings.sync.enterCode')"
+                    :aria-label="t('settings.sync.enterCode')"
                     class="w-full px-3 py-2 text-sm rounded-lg border-1 border-solid border-muted bg-surface text-on-surface placeholder:text-on-surface/50 focus:outline-2 focus:outline-primary disabled:opacity-50"
                     maxlength="20"
                     :disabled="!canEnableSync"

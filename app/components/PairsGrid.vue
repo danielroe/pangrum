@@ -43,43 +43,44 @@ const completedPairs = computed(() => {
     </header>
 
     <div class="flex-1 min-h-0 overflow-y-auto">
-      <dl
+      <div
         class="grid font-mono items-center text-sm gap-y-1.5 gap-x-1 grid-cols-[1.5rem_1fr_1.5rem_1fr_1.5rem_1fr] md:grid-cols-[1.5rem_1fr_1.5rem_1fr_1.5rem_1fr_1.5rem_1fr] lg:grid-cols-[1.5rem_1fr_1.5rem_1fr_1.5rem_1fr_1.5rem_1fr_1.5rem_1fr_1.5rem_1fr]"
+        role="list"
       >
         <template
           v-for="(count, prefix) in pairs"
           :key="prefix"
         >
-          <dd class="m-0">
-            <button
-              type="button"
-              class="pair-count flex items-center justify-center h-6 w-6 rounded cursor-pointer transition-all duration-150 text-xs focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 bg-transparent border-0"
-              :class="pairsRemaining[prefix]
-                ? 'text-on-surface hover:text-primary'
-                : 'pair-complete bg-primary/10 text-primary'"
-              :aria-label="`${prefix}: ${pairsRemaining[prefix]} ${pairsRemaining[prefix] === 1 ? 'word' : 'words'} remaining`"
-              @click="emit('showPairStats', prefix)"
-            >
-              <span
-                v-if="!pairsRemaining[prefix]"
-                class="i-lucide-check text-sm"
-                aria-hidden="true"
-              />
-              <span
-                v-else
-                aria-hidden="true"
-              >{{ pairsRemaining[prefix] }}</span>
-            </button>
-          </dd>
-          <dt
+          <button
+            type="button"
+            role="listitem"
+            class="pair-count flex items-center justify-center h-6 w-6 rounded cursor-pointer transition-all duration-150 text-xs focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-1 bg-transparent border-0"
+            :class="pairsRemaining[prefix]
+              ? 'text-on-surface hover:text-primary'
+              : 'pair-complete bg-primary/10 text-primary'"
+            :aria-label="`${prefix}: ${pairsRemaining[prefix]} ${pairsRemaining[prefix] === 1 ? 'word' : 'words'} remaining`"
+            @click="emit('showPairStats', prefix)"
+          >
+            <span
+              v-if="!pairsRemaining[prefix]"
+              class="i-lucide-check text-sm"
+              aria-hidden="true"
+            />
+            <span
+              v-else
+              aria-hidden="true"
+            >{{ pairsRemaining[prefix] }}</span>
+          </button>
+          <span
             class="pair-label text-xs h-6 leading-6 pl-1 cursor-pointer transition-colors duration-150 hover:text-primary"
             :class="pairsRemaining[prefix] ? 'text-muted-foreground' : 'text-primary'"
+            aria-hidden="true"
             @click="emit('showPairStats', prefix)"
           >
             {{ prefix }}
-          </dt>
+          </span>
         </template>
-      </dl>
+      </div>
     </div>
   </div>
 </template>
@@ -89,7 +90,8 @@ const completedPairs = computed(() => {
   color: var(--color-primary);
 }
 
-.pair-count:hover + .pair-label {
+.pair-count:hover + .pair-label,
+.pair-count:focus-visible + .pair-label {
   color: var(--color-primary);
 }
 

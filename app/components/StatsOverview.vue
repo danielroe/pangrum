@@ -19,7 +19,7 @@ onKeyStroke('Escape', () => emit('close'))
 
 <template>
   <Teleport to="body">
-    <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+    <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm overscroll-contain">
       <div
         ref="dialog"
         class="bg-surface-elevated border-1 border-solid border-muted rounded-2xl p-5 w-full max-w-xs shadow-2xl"

@@ -1,7 +1,9 @@
 {
   "app": {
     "name": "pangrum",
-    "offline": "offline"
+    "offline": "offline",
+    "loading": "Puzzel laden…",
+    "wordsSection": "Gevonden woorden en hints"
   },
   "header": {
     "statistics": "Statistieken",
@@ -125,7 +127,12 @@
       "createNew": "Nieuwe sync maken",
       "joinExisting": "Bestaande sync bijtreden"
     },
-    "howToPlay": "Hoe te spelen"
+    "howToPlay": "Hoe te spelen",
+    "syncToasts": {
+      "wordsSynced": "{count} woord gesynchroniseerd van andere apparaten | {count} woorden gesynchroniseerd van andere apparaten",
+      "wordSynced": "+1 woord gesynchroniseerd",
+      "joinedFromLink": "Sync bijgetreden via link"
+    }
   },
   "dateMismatch": {
     "title": "Andere datum",
@@ -205,7 +212,8 @@
     "shuffle": "Schudden",
     "shuffleLetters": "Letters schudden",
     "deleteCharacter": "Teken verwijderen",
-    "submitWord": "Woord indienen"
+    "submitWord": "Woord indienen",
+    "addLetter": "Letter {letter} toevoegen"
   },
   "hintsToggle": {
     "hintsOn": "Hints aan",

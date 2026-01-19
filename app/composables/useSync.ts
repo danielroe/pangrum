@@ -122,6 +122,7 @@ export function useSync(options: UseSyncOptions) {
   const { syncCode, isEnabled } = useSyncCode()
   const isOnline = useOnline()
   const config = useRuntimeConfig()
+  const { t } = useI18n()
 
   const socket = shallowRef<PartySocket | null>(null)
 
@@ -229,7 +230,7 @@ export function useSync(options: UseSyncOptions) {
     const suppressToast = isInitialSync && hadPreviouslyCompletedSync
     if (totalAdded > 0 && !suppressToast) {
       addToast({
-        message: `Synced ${totalAdded} word${totalAdded > 1 ? 's' : ''} from other devices`,
+        message: t('settings.syncToasts.wordsSynced', { count: totalAdded }),
         type: 'success',
       })
     }
@@ -250,7 +251,7 @@ export function useSync(options: UseSyncOptions) {
 
     if (added > 0) {
       addToast({
-        message: `Synced ${added} word${added > 1 ? 's' : ''}`,
+        message: t('settings.syncToasts.wordsSynced', { count: added }),
         type: 'success',
       })
     }
@@ -262,7 +263,7 @@ export function useSync(options: UseSyncOptions) {
     if (added > 0 && puzzleKey === toValue(options.currentPuzzleKey)) {
       // Show toast only for current puzzle
       addToast({
-        message: `+1 word synced`,
+        message: t('settings.syncToasts.wordSynced'),
         type: 'success',
       })
     }

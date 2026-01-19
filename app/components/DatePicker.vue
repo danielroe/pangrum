@@ -239,6 +239,8 @@ onKeyStroke('Escape', close)
                 'text-muted-foreground': !day.isCurrentMonth && !day.isFuture && !day.isPast && !day.isUnavailable,
                 'text-on-surface hover:bg-surface-hover hover:border-muted': day.isCurrentMonth && !day.isSelected && !day.isToday && !day.isFuture && !day.isPast && !day.isUnavailable,
               }"
+              :aria-label="new Date(day.date).toLocaleDateString(locale, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })"
+              :aria-current="day.isToday ? 'date' : undefined"
               :disabled="day.isFuture || day.isPast || day.isUnavailable"
               @click="() => selectDate(day)"
             >

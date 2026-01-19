@@ -13,7 +13,7 @@ useHead({
 })
 
 const language = useLanguage()
-const selectedDate = ref(new Date().toISOString().slice(0, 10))
+const selectedDate = ref(import.meta.server ? '' : new Date().toISOString().slice(0, 10))
 const { data } = useFetch(() => `/api/words/${language.value}/${selectedDate.value}`, {
   server: false,
 })
@@ -288,7 +288,7 @@ function openShareModal() {
               class="flex sm:hidden items-center justify-center w-8 h-8 rounded-lg bg-surface border-1 border-solid border-muted text-on-surface transition-colors focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2 ls:flex ls:w-7 ls:h-7"
               :class="puzzleStats.totalDaysPlayed > 0 ? 'cursor-pointer hover:bg-surface-hover' : 'opacity-40 cursor-not-allowed'"
               :disabled="puzzleStats.totalDaysPlayed === 0"
-              aria-label="View statistics"
+              :aria-label="t('header.statistics')"
               @click="puzzleStats.totalDaysPlayed > 0 && (showStatsModal = true)"
             >
               <span
@@ -373,7 +373,10 @@ function openShareModal() {
         />
 
         <!-- Right column in landscape: hints/words slider -->
-        <section class="flex-1 min-h-0 min-w-0 flex flex-col px-0 py-1 sm:py-2 md:pb-0 words-section touch-pan-y ls:row-start-2 ls:p-0">
+        <section
+          class="flex-1 min-h-0 min-w-0 flex flex-col px-0 py-1 sm:py-2 md:pb-0 words-section touch-pan-y ls:row-start-2 ls:p-0"
+          :aria-label="t('app.wordsSection')"
+        >
           <WordHints
             v-if="hintsEnabled"
             :pairs="pairs"
@@ -398,7 +401,7 @@ function openShareModal() {
         v-else
         class="app-main flex flex-col flex-1 min-h-0 gap-3 sm:gap-4 md:gap-6 ls:contents"
         aria-busy="true"
-        aria-label="Loading puzzle..."
+        :aria-label="t('app.loading')"
       >
         <!-- Left column skeleton -->
         <div class="flex flex-col-reverse gap-4 flex-shrink-0 sm:gap-8 md:flex-row md:items-end md:gap-12 ls:flex-col ls:gap-3 ls:row-start-2 ls:self-center ls:justify-self-center">
@@ -456,7 +459,10 @@ function openShareModal() {
         </div>
 
         <!-- Words section skeleton -->
-        <section class="flex-1 min-h-0 flex flex-col px-0 py-1 sm:py-2 md:pb-0 words-section touch-pan-y ls:row-start-2 ls:p-0">
+        <section
+          class="flex-1 min-h-0 flex flex-col px-0 py-1 sm:py-2 md:pb-0 words-section touch-pan-y ls:row-start-2 ls:p-0"
+          :aria-label="t('app.wordsSection')"
+        >
           <div class="flex items-center justify-center h-full text-muted-foreground font-mono text-sm text-center p-4">
             <div class="w-32 h-4 rounded bg-muted animate-pulse" />
           </div>

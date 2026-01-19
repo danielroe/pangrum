@@ -1,6 +1,7 @@
 import { generateSyncCode } from '../utils/sync'
 
 export function useSyncCode() {
+  const { t } = useI18n()
   const syncCode = useLocalStorage<string | null>('pangrum-sync-code', null, {
     initOnMounted: true,
   })
@@ -28,7 +29,7 @@ export function useSyncCode() {
         url.searchParams.delete('sync')
         window.history.replaceState({}, '', url.pathname + url.search + url.hash)
         addToast({
-          message: 'Joined sync from link',
+          message: t('settings.syncToasts.joinedFromLink'),
           type: 'success',
         })
       }

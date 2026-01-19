@@ -6,7 +6,7 @@ export function useShare() {
     return !!navigator.share && !!navigator.canShare
   })
 
-  async function generateShareImage(data: ShareData): Promise<Blob> {
+  async function generateShareImage(data: ShareData, locale?: string): Promise<Blob> {
     const canvas = document.createElement('canvas')
     const ctx = canvas.getContext('2d')!
 
@@ -43,7 +43,7 @@ export function useShare() {
     ctx.fillText('pangrum', 32, 40)
 
     // Date
-    const dateStr = new Date(data.date).toLocaleDateString('en', {
+    const dateStr = new Date(data.date).toLocaleDateString(locale, {
       month: 'short',
       day: 'numeric',
       year: 'numeric',
@@ -181,8 +181,8 @@ export function useShare() {
     ctx.fill()
   }
 
-  async function shareResults(data: ShareData) {
-    const blob = await generateShareImage(data)
+  async function shareResults(data: ShareData, locale?: string) {
+    const blob = await generateShareImage(data, locale)
     const file = new File([blob], `pangrum-${data.date}.png`, { type: 'image/png' })
 
     const shareData = {

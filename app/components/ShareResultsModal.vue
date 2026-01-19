@@ -146,6 +146,8 @@ const statusMessage = computed(() => {
           v-if="previewUrl"
           :src="previewUrl"
           alt="Share preview"
+          width="600"
+          height="400"
           class="w-full h-full object-contain"
         >
         <div

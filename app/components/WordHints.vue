@@ -212,7 +212,7 @@ function closeModal() {
         role="tab"
         :aria-selected="activeSlide === i - 1"
         :aria-current="activeSlide === i - 1 ? 'true' : undefined"
-        class="border-0 outline-0 rounded-full transition-all duration-300 ease-out"
+        class="border-0 rounded-full transition-all duration-300 ease-out focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
         :class="[
           activeSlide === i - 1
             ? 'w-6 h-2 bg-primary scale-110'

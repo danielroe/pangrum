@@ -80,6 +80,7 @@ const letterPositions = [
         <button
           class="letter-button centre-letter"
           :class="{ 'is-pressed': pressedLetter === centreLetter }"
+          :aria-label="t('letterGrid.addLetter', { letter: centreLetter })"
           @click="() => addLetter(centreLetter)"
         >
           {{ centreLetter }}
@@ -90,6 +91,7 @@ const letterPositions = [
           :key="letter"
           class="letter-button outer-letter"
           :class="{ 'is-pressed': pressedLetter === letter }"
+          :aria-label="t('letterGrid.addLetter', { letter })"
           :style="{
             '--pos-x': letterPositions[index]?.x ?? 0,
             '--pos-y': letterPositions[index]?.y ?? 0,

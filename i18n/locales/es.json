@@ -1,7 +1,9 @@
 {
   "app": {
     "name": "pangrum",
-    "offline": "sin conexión"
+    "offline": "sin conexión",
+    "loading": "Cargando puzzle…",
+    "wordsSection": "Palabras encontradas y pistas"
   },
   "header": {
     "statistics": "Estadísticas",
@@ -125,7 +127,12 @@
       "createNew": "Crear nuevo sync",
       "joinExisting": "Unirse a sync existente"
     },
-    "howToPlay": "Cómo jugar"
+    "howToPlay": "Cómo jugar",
+    "syncToasts": {
+      "wordsSynced": "Sincronizada {count} palabra de otros dispositivos | Sincronizadas {count} palabras de otros dispositivos",
+      "wordSynced": "+1 palabra sincronizada",
+      "joinedFromLink": "Unido a sincronización desde enlace"
+    }
   },
   "dateMismatch": {
     "title": "Fecha diferente",
@@ -205,7 +212,8 @@
     "shuffle": "Mezclar",
     "shuffleLetters": "Mezclar letras",
     "deleteCharacter": "Borrar carácter",
-    "submitWord": "Enviar palabra"
+    "submitWord": "Enviar palabra",
+    "addLetter": "Añadir letra {letter}"
   },
   "hintsToggle": {
     "hintsOn": "Pistas activadas",

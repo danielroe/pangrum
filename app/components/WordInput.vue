@@ -193,6 +193,7 @@ function addWord() {
           ref="wordInput"
           v-model="word"
           name="word"
+          autocomplete="off"
           autofocus
           type="text"
           :aria-label="t('input.label')"

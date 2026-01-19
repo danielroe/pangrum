@@ -104,7 +104,7 @@ onKeyStroke('Escape', handleSkip)
           v-for="(_, index) in totalSteps"
           :key="index"
           type="button"
-          class="step-indicator relative border-0 cursor-pointer bg-transparent p-3"
+          class="step-indicator relative border-0 cursor-pointer bg-transparent p-3 rounded focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-1"
           :aria-label="t('tutorial.goToStep', { step: index + 1 })"
           @click="currentStep = index"
         >

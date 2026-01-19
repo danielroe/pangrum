@@ -1,7 +1,9 @@
 {
   "app": {
     "name": "pangrum",
-    "offline": "offline"
+    "offline": "offline",
+    "loading": "Rätsel wird geladen…",
+    "wordsSection": "Gefundene Wörter und Hinweise"
   },
   "header": {
     "statistics": "Statistik",
@@ -125,7 +127,12 @@
       "createNew": "Neue Synchronisation erstellen",
       "joinExisting": "Bestehender Synchronisation beitreten"
     },
-    "howToPlay": "Spielanleitung"
+    "howToPlay": "Spielanleitung",
+    "syncToasts": {
+      "wordsSynced": "{count} Wort von anderen Geräten synchronisiert | {count} Wörter von anderen Geräten synchronisiert",
+      "wordSynced": "+1 Wort synchronisiert",
+      "joinedFromLink": "Über Link der Synchronisation beigetreten"
+    }
   },
   "dateMismatch": {
     "title": "Anderes Datum",
@@ -205,7 +212,8 @@
     "shuffle": "Mischen",
     "shuffleLetters": "Buchstaben mischen",
     "deleteCharacter": "Zeichen löschen",
-    "submitWord": "Wort absenden"
+    "submitWord": "Wort absenden",
+    "addLetter": "Buchstabe {letter} hinzufügen"
   },
   "hintsToggle": {
     "hintsOn": "Hinweise an",

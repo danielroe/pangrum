@@ -1,7 +1,9 @@
 {
   "app": {
     "name": "pangrum",
-    "offline": "offline"
+    "offline": "offline",
+    "loading": "Loading puzzle…",
+    "wordsSection": "Found words and hints"
   },
   "header": {
     "statistics": "Statistics",
@@ -125,7 +127,12 @@
       "createNew": "Create new sync",
       "joinExisting": "Join existing sync"
     },
-    "howToPlay": "How to play"
+    "howToPlay": "How to play",
+    "syncToasts": {
+      "wordsSynced": "Synced {count} word from other devices | Synced {count} words from other devices",
+      "wordSynced": "+1 word synced",
+      "joinedFromLink": "Joined sync from link"
+    }
   },
   "dateMismatch": {
     "title": "Different date",
@@ -205,7 +212,8 @@
     "shuffle": "Shuffle",
     "shuffleLetters": "Shuffle letters",
     "deleteCharacter": "Delete character",
-    "submitWord": "Submit word"
+    "submitWord": "Submit word",
+    "addLetter": "Add letter {letter}"
   },
   "hintsToggle": {
     "hintsOn": "Hints on",
