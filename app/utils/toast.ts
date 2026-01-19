@@ -23,7 +23,12 @@ export function addToast(toast: Toast) {
 
   toasts.value.push(toast)
 
-  setTimeout(() => toasts.value.splice(toasts.value.indexOf(toast), 1), duration)
+  setTimeout(() => {
+    const index = toasts.value.indexOf(toast)
+    if (index !== -1) {
+      toasts.value.splice(index, 1)
+    }
+  }, duration)
 }
 
 export const useToasts = () => useState<Toast[]>('toast', () => [])

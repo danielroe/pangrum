@@ -11,12 +11,15 @@ const emit = defineEmits<{
 const { t } = useI18n()
 
 function getRelativeDate(dateStr: string): string {
-  const date = new Date(dateStr + 'T00:00:00')
+  const [year, month, day] = dateStr.split('-').map(Number)
+  const date = new Date(year!, month! - 1, day!)
+  date.setHours(0, 0, 0, 0)
+
   const today = new Date()
   today.setHours(0, 0, 0, 0)
 
   const diffMs = today.getTime() - date.getTime()
-  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24))
+  const diffDays = Math.round(diffMs / (1000 * 60 * 60 * 24))
 
   if (diffDays === 0) return t('relativeDate.today')
   if (diffDays === 1) return t('relativeDate.yesterday')

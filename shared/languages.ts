@@ -1,4 +1,8 @@
-export const LANGUAGES: Record<string, { locale: string, alphabet: string }> = {
+export const LANGUAGE_CODES = ['en', 'en-gb', 'de', 'nl', 'fr', 'es'] as const
+
+export type LanguageCode = typeof LANGUAGE_CODES[number]
+
+export const LANGUAGES: Record<LanguageCode, { locale: string, alphabet: string }> = {
   'en': {
     locale: 'en-US',
     alphabet: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',

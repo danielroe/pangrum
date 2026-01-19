@@ -85,7 +85,10 @@ export function useParticles() {
   onUnmounted(() => {
     if (animationFrame) {
       cancelAnimationFrame(animationFrame)
+      animationFrame = null
     }
+    particles.value = []
+    isAnimating.value = false
   })
 
   return {

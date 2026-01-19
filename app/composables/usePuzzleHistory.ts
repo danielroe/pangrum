@@ -140,9 +140,6 @@ export function usePuzzleHistory(language: MaybeRefOrGetter<Language>) {
   // Reload when language changes
   watch(() => toValue(language), loadHistory, { immediate: true })
 
-  // Also reload when component mounts (for SSR hydration)
-  onMounted(loadHistory)
-
   // Listen for storage events from other tabs
   if (import.meta.client) {
     useEventListener('storage', (event) => {

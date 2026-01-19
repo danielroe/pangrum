@@ -3,6 +3,7 @@ import { clientsClaim } from 'workbox-core'
 import { NetworkFirst, NetworkOnly } from 'workbox-strategies'
 import { NavigationRoute, registerRoute } from 'workbox-routing'
 import { BackgroundSyncPlugin } from 'workbox-background-sync'
+import { LANGUAGE_CODES } from '#shared/languages'
 
 declare let self: ServiceWorkerGlobalScope
 
@@ -51,9 +52,8 @@ self.addEventListener('install', (event) => {
   const prefetchUpcomingDays = async () => {
     const today = new Date()
     const urls: string[] = []
-    const languages = ['en', 'en-gb', 'de', 'nl', 'fr', 'es']
 
-    for (const lang of languages) {
+    for (const lang of LANGUAGE_CODES) {
       for (let i = 1; i <= 7; i++) {
         const date = new Date(today)
         date.setDate(today.getDate() + i)
@@ -95,9 +95,8 @@ self.addEventListener('activate', (event) => {
 
     const today = new Date()
     const urls: string[] = []
-    const languages = ['en', 'en-gb', 'de', 'nl', 'fr', 'es']
 
-    for (const lang of languages) {
+    for (const lang of LANGUAGE_CODES) {
       for (let i = 0; i <= 7; i++) {
         const date = new Date(today)
         date.setDate(today.getDate() + i)
