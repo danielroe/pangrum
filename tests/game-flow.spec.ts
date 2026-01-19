@@ -19,7 +19,7 @@ test.describe('Game Flow', () => {
 
     // Should have 7 letter buttons (verify by checking each letter has a button)
     for (const letter of TEST_PUZZLE.letters) {
-      await expect(page.getByRole('button', { name: letter, exact: true })).toBeVisible()
+      await expect(page.getByRole('button', { name: `Add letter ${letter}` })).toBeVisible()
     }
   })
 
@@ -43,7 +43,7 @@ test.describe('Game Flow', () => {
     await expect(input).toBeVisible()
 
     // Click the centre letter button
-    await page.getByRole('button', { name: TEST_PUZZLE.centreLetter, exact: true }).click()
+    await page.getByRole('button', { name: `Add letter ${TEST_PUZZLE.centreLetter}` }).click()
 
     // The input value is updated reactively (buttons add uppercase letters)
     await expect(input).toHaveValue(TEST_PUZZLE.centreLetter)
@@ -106,7 +106,7 @@ test.describe('Game Flow', () => {
 
     // All letter buttons should still be present after shuffle
     for (const letter of TEST_PUZZLE.letters) {
-      await expect(page.getByRole('button', { name: letter, exact: true })).toBeVisible()
+      await expect(page.getByRole('button', { name: `Add letter ${letter}` })).toBeVisible()
     }
   })
 })

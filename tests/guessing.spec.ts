@@ -89,10 +89,10 @@ test.describe('Word Guessing', () => {
     await expect(input).toBeVisible()
 
     // Click the centre letter button (A)
-    await page.getByRole('button', { name: TEST_PUZZLE.centreLetter, exact: true }).click()
+    await page.getByRole('button', { name: `Add letter ${TEST_PUZZLE.centreLetter}` }).click()
 
     // Click another letter button (T)
-    await page.getByRole('button', { name: 'T', exact: true }).click()
+    await page.getByRole('button', { name: 'Add letter T' }).click()
 
     // Check input has both letters (uppercase since buttons add uppercase)
     await expect(input).toHaveValue('AT')
@@ -105,7 +105,7 @@ test.describe('Word Guessing', () => {
     await expect(input).toBeVisible()
 
     // Click centre letter twice
-    const centreButton = page.getByRole('button', { name: TEST_PUZZLE.centreLetter, exact: true })
+    const centreButton = page.getByRole('button', { name: `Add letter ${TEST_PUZZLE.centreLetter}` })
     await centreButton.click()
     await centreButton.click()
 
