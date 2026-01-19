@@ -68,7 +68,7 @@
     "typescript": "5.9.3",
     "vitest": "4.0.16",
     "vue-tsc": "3.2.2",
-    "workbox-background-sync": "^7.4.0"
+    "workbox-background-sync": "7.4.0"
   },
   "pnpm": {
     "packageExtensions": {
