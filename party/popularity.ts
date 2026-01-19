@@ -84,23 +84,33 @@ export default class PopularityServer implements Party.Server {
   }
 
   /**
-   * HTTP POST handler for offline queue fallback.
+   * HTTP handler for offline queue fallback.
    */
   async onRequest(req: Party.Request): Promise<Response> {
+    const corsHeaders = {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'POST, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type',
+    }
+
+    if (req.method === 'OPTIONS') {
+      return new Response(null, { status: 204, headers: corsHeaders })
+    }
+
     if (req.method !== 'POST') {
-      return new Response('Method not allowed', { status: 405 })
+      return new Response('Method not allowed', { status: 405, headers: corsHeaders })
     }
 
     try {
       const body = await req.json() as ClientMessage
       if (body.type === 'word') {
         await this.handleWordSubmission(body)
-        return Response.json({ success: true })
+        return Response.json({ success: true }, { headers: corsHeaders })
       }
-      return new Response('Invalid message type', { status: 400 })
+      return new Response('Invalid message type', { status: 400, headers: corsHeaders })
     }
     catch {
-      return new Response('Invalid request body', { status: 400 })
+      return new Response('Invalid request body', { status: 400, headers: corsHeaders })
     }
   }
 
