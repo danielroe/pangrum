@@ -98,10 +98,12 @@ export default defineCachedEventHandler(async (event) => {
     pairs[prefix] = (pairs[prefix] || 0) + 1
   }
 
+  const sortedWords = validWords.toSorted((a, b) => a.localeCompare(b))
+
   return {
-    words: validWords.map(w => w.replace(/^(.)(.*)/, (_, first, rest) => first + rest.replace(/./g, '_'))).sort(),
+    words: sortedWords.map(w => w.replace(/^(.)(.*)/, (_, first, rest) => first + rest.replace(/./g, '_'))),
     pairs: Object.fromEntries(Object.entries(pairs).sort((a, b) => a[0].localeCompare(b[0]))),
-    hashes: validWords.map(w => hash(w)),
+    hashes: sortedWords.map(w => hash(w)),
     letters,
     pangrams: validWords.filter(word => letters.every(letter => word.includes(letter))).length,
     date,
@@ -113,6 +115,6 @@ export default defineCachedEventHandler(async (event) => {
   getKey: (event) => {
     const lang = getRouterParam(event, 'lang')
     const date = getRouterParam(event, 'date')
-    return `v1-${lang}-${date}`
+    return `v2-${lang}-${date}`
   },
 })
