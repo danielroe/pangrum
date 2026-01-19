@@ -16,7 +16,7 @@ const triggerRef = useTemplateRef<HTMLButtonElement>('trigger')
 const popoverRef = useTemplateRef<HTMLDivElement>('popover')
 
 const today = new Date().toISOString().slice(0, 10)
-const startDate = '2026-01-01'
+const startDate = '2026-01-19'
 const isToday = computed(() => props.modelValue === today)
 
 const isOnline = useOnline()
