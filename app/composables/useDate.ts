@@ -4,16 +4,15 @@ function isValidDate(dateString: unknown): dateString is string {
 
 export const useDate = createSharedComposable(function useDate() {
   const route = useRoute()
-  const router = useRouter()
+  // const router = useRouter()
 
   const dateString = isValidDate(route.query.date)
     ? route.query.date
     : new Date().toISOString().slice(0, 10)
 
   const date = ref(import.meta.server ? '' : dateString)
-  watch(date, newDate => router.push({ query: { ...route.query, date: newDate } }), { immediate: true })
+  // TODO: reenable later
+  // watch(date, newDate => router.push({ query: { ...route.query, date: newDate } }), { immediate: true })
 
-  return {
-    date,
-  }
+  return { date }
 })
