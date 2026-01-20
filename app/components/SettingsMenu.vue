@@ -1,18 +1,12 @@
 <script setup lang="ts">
 import { renderSVG } from 'uqr'
 
-const { t, locale, locales, setLocale } = useI18n()
+const { t, locale, locales: availableUILocales, setLocale } = useI18n()
 
 const colorMode = useColorMode()
 const puzzleLanguage = useLanguage()
 const { startTutorial } = useTutorial()
 
-const availableUILocales = computed(() =>
-  (locales.value as Array<{ code: string, name: string }>).map(l => ({
-    code: l.code,
-    name: l.name,
-  })),
-)
 const {
   settings: notificationSettings,
   permission,
@@ -148,8 +142,7 @@ function setPuzzleLanguageValue(lang: Language) {
   }
 }
 
-async function setUILocale(code: string) {
-  // @ts-expect-error - i18n types are strict but code is validated by availableUILocales
+async function setUILocale(code: 'en' | 'de' | 'es' | 'fr' | 'nl') {
   await setLocale(code)
   activeSection.value = 'main'
 }

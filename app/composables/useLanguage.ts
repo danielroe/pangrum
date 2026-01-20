@@ -13,8 +13,14 @@ export const isLanguage = (value: unknown): value is Language => {
   return typeof value === 'string' && value in SUPPORTED_LANGUAGES
 }
 
-export function useLanguage() {
-  return useLocalStorage<Language>('pangrum-language', 'en', {
+export const useLanguage = createSharedComposable(function useLanguage() {
+  const route = useRoute()
+  const router = useRouter()
+  const language = useLocalStorage<Language>('pangrum-language', isLanguage(route.query.lang) ? route.query.lang : 'en', {
     initOnMounted: true,
   })
-}
+
+  watch(language, newLang => router.push({ query: { ...route.query, lang: newLang } }), { immediate: true })
+
+  return language
+})
