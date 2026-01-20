@@ -1,5 +1,6 @@
 import type { Language } from './useLanguage'
 import type { LevelKey } from '../utils/score'
+import { getLocalDateString } from '#shared/utils'
 
 export interface PuzzleDayProgress {
   date: string
@@ -26,7 +27,7 @@ export function calculateCurrentStreak(playedDates: Set<string>, today: string):
   const checkDate = new Date(today)
 
   while (true) {
-    const dateStr = checkDate.toISOString().slice(0, 10)
+    const dateStr = getLocalDateString(checkDate)
     if (playedDates.has(dateStr)) {
       currentStreak++
       checkDate.setDate(checkDate.getDate() - 1)
@@ -34,7 +35,7 @@ export function calculateCurrentStreak(playedDates: Set<string>, today: string):
     else if (currentStreak === 0) {
       // If today has no progress, check if yesterday started a streak
       checkDate.setDate(checkDate.getDate() - 1)
-      const yesterdayStr = checkDate.toISOString().slice(0, 10)
+      const yesterdayStr = getLocalDateString(checkDate)
       if (!playedDates.has(yesterdayStr)) {
         break // No streak
       }
@@ -160,7 +161,7 @@ export function usePuzzleHistory(language: MaybeRefOrGetter<Language>) {
   }
 
   const stats = computed<PuzzleStats>(() => {
-    const today = new Date().toISOString().slice(0, 10)
+    const today = getLocalDateString()
     const playedDates = new Set(historyMap.value.keys())
     return calculateStats(playedDates, today)
   })

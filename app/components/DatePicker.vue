@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { getLocalDateString } from '#shared/utils'
+
 const { t, locale } = useI18n()
 
 const props = defineProps<{
@@ -15,7 +17,7 @@ const isOpen = ref(false)
 const triggerRef = useTemplateRef<HTMLButtonElement>('trigger')
 const popoverRef = useTemplateRef<HTMLDivElement>('popover')
 
-const today = new Date().toISOString().slice(0, 10)
+const today = getLocalDateString()
 const startDate = '2026-01-19'
 const isToday = computed(() => props.modelValue === today)
 
@@ -74,19 +76,19 @@ const calendarDays = computed(() => {
   const prevMonthLastDay = new Date(year, month, 0).getDate()
   for (let i = startPadding - 1; i >= 0; i--) {
     const d = prevMonthLastDay - i
-    const date = new Date(year, month - 1, d).toISOString().slice(0, 10)
+    const date = getLocalDateString(new Date(year, month - 1, d))
     days.push(createDay(date, d, false))
   }
 
   // Add days of current month
   for (let d = 1; d <= lastDay.getDate(); d++) {
-    const date = new Date(year, month, d).toISOString().slice(0, 10)
+    const date = getLocalDateString(new Date(year, month, d))
     days.push(createDay(date, d, true))
   }
 
   const endPadding = 42 - days.length // 6 rows * 7 days
   for (let d = 1; d <= endPadding; d++) {
-    const date = new Date(year, month + 1, d).toISOString().slice(0, 10)
+    const date = getLocalDateString(new Date(year, month + 1, d))
     days.push(createDay(date, d, false))
   }
 

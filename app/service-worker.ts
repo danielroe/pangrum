@@ -4,6 +4,7 @@ import { NetworkFirst, NetworkOnly } from 'workbox-strategies'
 import { NavigationRoute, registerRoute } from 'workbox-routing'
 import { BackgroundSyncPlugin } from 'workbox-background-sync'
 import { LANGUAGE_CODES } from '#shared/languages'
+import { getLocalDateString } from '#shared/utils'
 
 declare let self: ServiceWorkerGlobalScope
 
@@ -57,7 +58,7 @@ self.addEventListener('install', (event) => {
       for (let i = 1; i <= 7; i++) {
         const date = new Date(today)
         date.setDate(today.getDate() + i)
-        const dateStr = date.toISOString().slice(0, 10)
+        const dateStr = getLocalDateString(date)
         urls.push(`/api/words/${lang}/${dateStr}`)
       }
     }
@@ -100,7 +101,7 @@ self.addEventListener('activate', (event) => {
       for (let i = 0; i <= 7; i++) {
         const date = new Date(today)
         date.setDate(today.getDate() + i)
-        const dateStr = date.toISOString().slice(0, 10)
+        const dateStr = getLocalDateString(date)
         urls.push(`/api/words/${lang}/${dateStr}`)
       }
     }

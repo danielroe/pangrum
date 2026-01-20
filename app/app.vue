@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { TheScore } from '#components'
 import { hash } from 'ohash'
+import { getLocalDateString } from '#shared/utils'
 
 const { t } = useI18n()
 const colorMode = useColorMode()
@@ -42,7 +43,7 @@ const popularityData = computed(() => {
 
 defineOgImageComponent('Default')
 
-const todayDate = computed(() => new Date().toISOString().slice(0, 10))
+const todayDate = computed(() => getLocalDateString())
 const isViewingToday = computed(() => selectedDate.value === todayDate.value)
 
 function goToToday() {
