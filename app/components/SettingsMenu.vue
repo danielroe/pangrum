@@ -143,8 +143,8 @@ function setPuzzleLanguageValue(lang: Language) {
   }
 }
 
-async function setUILocale(code: string) {
-  await setLocale(code)
+function setUILocale(code: string) {
+  setLocale(code)
   activeSection.value = 'main'
 }
 
