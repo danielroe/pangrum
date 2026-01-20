@@ -13,7 +13,7 @@ useHead({
 })
 
 const language = useLanguage()
-const selectedDate = ref(import.meta.server ? '' : new Date().toISOString().slice(0, 10))
+const { date: selectedDate } = useDate()
 const { data } = useFetch(() => `/api/words/${language.value}/${selectedDate.value}`, {
   server: false,
 })
