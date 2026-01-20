@@ -9,17 +9,25 @@ const isValidUILocale = (v: unknown): v is UILocale =>
 
 export function useUILanguage() {
   const { locale, locales, setLocale } = useI18n()
-  const uiLang = useUrlState('ui', 'en', isValidUILocale)
+  const stored = useLocalStorage<UILocale>('pangrum-language-ui', 'en')
+  const initial = getUrlParam('ui', isValidUILocale) ?? stored.value
 
-  watch(uiLang, code => setLocale(code), { immediate: true })
+  if (initial !== 'en') setLocale(initial)
 
   const availableLocales = computed(() =>
     locales.value.map(l => typeof l === 'string' ? { code: l, name: l } : l),
   )
 
+  function persistLocale(value: string) {
+    if (!isValidUILocale(value)) return
+    setLocale(value)
+    stored.value = value
+    syncToUrl('ui', value, 'en')
+  }
+
   return {
     locale,
     availableLocales,
-    setLocale: (code: string) => { if (isValidUILocale(code)) uiLang.value = code },
+    setLocale: persistLocale,
   }
 }

@@ -19,11 +19,19 @@ export function useUrlState<T extends string>(
     if (newValue && isValid(newValue) && newValue !== state.value) {
       state.value = newValue
     }
+    else if (!newValue && state.value !== defaultValue) {
+      state.value = defaultValue
+    }
   })
 
   watch(state, (newValue) => {
-    if (import.meta.client && route.query[key] !== newValue) {
+    if (!import.meta.client) return
+    if (newValue !== defaultValue && route.query[key] !== newValue) {
       router.replace({ query: { ...route.query, [key]: newValue } })
+    }
+    else if (newValue === defaultValue && route.query[key]) {
+      const { [key]: _, ...rest } = route.query
+      router.replace({ query: rest })
     }
   }, { immediate: true })
 

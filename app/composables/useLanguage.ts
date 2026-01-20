@@ -14,10 +14,19 @@ export const isLanguage = (value: unknown): value is Language => {
 }
 
 export function useLanguage() {
-  const stored = useLocalStorage<Language>('pangrum-language', 'en', { initOnMounted: true })
-  const language = useUrlState('lang', stored.value, isLanguage)
+  const initial = getUrlParam('lang', isLanguage)
+  const stored = useLocalStorage<Language>('pangrum-language', 'en', { initOnMounted: !initial })
 
-  watch(language, v => stored.value = v)
+  if (initial) stored.value = initial
 
-  return language
+  let initialized = false
+  watch(stored, (value) => {
+    if (!initialized) {
+      initialized = true
+      return
+    }
+    syncToUrl('lang', value, 'en')
+  })
+
+  return stored
 }
