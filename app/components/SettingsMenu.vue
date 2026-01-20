@@ -1,18 +1,13 @@
 <script setup lang="ts">
 import { renderSVG } from 'uqr'
 
-const { t, locale, locales, setLocale } = useI18n()
+const { t, locale } = useI18n()
+const { availableLocales: availableUILocales, setLocale } = useUILanguage()
 
 const colorMode = useColorMode()
 const puzzleLanguage = useLanguage()
 const { startTutorial } = useTutorial()
 
-const availableUILocales = computed(() =>
-  (locales.value as Array<{ code: string, name: string }>).map(l => ({
-    code: l.code,
-    name: l.name,
-  })),
-)
 const {
   settings: notificationSettings,
   permission,
