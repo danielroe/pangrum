@@ -144,7 +144,6 @@ function setPuzzleLanguageValue(lang: Language) {
 }
 
 async function setUILocale(code: string) {
-  // @ts-expect-error - i18n types are strict but code is validated by availableUILocales
   await setLocale(code)
   activeSection.value = 'main'
 }
