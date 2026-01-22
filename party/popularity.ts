@@ -16,6 +16,10 @@ interface WordSubmission {
   isFirstWord?: boolean
 }
 
+interface SyncRequest {
+  type: 'sync'
+}
+
 interface InitMessage {
   type: 'init'
   counts: Record<string, number>
@@ -29,7 +33,7 @@ interface UpdateMessage {
   totalPlayers: number
 }
 
-type ClientMessage = WordSubmission
+type ClientMessage = WordSubmission | SyncRequest
 type _ServerMessage = InitMessage | UpdateMessage
 
 export default class PopularityServer implements Party.Server {
@@ -69,7 +73,7 @@ export default class PopularityServer implements Party.Server {
     } satisfies InitMessage))
   }
 
-  async onMessage(message: string, _sender: Party.Connection) {
+  async onMessage(message: string, sender: Party.Connection) {
     let data: ClientMessage
     try {
       data = JSON.parse(message)
@@ -81,6 +85,37 @@ export default class PopularityServer implements Party.Server {
     if (data.type === 'word') {
       await this.handleWordSubmission(data)
     }
+    else if (data.type === 'sync') {
+      await this.sendCurrentState(sender)
+    }
+  }
+
+  private async sendCurrentState(conn: Party.Connection) {
+    const items = await this.room.storage.list()
+    const counts: Record<string, number> = {}
+    let totalPlayers = 0
+
+    for (const [key, value] of items) {
+      if (key === 'players') {
+        totalPlayers = value as number
+      }
+      else if (key.startsWith('count:')) {
+        counts[key.slice(6)] = value as number
+      }
+    }
+
+    // Sanitize counts to not exceed total players
+    for (const hash of Object.keys(counts)) {
+      if (counts[hash] > totalPlayers) {
+        counts[hash] = totalPlayers
+      }
+    }
+
+    conn.send(JSON.stringify({
+      type: 'init',
+      counts,
+      totalPlayers,
+    } satisfies InitMessage))
   }
 
   /**

@@ -30,6 +30,7 @@ type ServerMessage = InitMessage | UpdateMessage
 
 const QUEUE_KEY = 'pangrum-popularity-queue'
 const MAX_AGE_MS = 24 * 60 * 60 * 1000 // 24 hours
+const CONNECTION_TIMEOUT_MS = 10_000 // 10 seconds to receive init message
 
 export function usePopularity(
   lang: MaybeRefOrGetter<string>,
@@ -45,6 +46,7 @@ export function usePopularity(
   const isConnected = ref(false)
 
   const socket = shallowRef<PartySocket | null>(null)
+  let connectionTimeoutId: ReturnType<typeof setTimeout> | null = null
 
   const hasData = computed(() => totalPlayers.value > 0)
 
@@ -115,6 +117,23 @@ export function usePopularity(
     saveQueue(remaining)
   }
 
+  function clearConnectionTimeout() {
+    if (connectionTimeoutId) {
+      clearTimeout(connectionTimeoutId)
+      connectionTimeoutId = null
+    }
+  }
+
+  function startConnectionTimeout() {
+    clearConnectionTimeout()
+    connectionTimeoutId = setTimeout(() => {
+      if (loading.value) {
+        loading.value = false
+        error.value = new Error('Connection timeout - no response from server')
+      }
+    }, CONNECTION_TIMEOUT_MS)
+  }
+
   function connect() {
     const langValue = toValue(lang)
     const dateValue = toValue(date)
@@ -124,6 +143,7 @@ export function usePopularity(
 
     loading.value = true
     error.value = null
+    startConnectionTimeout()
 
     const newSocket = new PartySocket({
       host: config.public.partykit.host,
@@ -136,6 +156,7 @@ export function usePopularity(
     newSocket.addEventListener('open', () => {
       if (socket.value !== newSocket) return
       isConnected.value = true
+      newSocket.send(JSON.stringify({ type: 'sync' }))
       processQueue()
     })
 
@@ -147,7 +168,7 @@ export function usePopularity(
     newSocket.addEventListener('close', () => {
       if (socket.value !== newSocket) return
       isConnected.value = false
-      socket.value = null
+      clearConnectionTimeout()
     })
 
     newSocket.addEventListener('error', () => {
@@ -155,11 +176,12 @@ export function usePopularity(
       error.value = new Error('WebSocket connection error')
       loading.value = false
       isConnected.value = false
-      socket.value = null
+      clearConnectionTimeout()
     })
   }
 
   function disconnect() {
+    clearConnectionTimeout()
     if (socket.value) {
       socket.value.close()
       socket.value = null
@@ -177,6 +199,7 @@ export function usePopularity(
     }
 
     if (message.type === 'init') {
+      clearConnectionTimeout()
       counts.value = message.counts
       totalPlayers.value = message.totalPlayers
       loading.value = false
@@ -260,8 +283,23 @@ export function usePopularity(
     }
   })
 
+  function handleVisibilityChange() {
+    if (document.visibilityState === 'visible' && socket.value) {
+      if (socket.value.readyState === WebSocket.OPEN) {
+        loading.value = true
+        startConnectionTimeout()
+        socket.value.send(JSON.stringify({ type: 'sync' }))
+      }
+    }
+  }
+
+  if (import.meta.client) {
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+  }
+
   onUnmounted(() => {
     disconnect()
+    document.removeEventListener('visibilitychange', handleVisibilityChange)
   })
 
   return {
