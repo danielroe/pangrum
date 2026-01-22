@@ -54,11 +54,11 @@ const wordsWithPopularity = computed<WordWithPopularity[]>(() => {
       pangram: foundWord ? isPangram(foundWord) : false,
     }
   }).sort((a, b) => {
-    // Sort by popularity (most popular first), then alphabetically
+    // Sort by popularity (most popular first), then by hash (to maintain order)
     const aPercent = a.percentage ?? -1
     const bPercent = b.percentage ?? -1
     if (bPercent !== aPercent) return bPercent - aPercent
-    return a.word.localeCompare(b.word)
+    return a.hash.localeCompare(b.hash)
   })
 })
 
@@ -113,10 +113,13 @@ const totalWords = computed(() => props.validWords.length)
     <template v-else>
       <ul class="flex-1 overflow-y-auto space-y-0.5 pr-1 m-0 p-0 list-none">
         <li
-          v-for="item in wordsWithPopularity"
+          v-for="(item, index) in wordsWithPopularity"
           :key="item.hash"
           class="flex items-center gap-2 px-2 py-1.5 rounded transition-colors duration-150"
         >
+          <span class="w-4 text-xs text-muted-foreground tabular-nums text-right shrink-0">
+            {{ index + 1 }}.
+          </span>
           <span class="w-5 text-center shrink-0">
             <span
               v-if="item.found"
