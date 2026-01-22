@@ -343,7 +343,7 @@ const syncButtonIcon = computed(() => {
                 <span aria-hidden="true">·</span>
                 <span class="inline-flex items-center gap-1 font-mono opacity-60 hover:opacity-100 transition-opacity">
                   <a
-                    :href="`https://github.com/danielroe/pangrum/commit/${$config.public.commitHash}`"
+                    href="https://github.com/danielroe/pangrum"
                     target="_blank"
                     rel="noopener noreferrer"
                   >{{ $config.public.commitHash }}</a>
