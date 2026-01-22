@@ -5,11 +5,11 @@ import { NavigationRoute, registerRoute } from 'workbox-routing'
 import { BackgroundSyncPlugin } from 'workbox-background-sync'
 import { LANGUAGE_CODES } from '#shared/languages'
 import { getLocalDateString } from '#shared/utils'
+import { cacheVersion } from '#shared/cache'
 
 declare let self: ServiceWorkerGlobalScope
 
-const WORDS_CACHE_VERSION = 'v1'
-const WORDS_CACHE_NAME = `words-api-cache-${WORDS_CACHE_VERSION}`
+const WORDS_CACHE_NAME = `words-api-cache-v${cacheVersion}`
 
 self.skipWaiting()
 clientsClaim()

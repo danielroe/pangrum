@@ -1,5 +1,6 @@
 // @ts-expect-error virtual module
 import { languages, en_pangrams, en_words, en_gb_pangrams, en_gb_words, de_pangrams, de_words, nl_pangrams, nl_words, fr_pangrams, fr_words, es_pangrams, es_words } from '#words.mjs'
+import { cacheVersion } from '#shared/cache'
 
 import { hash } from 'ohash'
 
@@ -115,6 +116,6 @@ export default defineCachedEventHandler(async (event) => {
   getKey: (event) => {
     const lang = getRouterParam(event, 'lang')
     const date = getRouterParam(event, 'date')
-    return `v2-${lang}-${date}`
+    return `v${cacheVersion}-${lang}-${date}`
   },
 })
