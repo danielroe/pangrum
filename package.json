@@ -25,8 +25,8 @@
   "dependencies": {
     "@iconify-json/lucide": "^1.2.84",
     "@nuxt/a11y": "1.0.0-alpha.1",
-    "@nuxt/eslint": "1.12.1",
-    "@nuxt/fonts": "0.12.1",
+    "@nuxt/eslint": "1.13.0",
+    "@nuxt/fonts": "0.13.0",
     "@nuxt/scripts": "0.13.2",
     "@nuxt/test-utils": "3.23.0",
     "@nuxtjs/color-mode": "^4.0.0",
@@ -36,7 +36,7 @@
     "@vercel/kv": "^3.0.0",
     "@vite-pwa/nuxt": "1.1.0",
     "@vueuse/nuxt": "14.1.0",
-    "beasties": "^0.3.5",
+    "beasties": "^0.4.0",
     "estree-walker": "^3.0.3",
     "language-packages": "^1.0.1",
     "nuxt": "^4.2.2",
@@ -54,7 +54,7 @@
     "workbox-strategies": "^7.4.0"
   },
   "devDependencies": {
-    "@playwright/test": "1.57.0",
+    "@playwright/test": "1.58.0",
     "@vite-pwa/assets-generator": "1.0.2",
     "@vitest/browser-playwright": "4.0.17",
     "@vitest/coverage-v8": "4.0.17",
@@ -64,11 +64,11 @@
     "lint-staged": "16.2.7",
     "nano-staged": "0.9.0",
     "partykit": "0.0.115",
-    "playwright-core": "1.57.0",
+    "playwright-core": "1.58.0",
     "simple-git-hooks": "2.13.1",
     "typescript": "5.9.3",
     "vitest": "4.0.17",
-    "vue-tsc": "3.2.2",
+    "vue-tsc": "3.2.4",
     "workbox-background-sync": "7.4.0"
   },
   "pnpm": {
