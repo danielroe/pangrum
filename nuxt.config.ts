@@ -59,9 +59,16 @@ export default defineNuxtConfig({
         { property: 'og:site_name', content: 'Pangrum' },
         { property: 'og:locale', content: 'en_US' },
         { name: 'twitter:card', content: 'summary_large_image' },
+        { property: 'og:url', content: 'https://pangrum.com' },
       ],
       link: [
         { rel: 'canonical', href: 'https://pangrum.com' },
+        { rel: 'alternate', hreflang: 'x-default', href: 'https://pangrum.com' },
+        { rel: 'alternate', hreflang: 'en', href: 'https://pangrum.com' },
+        { rel: 'alternate', hreflang: 'de', href: 'https://pangrum.com' },
+        { rel: 'alternate', hreflang: 'es', href: 'https://pangrum.com' },
+        { rel: 'alternate', hreflang: 'fr', href: 'https://pangrum.com' },
+        { rel: 'alternate', hreflang: 'nl', href: 'https://pangrum.com' },
       ],
       viewport: 'width=device-width, initial-scale=1',
       script: [
