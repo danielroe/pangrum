@@ -35,7 +35,7 @@
     "@unocss/transformer-directives": "^66.5.12",
     "@vercel/kv": "^3.0.0",
     "@vite-pwa/nuxt": "1.1.0",
-    "@vueuse/nuxt": "14.1.0",
+    "@vueuse/nuxt": "14.2.0",
     "beasties": "^0.4.0",
     "estree-walker": "^3.0.3",
     "language-packages": "^1.0.1",
@@ -54,7 +54,7 @@
     "workbox-strategies": "^7.4.0"
   },
   "devDependencies": {
-    "@playwright/test": "1.58.0",
+    "@playwright/test": "1.58.1",
     "@vite-pwa/assets-generator": "1.0.2",
     "@vitest/browser-playwright": "4.0.18",
     "@vitest/coverage-v8": "4.0.18",
@@ -64,7 +64,7 @@
     "lint-staged": "16.2.7",
     "nano-staged": "0.9.0",
     "partykit": "0.0.115",
-    "playwright-core": "1.58.0",
+    "playwright-core": "1.58.1",
     "simple-git-hooks": "2.13.1",
     "typescript": "5.9.3",
     "vitest": "4.0.18",
