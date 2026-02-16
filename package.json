@@ -25,8 +25,8 @@
   "dependencies": {
     "@iconify-json/lucide": "^1.2.84",
     "@nuxt/a11y": "1.0.0-alpha.1",
-    "@nuxt/eslint": "1.14.0",
-    "@nuxt/fonts": "0.13.0",
+    "@nuxt/eslint": "1.15.1",
+    "@nuxt/fonts": "0.14.0",
     "@nuxt/scripts": "0.13.2",
     "@nuxt/test-utils": "4.0.0",
     "@nuxtjs/color-mode": "^4.0.0",
@@ -35,7 +35,7 @@
     "@unocss/transformer-directives": "^66.5.12",
     "@vercel/kv": "^3.0.0",
     "@vite-pwa/nuxt": "1.1.1",
-    "@vueuse/nuxt": "14.2.0",
+    "@vueuse/nuxt": "14.2.1",
     "beasties": "^0.4.0",
     "estree-walker": "^3.0.3",
     "language-packages": "^1.0.1",
@@ -80,7 +80,7 @@
       }
     }
   },
-  "packageManager": "pnpm@10.29.2",
+  "packageManager": "pnpm@10.29.3",
   "simple-git-hooks": {
     "pre-commit": "npx lint-staged"
   },
