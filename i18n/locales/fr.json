@@ -205,6 +205,12 @@
     "by": "par",
     "refreshApp": "Actualisez l'app pour obtenir la dernière version"
   },
+  "definition": {
+    "tapForDefinition": "Appuyer pour la définition",
+    "notFound": "Aucune définition disponible pour ce mot",
+    "offline": "Définition non disponible hors ligne",
+    "englishOnly": "Définitions disponibles en anglais uniquement"
+  },
   "common": {
     "close": "Fermer"
   },

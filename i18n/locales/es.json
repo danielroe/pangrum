@@ -205,6 +205,12 @@
     "by": "por",
     "refreshApp": "Actualiza la app para obtener la última versión"
   },
+  "definition": {
+    "tapForDefinition": "Toca para ver la definición",
+    "notFound": "No hay definición disponible para esta palabra",
+    "offline": "Definición no disponible sin conexión",
+    "englishOnly": "Definiciones disponibles solo en inglés"
+  },
   "common": {
     "close": "Cerrar"
   },

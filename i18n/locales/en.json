@@ -205,6 +205,12 @@
     "by": "by",
     "refreshApp": "Refresh app to get latest version"
   },
+  "definition": {
+    "tapForDefinition": "Tap for definition",
+    "notFound": "No definition available for this word",
+    "offline": "Definition unavailable offline",
+    "englishOnly": "Definitions available in English only"
+  },
   "common": {
     "close": "Close"
   },

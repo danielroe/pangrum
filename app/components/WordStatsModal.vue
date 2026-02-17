@@ -35,11 +35,6 @@ const sortedRemainingWords = computed(() => {
   return remaining.sort()
 })
 
-function isPangram(word: string) {
-  if (!props.letters?.length) return false
-  return props.letters.every(l => word.includes(l))
-}
-
 const dialogRef = useTemplateRef<HTMLDialogElement>('dialog')
 
 onMounted(() => {
@@ -96,10 +91,10 @@ function handleClick(event: MouseEvent) {
               v-for="word in sortedFoundWords"
               :key="word"
               class="list-none font-mono px-2 py-1 border-1 border-solid transition-colors duration-150"
-              :class="isPangram(word)
+              :class="isPangram(word, props.letters ?? [])
                 ? 'border-celebration bg-celebration-bg text-celebration font-semibold'
                 : 'border-primary bg-primary/20'"
-              :title="isPangram(word) ? t('foundWords.pangram') : ''"
+              :title="isPangram(word, props.letters ?? []) ? t('foundWords.pangram') : ''"
             >
               {{ word.toLowerCase() }}
             </li>
