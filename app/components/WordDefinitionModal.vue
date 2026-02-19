@@ -108,12 +108,6 @@ function handleClick(event: MouseEvent) {
         v-else-if="definition"
         class="space-y-3"
       >
-        <p
-          v-if="definition.uiLangFallback"
-          class="text-xs text-muted-foreground m-0 pb-1 border-b-1 border-solid border-muted"
-        >
-          {{ t('definition.noUiLangDefinition', { lang: localeName }) }}
-        </p>
         <p class="text-xs text-muted-foreground italic m-0">
           {{ definition.partOfSpeech }}
         </p>
@@ -186,6 +180,18 @@ function handleClick(event: MouseEvent) {
             </p>
           </div>
         </div>
+
+        <!-- Fallback notice: no entry in UI language -->
+        <p
+          v-if="definition.uiLangFallback"
+          class="flex items-center gap-1.5 text-xs text-muted-foreground m-0 pt-3 border-t-1 border-solid border-muted"
+        >
+          <span
+            class="i-lucide-languages text-sm shrink-0"
+            aria-hidden="true"
+          />
+          <span class="font-medium">{{ t('common.note') }}:</span> {{ t('definition.noUiLangDefinition', { lang: localeName }) }}
+        </p>
       </div>
     </div>
   </dialog>

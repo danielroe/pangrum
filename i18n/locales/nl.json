@@ -212,7 +212,8 @@
     "noUiLangDefinition": "Geen {lang}-definitie beschikbaar"
   },
   "common": {
-    "close": "Sluiten"
+    "close": "Sluiten",
+    "note": "Opmerking"
   },
   "letterGrid": {
     "shuffle": "Schudden",

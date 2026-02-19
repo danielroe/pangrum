@@ -212,7 +212,8 @@
     "noUiLangDefinition": "No hay definición en {lang} disponible"
   },
   "common": {
-    "close": "Cerrar"
+    "close": "Cerrar",
+    "note": "Nota"
   },
   "letterGrid": {
     "shuffle": "Mezclar",
