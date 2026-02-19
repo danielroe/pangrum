@@ -13,10 +13,6 @@ const props = defineProps<{
 
 const { t } = useI18n()
 
-function isPangram(word: string) {
-  return props.letters.every(l => word.includes(l))
-}
-
 function getPercentage(wordHash: string): number | null {
   if (!props.popularity || props.popularity.totalPlayers === 0) return null
   const count = props.popularity.counts[wordHash] || 0
@@ -51,7 +47,7 @@ const wordsWithPopularity = computed<WordWithPopularity[]>(() => {
       hash: wordHash,
       percentage: getPercentage(wordHash),
       found: !!foundWord,
-      pangram: foundWord ? isPangram(foundWord) : false,
+      pangram: foundWord ? isPangram(foundWord, props.letters) : false,
     }
   }).sort((a, b) => {
     // Sort by popularity (most popular first), then by hash (to maintain order)

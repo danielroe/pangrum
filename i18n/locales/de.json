@@ -205,8 +205,15 @@
     "by": "von",
     "refreshApp": "App aktualisieren für neueste Version"
   },
+  "definition": {
+    "tapForDefinition": "Tippe für Definition",
+    "notFound": "Keine Definition für dieses Wort verfügbar",
+    "offline": "Definition offline nicht verfügbar",
+    "noUiLangDefinition": "Keine {lang}-Definition verfügbar"
+  },
   "common": {
-    "close": "Schließen"
+    "close": "Schließen",
+    "note": "Hinweis"
   },
   "letterGrid": {
     "shuffle": "Mischen",

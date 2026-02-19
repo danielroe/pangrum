@@ -205,8 +205,15 @@
     "by": "door",
     "refreshApp": "Ververs de app voor de nieuwste versie"
   },
+  "definition": {
+    "tapForDefinition": "Tik voor definitie",
+    "notFound": "Geen definitie beschikbaar voor dit woord",
+    "offline": "Definitie offline niet beschikbaar",
+    "noUiLangDefinition": "Geen {lang}-definitie beschikbaar"
+  },
   "common": {
-    "close": "Sluiten"
+    "close": "Sluiten",
+    "note": "Opmerking"
   },
   "letterGrid": {
     "shuffle": "Schudden",

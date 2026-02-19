@@ -5,14 +5,21 @@ const props = defineProps<{
 }>()
 
 const { t } = useI18n()
+const language = useLanguage()
 
 const sortedWords = computed(() => [...props.words].sort())
 
-function isPangram(word: string) {
-  return props.letters.every(l => word.includes(l))
+const pangramCount = computed(() => sortedWords.value.filter(w => isPangram(w, props.letters)).length)
+
+const selectedWord = ref<string | null>(null)
+
+function openDefinition(word: string) {
+  selectedWord.value = word
 }
 
-const pangramCount = computed(() => sortedWords.value.filter(isPangram).length)
+function closeDefinition() {
+  selectedWord.value = null
+}
 </script>
 
 <template>
@@ -57,15 +64,29 @@ const pangramCount = computed(() => sortedWords.value.filter(isPangram).length)
       <li
         v-for="word of sortedWords"
         :key="word"
-        class="word-item font-mono text-sm px-3 py-2 border-1 border-solid rounded-lg transition-all duration-150 hover:-translate-y-px motion-reduce:transition-none"
-        :class="isPangram(word)
-          ? 'is-pangram bg-celebration-bg border-celebration text-celebration font-semibold'
-          : 'bg-surface-elevated border-muted text-on-surface hover:bg-surface-hover'"
-        :title="isPangram(word) ? t('foundWords.pangram') : ''"
       >
-        {{ word.toLowerCase() }}
+        <button
+          type="button"
+          class="word-item w-full font-mono text-sm px-3 py-2 border-1 border-solid rounded-lg transition-all duration-150 hover:-translate-y-px motion-reduce:transition-none cursor-pointer text-left"
+          :class="isPangram(word, props.letters)
+            ? 'is-pangram bg-celebration-bg border-celebration text-celebration font-semibold'
+            : 'bg-surface-elevated border-muted text-on-surface hover:bg-surface-hover'"
+          :title="isPangram(word, props.letters) ? t('foundWords.pangram') : t('definition.tapForDefinition')"
+          :aria-label="`${word.toLowerCase()}${isPangram(word, props.letters) ? ` — ${t('foundWords.pangram')}` : ''} — ${t('definition.tapForDefinition')}`"
+          @click="openDefinition(word)"
+        >
+          {{ word.toLowerCase() }}
+        </button>
       </li>
     </ul>
+
+    <WordDefinitionModal
+      v-if="selectedWord"
+      :word="selectedWord"
+      :letters="letters"
+      :lang="language"
+      @close="closeDefinition"
+    />
   </div>
 </template>
 
