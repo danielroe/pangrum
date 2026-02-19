@@ -139,12 +139,40 @@ function handleClick(event: MouseEvent) {
             {{ definition.baseWordDefinition.example }}
           </p>
         </div>
+
+        <!-- Capitalized variant (e.g. noun "Leier" alongside verb "leier") -->
+        <div
+          v-if="definition.capitalizedDefinition"
+          class="pt-2 border-t-1 border-solid border-muted space-y-2"
+        >
+          <p class="text-xs text-muted-foreground italic m-0">
+            {{ definition.capitalizedDefinition.partOfSpeech }}
+          </p>
+          <p class="text-sm text-on-surface m-0 leading-relaxed">
+            {{ definition.capitalizedDefinition.definition }}
+          </p>
+          <p
+            v-if="definition.capitalizedDefinition.example"
+            class="text-xs text-muted-foreground italic m-0 border-l-2 border-solid border-muted pl-3"
+          >
+            {{ definition.capitalizedDefinition.example }}
+          </p>
+          <!-- Base word of the capitalized variant -->
+          <div
+            v-if="definition.capitalizedDefinition.baseWord && definition.capitalizedDefinition.baseWordDefinition"
+            class="pt-1 space-y-1"
+          >
+            <p class="text-xs text-muted-foreground m-0">
+              {{ definition.capitalizedDefinition.baseWord }}
+              <span class="italic">· {{ definition.capitalizedDefinition.baseWordDefinition.partOfSpeech }}</span>
+            </p>
+            <p class="text-sm text-on-surface m-0 leading-relaxed">
+              {{ definition.capitalizedDefinition.baseWordDefinition.definition }}
+            </p>
+          </div>
+        </div>
       </div>
     </div>
-
-    <p class="text-xs text-muted-foreground text-center m-0 px-4 py-2 opacity-60">
-      {{ t('definition.englishOnly') }}
-    </p>
   </dialog>
 </template>
 

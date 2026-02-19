@@ -4,13 +4,17 @@ export interface BaseWordDefinition {
   example?: string
 }
 
-export interface WordDefinition {
-  word: string
+export interface DefinitionEntry {
   partOfSpeech: string
   definition: string
   example?: string
   baseWord?: string
   baseWordDefinition?: BaseWordDefinition
+}
+
+export interface WordDefinition extends DefinitionEntry {
+  word: string
+  capitalizedDefinition?: DefinitionEntry
 }
 
 const cache = new Map<string, WordDefinition>()

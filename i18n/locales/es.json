@@ -208,8 +208,7 @@
   "definition": {
     "tapForDefinition": "Toca para ver la definición",
     "notFound": "No hay definición disponible para esta palabra",
-    "offline": "Definición no disponible sin conexión",
-    "englishOnly": "Definiciones disponibles solo en inglés"
+    "offline": "Definición no disponible sin conexión"
   },
   "common": {
     "close": "Cerrar"

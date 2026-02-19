@@ -208,8 +208,7 @@
   "definition": {
     "tapForDefinition": "Tik voor definitie",
     "notFound": "Geen definitie beschikbaar voor dit woord",
-    "offline": "Definitie offline niet beschikbaar",
-    "englishOnly": "Definities alleen beschikbaar in het Engels"
+    "offline": "Definitie offline niet beschikbaar"
   },
   "common": {
     "close": "Sluiten"
