@@ -8,6 +8,7 @@ export interface DefinitionEntry {
   partOfSpeech: string
   definition: string
   example?: string
+  exampleTranslation?: string
   baseWord?: string
   baseWordDefinition?: BaseWordDefinition
 }
@@ -26,8 +27,8 @@ export function useWordDefinition() {
   const loading = ref(false)
   const error = ref<DefinitionError | null>(null)
 
-  async function fetchDefinition(word: string, lang: string) {
-    const key = `${lang}:${word}`
+  async function fetchDefinition(word: string, wordsetLang: string, uiLang: string) {
+    const key = `${uiLang}:${wordsetLang}:${word}`
 
     definition.value = null
     error.value = null
@@ -40,7 +41,7 @@ export function useWordDefinition() {
     loading.value = true
 
     try {
-      const result = await $fetch<WordDefinition>(`/api/definition/${lang}/${word}`)
+      const result = await $fetch<WordDefinition>(`/api/definition/${uiLang}/${word}`, { query: { lang: wordsetLang } })
       cache.set(key, result)
       definition.value = result
     }

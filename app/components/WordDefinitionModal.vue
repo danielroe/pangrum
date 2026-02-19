@@ -9,7 +9,7 @@ const emit = defineEmits<{
   close: []
 }>()
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 
 const { definition, loading, error, fetchDefinition } = useWordDefinition()
 
@@ -17,7 +17,7 @@ const dialogRef = useTemplateRef<HTMLDialogElement>('dialog')
 
 onMounted(() => {
   dialogRef.value?.showModal()
-  fetchDefinition(props.word, props.lang)
+  fetchDefinition(props.word, props.lang, locale.value)
 })
 
 onBeforeUnmount(() => {
@@ -113,12 +113,20 @@ function handleClick(event: MouseEvent) {
         <p class="text-sm text-on-surface m-0 leading-relaxed">
           {{ definition.definition }}
         </p>
-        <p
+        <div
           v-if="definition.example"
-          class="text-xs text-muted-foreground italic m-0 border-l-2 border-solid border-muted pl-3"
+          class="border-l-2 border-solid border-muted pl-3 space-y-1"
         >
-          {{ definition.example }}
-        </p>
+          <p class="text-xs text-muted-foreground italic m-0">
+            {{ definition.example }}
+          </p>
+          <p
+            v-if="definition.exampleTranslation"
+            class="text-xs text-primary/70 m-0 mt-2"
+          >
+            {{ definition.exampleTranslation }}
+          </p>
+        </div>
 
         <!-- Base word definition -->
         <div

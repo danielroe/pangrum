@@ -13,7 +13,7 @@ const wiktapiLang: Record<string, string> = {
 
 interface WiktapiSense {
   glosses?: string[]
-  examples?: Array<{ text?: string } | string>
+  examples?: Array<{ text?: string, translation?: string } | string>
   tags?: string[]
   form_of?: Array<{ word: string }>
 }
@@ -40,6 +40,7 @@ interface DefinitionEntry {
   partOfSpeech: string
   definition: string
   example?: string
+  exampleTranslation?: string
   baseWord?: string
   baseWordDefinition?: BaseWordDefinition
 }
@@ -49,8 +50,8 @@ function capitalize(word: string): string {
 }
 
 // Fetch exactly the word as given — no casing fallback
-async function fetchWiktapiRaw(wordLang: string, word: string): Promise<WiktapiDefinition[] | null> {
-  const url = `https://api.wiktapi.dev/v1/${wordLang}/word/${encodeURIComponent(word)}/definitions?lang=${wordLang}`
+async function fetchWiktapiRaw(editionLang: string, filterLang: string, word: string): Promise<WiktapiDefinition[] | null> {
+  const url = `https://api.wiktapi.dev/v1/${editionLang}/word/${encodeURIComponent(word)}/definitions?lang=${filterLang}`
   try {
     const data = await $fetch<WiktapiResponse>(url)
     return data.definitions?.length ? data.definitions : null
@@ -61,19 +62,20 @@ async function fetchWiktapiRaw(wordLang: string, word: string): Promise<WiktapiD
 }
 
 // Try word as-is, then capitalized — used for base word lookups where casing is uncertain
-async function fetchWiktapiWithFallback(wordLang: string, word: string): Promise<WiktapiDefinition[] | null> {
+async function fetchWiktapiWithFallback(editionLang: string, filterLang: string, word: string): Promise<WiktapiDefinition[] | null> {
   const variants = [...new Set([word, capitalize(word)])]
   for (const variant of variants) {
-    const result = await fetchWiktapiRaw(wordLang, variant)
+    const result = await fetchWiktapiRaw(editionLang, filterLang, variant)
     if (result) return result
   }
   return null
 }
 
-function extractExample(examples?: Array<{ text?: string } | string>): string | undefined {
-  if (!examples?.length) return undefined
+function extractExample(examples?: Array<{ text?: string, translation?: string } | string>): { text: string | undefined, translation: string | undefined } {
+  if (!examples?.length) return { text: undefined, translation: undefined }
   const first = examples[0]
-  return typeof first === 'string' ? first || undefined : first?.text || undefined
+  if (typeof first === 'string') return { text: first || undefined, translation: undefined }
+  return { text: first?.text || undefined, translation: first?.translation || undefined }
 }
 
 // Extract the base word for inflection senses.
@@ -100,7 +102,7 @@ function resolveDefinition(definitions: WiktapiDefinition[]): { def: WiktapiDefi
   return null
 }
 
-async function buildEntry(wordLang: string, resolved: { def: WiktapiDefinition, sense: WiktapiSense }): Promise<DefinitionEntry> {
+async function buildEntry(editionLang: string, filterLang: string, resolved: { def: WiktapiDefinition, sense: WiktapiSense }): Promise<DefinitionEntry> {
   const { def, sense } = resolved
   const baseWordRaw = getBaseWord(sense)
 
@@ -108,31 +110,36 @@ async function buildEntry(wordLang: string, resolved: { def: WiktapiDefinition, 
   let baseWordDefinition: BaseWordDefinition | undefined
 
   if (baseWordRaw) {
-    const baseDefs = await fetchWiktapiWithFallback(wordLang, baseWordRaw)
+    const baseDefs = await fetchWiktapiWithFallback(editionLang, filterLang, baseWordRaw)
     const baseResolved = baseDefs ? resolveDefinition(baseDefs) : null
     if (baseResolved) {
       baseWord = baseWordRaw.toLowerCase()
+      const baseExample = extractExample(baseResolved.sense.examples)
       baseWordDefinition = {
         partOfSpeech: baseResolved.def.pos,
         definition: baseResolved.sense.glosses![0]!,
-        example: extractExample(baseResolved.sense.examples),
+        ...(baseExample.text ? { example: baseExample.text } : {}),
       }
     }
   }
 
+  const { text: exampleText, translation: exampleTranslation } = extractExample(sense.examples)
+
   return {
     partOfSpeech: def.pos,
     definition: sense.glosses![0]!,
-    example: extractExample(sense.examples),
+    ...(exampleText ? { example: exampleText } : {}),
+    ...(exampleTranslation ? { exampleTranslation } : {}),
     ...(baseWord && baseWordDefinition ? { baseWord, baseWordDefinition } : {}),
   }
 }
 
 export default defineCachedEventHandler(async (event) => {
-  const lang = getRouterParam(event, 'lang')
+  const uiLang = getRouterParam(event, 'lang')
+  const wordsetLang = getQuery(event).lang as string | undefined
   const word = getRouterParam(event, 'word')?.toLowerCase()
 
-  if (!lang || !languages.includes(lang)) {
+  if (!wordsetLang || !languages.includes(wordsetLang)) {
     throw createError({
       statusCode: 400,
       statusMessage: `Invalid language. Supported languages: ${languages.join(', ')}`,
@@ -146,13 +153,14 @@ export default defineCachedEventHandler(async (event) => {
     })
   }
 
-  const wordLang = wiktapiLang[lang]!
+  const editionLang = wiktapiLang[uiLang!] ?? uiLang!
+  const filterLang = wiktapiLang[wordsetLang]!
   const capitalized = capitalize(word)
 
   // Fetch both the lowercase and capitalized variants in parallel
   const [lowercaseDefs, capitalizedDefs] = await Promise.all([
-    fetchWiktapiRaw(wordLang, word),
-    word !== capitalized ? fetchWiktapiRaw(wordLang, capitalized) : Promise.resolve(null),
+    fetchWiktapiRaw(editionLang, filterLang, word),
+    word !== capitalized ? fetchWiktapiRaw(editionLang, filterLang, capitalized) : Promise.resolve(null),
   ])
 
   const resolvedLower = lowercaseDefs ? resolveDefinition(lowercaseDefs) : null
@@ -173,8 +181,8 @@ export default defineCachedEventHandler(async (event) => {
 
   // Build both entries in parallel (each may trigger a base word fetch)
   const [primaryEntry, capitalizedEntry] = await Promise.all([
-    buildEntry(wordLang, primary),
-    alternate ? buildEntry(wordLang, alternate) : Promise.resolve(null),
+    buildEntry(editionLang, filterLang, primary),
+    alternate ? buildEntry(editionLang, filterLang, alternate) : Promise.resolve(null),
   ])
 
   return {
@@ -187,8 +195,9 @@ export default defineCachedEventHandler(async (event) => {
   maxAge: 60 * 60 * 24 * 30,
   base: 'definitions',
   getKey: (event) => {
-    const lang = getRouterParam(event, 'lang') || ''
+    const uiLang = getRouterParam(event, 'lang') || ''
+    const wordsetLang = (getQuery(event).lang as string | undefined) || ''
     const word = getRouterParam(event, 'word') || ''
-    return `${lang}-${word.toLowerCase()}`
+    return `${uiLang}-${wordsetLang}-${word.toLowerCase()}`
   },
 })
