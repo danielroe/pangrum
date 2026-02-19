@@ -9,7 +9,8 @@ const emit = defineEmits<{
   close: []
 }>()
 
-const { t, locale } = useI18n()
+const { t, locale, locales } = useI18n()
+const localeName = computed(() => locales.value.find(l => l.code === locale.value)?.name ?? locale.value)
 
 const { definition, loading, error, fetchDefinition } = useWordDefinition()
 
@@ -107,6 +108,12 @@ function handleClick(event: MouseEvent) {
         v-else-if="definition"
         class="space-y-3"
       >
+        <p
+          v-if="definition.uiLangFallback"
+          class="text-xs text-muted-foreground m-0 pb-1 border-b-1 border-solid border-muted"
+        >
+          {{ t('definition.noUiLangDefinition', { lang: localeName }) }}
+        </p>
         <p class="text-xs text-muted-foreground italic m-0">
           {{ definition.partOfSpeech }}
         </p>

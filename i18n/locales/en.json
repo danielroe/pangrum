@@ -208,7 +208,8 @@
   "definition": {
     "tapForDefinition": "Tap for definition",
     "notFound": "No definition available for this word",
-    "offline": "Definition unavailable offline"
+    "offline": "Definition unavailable offline",
+    "noUiLangDefinition": "No {lang} definition available"
   },
   "common": {
     "close": "Close"

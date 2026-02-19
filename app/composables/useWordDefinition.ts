@@ -16,6 +16,7 @@ export interface DefinitionEntry {
 export interface WordDefinition extends DefinitionEntry {
   word: string
   capitalizedDefinition?: DefinitionEntry
+  uiLangFallback?: boolean
 }
 
 const cache = new Map<string, WordDefinition>()

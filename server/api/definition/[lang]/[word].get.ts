@@ -155,6 +155,7 @@ export default defineCachedEventHandler(async (event) => {
 
   const editionLang = wiktapiLang[uiLang!] ?? uiLang!
   const filterLang = wiktapiLang[wordsetLang]!
+  const crossLang = editionLang !== filterLang
   const capitalized = capitalize(word)
 
   // Fetch both the lowercase and capitalized variants in parallel
@@ -163,8 +164,20 @@ export default defineCachedEventHandler(async (event) => {
     word !== capitalized ? fetchWiktapiRaw(editionLang, filterLang, capitalized) : Promise.resolve(null),
   ])
 
-  const resolvedLower = lowercaseDefs ? resolveDefinition(lowercaseDefs) : null
-  const resolvedCapital = capitalizedDefs ? resolveDefinition(capitalizedDefs) : null
+  let resolvedLower = lowercaseDefs ? resolveDefinition(lowercaseDefs) : null
+  let resolvedCapital = capitalizedDefs ? resolveDefinition(capitalizedDefs) : null
+
+  // If no results and langs differ, fall back to the wordset lang edition
+  let uiLangFallback = false
+  if (!resolvedLower && !resolvedCapital && crossLang) {
+    const [fallbackLower, fallbackCapital] = await Promise.all([
+      fetchWiktapiRaw(filterLang, filterLang, word),
+      word !== capitalized ? fetchWiktapiRaw(filterLang, filterLang, capitalized) : Promise.resolve(null),
+    ])
+    resolvedLower = fallbackLower ? resolveDefinition(fallbackLower) : null
+    resolvedCapital = fallbackCapital ? resolveDefinition(fallbackCapital) : null
+    uiLangFallback = !!(resolvedLower || resolvedCapital)
+  }
 
   if (!resolvedLower && !resolvedCapital) {
     throw createError({ statusCode: 404, statusMessage: 'No definition found' })
@@ -179,16 +192,20 @@ export default defineCachedEventHandler(async (event) => {
       || resolvedLower.sense.glosses![0] !== resolvedCapital.sense.glosses![0])
   const alternate = isDistinctEntry ? resolvedCapital : null
 
+  // When falling back, both edition and filter use the wordset lang
+  const resolvedEditionLang = uiLangFallback ? filterLang : editionLang
+
   // Build both entries in parallel (each may trigger a base word fetch)
   const [primaryEntry, capitalizedEntry] = await Promise.all([
-    buildEntry(editionLang, filterLang, primary),
-    alternate ? buildEntry(editionLang, filterLang, alternate) : Promise.resolve(null),
+    buildEntry(resolvedEditionLang, filterLang, primary),
+    alternate ? buildEntry(resolvedEditionLang, filterLang, alternate) : Promise.resolve(null),
   ])
 
   return {
     word,
     ...primaryEntry,
     ...(capitalizedEntry ? { capitalizedDefinition: capitalizedEntry } : {}),
+    ...(uiLangFallback ? { uiLangFallback: true } : {}),
   }
 }, {
   // Definitions don't change — cache for 30 days
