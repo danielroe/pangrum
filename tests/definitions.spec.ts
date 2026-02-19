@@ -53,7 +53,7 @@ test.describe('Word Definitions', () => {
 
     // Modal should appear with the word as heading
     await expect(page.getByRole('dialog')).toBeVisible()
-    await expect(page.getByRole('dialog').getByText('rain')).toBeVisible()
+    await expect(page.getByRole('dialog').getByRole('heading', { name: 'rain' })).toBeVisible()
   })
 
   test('definition modal shows part of speech and definition text', async ({ page, goto }) => {
