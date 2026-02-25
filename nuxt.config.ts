@@ -29,6 +29,10 @@ export default defineNuxtConfig({
           driver: 'fsLite',
           base: '.nuxt/popularity',
         },
+        definitions: {
+          driver: 'fsLite',
+          base: '.nuxt/definitions',
+        },
       },
     },
   },

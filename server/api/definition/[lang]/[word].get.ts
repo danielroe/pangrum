@@ -63,12 +63,15 @@ async function fetchWiktapiRaw(editionLang: string, filterLang: string, word: st
 
 // Try word as-is, then capitalized — used for base word lookups where casing is uncertain
 async function fetchWiktapiWithFallback(editionLang: string, filterLang: string, word: string): Promise<WiktapiDefinition[] | null> {
-  const variants = [...new Set([word, capitalize(word)])]
-  for (const variant of variants) {
-    const result = await fetchWiktapiRaw(editionLang, filterLang, variant)
-    if (result) return result
+  const capitalized = capitalize(word)
+  if (word === capitalized) {
+    return fetchWiktapiRaw(editionLang, filterLang, word)
   }
-  return null
+  const [lower, upper] = await Promise.all([
+    fetchWiktapiRaw(editionLang, filterLang, word),
+    fetchWiktapiRaw(editionLang, filterLang, capitalized),
+  ])
+  return lower ?? upper
 }
 
 function extractExample(examples?: Array<{ text?: string, translation?: string } | string>): { text: string | undefined, translation: string | undefined } {
@@ -139,6 +142,13 @@ export default defineCachedEventHandler(async (event) => {
   const wordsetLang = getQuery(event).lang as string | undefined
   const word = getRouterParam(event, 'word')?.toLowerCase()
 
+  if (!uiLang || !(uiLang in wiktapiLang)) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: `Invalid UI language. Supported: ${Object.keys(wiktapiLang).join(', ')}`,
+    })
+  }
+
   if (!wordsetLang || !languages.includes(wordsetLang)) {
     throw createError({
       statusCode: 400,
@@ -146,14 +156,14 @@ export default defineCachedEventHandler(async (event) => {
     })
   }
 
-  if (!word || !/^[a-zA-ZÀ-ÿ]+$/.test(word)) {
+  if (!word || !/^[\p{L}]+$/u.test(word)) {
     throw createError({
       statusCode: 400,
       statusMessage: 'Invalid word',
     })
   }
 
-  const editionLang = wiktapiLang[uiLang!] ?? uiLang!
+  const editionLang = wiktapiLang[uiLang]!
   const filterLang = wiktapiLang[wordsetLang]!
   const crossLang = editionLang !== filterLang
   const capitalized = capitalize(word)

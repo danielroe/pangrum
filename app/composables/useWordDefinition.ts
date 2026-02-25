@@ -19,7 +19,7 @@ export interface WordDefinition extends DefinitionEntry {
   uiLangFallback?: boolean
 }
 
-const cache = new Map<string, WordDefinition>()
+const cache = import.meta.client ? new Map<string, WordDefinition>() : undefined
 
 export type DefinitionError = 'offline' | 'notFound'
 
@@ -34,7 +34,7 @@ export function useWordDefinition() {
     definition.value = null
     error.value = null
 
-    if (cache.has(key)) {
+    if (cache?.has(key)) {
       definition.value = cache.get(key)!
       return
     }
@@ -43,7 +43,7 @@ export function useWordDefinition() {
 
     try {
       const result = await $fetch<WordDefinition>(`/api/definition/${uiLang}/${word}`, { query: { lang: wordsetLang } })
-      cache.set(key, result)
+      cache?.set(key, result)
       definition.value = result
     }
     catch (err) {
