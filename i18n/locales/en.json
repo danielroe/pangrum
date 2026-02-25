@@ -205,8 +205,15 @@
     "by": "by",
     "refreshApp": "Refresh app to get latest version"
   },
+  "definition": {
+    "tapForDefinition": "Tap for definition",
+    "notFound": "No definition available for this word",
+    "offline": "Definition unavailable offline",
+    "noUiLangDefinition": "No {lang} definition available"
+  },
   "common": {
-    "close": "Close"
+    "close": "Close",
+    "note": "Note"
   },
   "letterGrid": {
     "shuffle": "Shuffle",

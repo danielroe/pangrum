@@ -56,10 +56,10 @@ describe('FoundWordsList', () => {
       },
     })
 
-    const listItems = component.findAll('li')
-    const pangramItem = listItems.find(li => li.text().includes('seating'))
+    const buttons = component.findAll('button.word-item')
+    const pangramButton = buttons.find(btn => btn.text().includes('seating'))
 
-    expect(pangramItem?.classes()).toContain('is-pangram')
+    expect(pangramButton?.classes()).toContain('is-pangram')
   })
 
   it('shows title attribute for pangrams', async () => {
@@ -71,14 +71,14 @@ describe('FoundWordsList', () => {
       },
     })
 
-    const listItems = component.findAll('li')
-    const pangramItem = listItems.find(li => li.text().includes('seating'))
+    const buttons = component.findAll('button.word-item')
+    const pangramButton = buttons.find(btn => btn.text().includes('seating'))
 
     // Check for either translated text or key (i18n may not load in tests)
-    expect(pangramItem?.attributes('title')).toMatch(/Pangram!|foundWords\.pangram/)
+    expect(pangramButton?.attributes('title')).toMatch(/Pangram!|foundWords\.pangram/)
   })
 
-  it('renders words as list items', async () => {
+  it('renders words as buttons inside list items', async () => {
     const component = await mountSuspended(FoundWordsList, {
       props: {
         ...defaultProps,
@@ -88,5 +88,50 @@ describe('FoundWordsList', () => {
 
     const listItems = component.findAll('li')
     expect(listItems).toHaveLength(3)
+
+    const buttons = component.findAll('button.word-item')
+    expect(buttons).toHaveLength(3)
+  })
+
+  it('clicking a word button opens the definition modal', async () => {
+    // Stub the modal to avoid showModal() API limitations in the test context
+    const component = await mountSuspended(FoundWordsList, {
+      props: {
+        ...defaultProps,
+        words: new Set(['TEST']),
+      },
+      global: {
+        stubs: { WordDefinitionModal: { template: '<div data-testid="definition-modal" />' } },
+      },
+    })
+
+    expect(component.find('[data-testid="definition-modal"]').exists()).toBe(false)
+
+    await component.find('button.word-item').trigger('click')
+
+    expect(component.find('[data-testid="definition-modal"]').exists()).toBe(true)
+  })
+
+  it('closing the definition modal removes it', async () => {
+    const component = await mountSuspended(FoundWordsList, {
+      props: {
+        ...defaultProps,
+        words: new Set(['TEST']),
+      },
+      global: {
+        stubs: {
+          WordDefinitionModal: {
+            template: '<button data-testid="modal-close" @click="$emit(\'close\')" />',
+            emits: ['close'],
+          },
+        },
+      },
+    })
+
+    await component.find('button.word-item').trigger('click')
+    expect(component.find('[data-testid="modal-close"]').exists()).toBe(true)
+
+    await component.find('[data-testid="modal-close"]').trigger('click')
+    expect(component.find('[data-testid="modal-close"]').exists()).toBe(false)
   })
 })
