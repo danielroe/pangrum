@@ -61,7 +61,7 @@
     "@vue/test-utils": "2.4.6",
     "eslint": "10.0.3",
     "get-port-please": "3.2.0",
-    "lint-staged": "16.3.2",
+    "lint-staged": "16.4.0",
     "nano-staged": "0.9.0",
     "partykit": "0.0.115",
     "playwright-core": "1.58.2",
@@ -80,7 +80,7 @@
       }
     }
   },
-  "packageManager": "pnpm@10.32.0",
+  "packageManager": "pnpm@10.32.1",
   "simple-git-hooks": {
     "pre-commit": "npx lint-staged"
   },
