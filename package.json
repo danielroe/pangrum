@@ -66,7 +66,7 @@
     "partykit": "0.0.115",
     "playwright-core": "1.58.2",
     "simple-git-hooks": "2.13.1",
-    "typescript": "5.9.3",
+    "typescript": "6.0.2",
     "vitest": "4.1.0",
     "vue-tsc": "3.2.6",
     "workbox-background-sync": "7.4.0"
