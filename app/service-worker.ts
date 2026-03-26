@@ -1,6 +1,6 @@
 import { cleanupOutdatedCaches, precacheAndRoute } from 'workbox-precaching'
 import { clientsClaim } from 'workbox-core'
-import { NetworkFirst, NetworkOnly } from 'workbox-strategies'
+import { NetworkFirst, NetworkOnly, StaleWhileRevalidate } from 'workbox-strategies'
 import { NavigationRoute, registerRoute } from 'workbox-routing'
 import { BackgroundSyncPlugin } from 'workbox-background-sync'
 import { LANGUAGE_CODES } from '#shared/languages'
@@ -22,6 +22,14 @@ registerRoute(
   new NetworkFirst({
     cacheName: WORDS_CACHE_NAME,
     networkTimeoutSeconds: 5,
+  }),
+)
+
+// Cache i18n locale messages for offline use
+registerRoute(
+  ({ url }) => url.pathname.startsWith('/_i18n/'),
+  new StaleWhileRevalidate({
+    cacheName: 'i18n-locale-cache',
   }),
 )
 

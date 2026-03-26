@@ -207,7 +207,7 @@ export default defineNuxtConfig({
     srcDir: '.',
     filename: 'service-worker.ts',
     injectManifest: {
-      globPatterns: ['**/*.{js,css,html,png,svg,ico}'],
+      globPatterns: ['**/*.{js,json,css,html,png,svg,ico}'],
     },
     injectRegister: 'auto',
     client: {

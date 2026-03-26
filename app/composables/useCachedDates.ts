@@ -1,6 +1,7 @@
 import type { Language } from './useLanguage'
+import { cacheVersion } from '#shared/cache'
 
-const WORDS_CACHE_NAME = 'words-api-cache-v1'
+const WORDS_CACHE_NAME = `words-api-cache-v${cacheVersion}`
 
 export interface CachedDatesState {
   /** Map of language -> Set of cached dates (YYYY-MM-DD) */
