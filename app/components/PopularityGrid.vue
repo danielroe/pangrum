@@ -58,8 +58,12 @@ const wordsWithPopularity = computed<WordWithPopularity[]>(() => {
   })
 })
 
-const foundCount = computed(() => props.words.size)
-const totalWords = computed(() => props.validWords.length)
+const hideFoundWords = ref(false)
+
+const filteredWords = computed(() => {
+  if (!hideFoundWords.value) return wordsWithPopularity.value
+  return wordsWithPopularity.value.filter(item => !item.found)
+})
 </script>
 
 <template>
@@ -72,12 +76,19 @@ const totalWords = computed(() => props.validWords.length)
       <h3 class="text-sm font-medium text-on-surface m-0">
         {{ t('hints.panels.popularity') }}
       </h3>
-      <span
+      <label
         v-if="popularity && popularity.totalPlayers > 0"
-        class="text-xs text-muted-foreground ml-auto tabular-nums"
+        class="ml-auto flex items-center gap-1.5 cursor-pointer select-none"
       >
-        {{ foundCount }}/{{ totalWords }}
-      </span>
+        <input
+          v-model="hideFoundWords"
+          type="checkbox"
+          class="accent-primary w-3.5 h-3.5 cursor-pointer"
+        >
+        <span class="text-xs text-muted-foreground">
+          {{ t('popularity.hideFound') }}
+        </span>
+      </label>
     </header>
 
     <div
@@ -109,7 +120,7 @@ const totalWords = computed(() => props.validWords.length)
     <template v-else>
       <ul class="flex-1 overflow-y-auto space-y-0.5 pr-1 m-0 p-0 list-none">
         <li
-          v-for="(item, index) in wordsWithPopularity"
+          v-for="(item, index) in filteredWords"
           :key="item.hash"
           class="flex items-center gap-2 px-2 py-1.5 rounded transition-colors duration-150"
         >

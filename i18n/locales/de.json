@@ -51,7 +51,8 @@
     "loading": "Lade Beliebtheitsdaten...",
     "noData": "Beliebtheitsdaten erscheinen, sobald mehr Spieler dieses Rätsel lösen.",
     "basedOn": "Basierend auf {count} Spieler | Basierend auf {count} Spielern",
-    "foundPercent": "{percent}% der Spieler haben dieses Wort gefunden"
+    "foundPercent": "{percent}% der Spieler haben dieses Wort gefunden",
+    "hideFound": "Gefundene ausblenden"
   },
   "tutorial": {
     "skip": "Überspringen",

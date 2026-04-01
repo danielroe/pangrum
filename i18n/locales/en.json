@@ -51,7 +51,8 @@
     "loading": "Loading popularity data...",
     "noData": "Popularity data will appear as more players complete this puzzle.",
     "basedOn": "Based on {count} player | Based on {count} players",
-    "foundPercent": "{percent}% of players found this word"
+    "foundPercent": "{percent}% of players found this word",
+    "hideFound": "Hide found words"
   },
   "tutorial": {
     "skip": "Skip",

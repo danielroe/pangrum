@@ -51,7 +51,8 @@
     "loading": "Populariteitsgegevens laden...",
     "noData": "Populariteitsgegevens verschijnen wanneer meer spelers deze puzzel voltooien.",
     "basedOn": "Gebaseerd op {count} speler | Gebaseerd op {count} spelers",
-    "foundPercent": "{percent}% van de spelers heeft dit woord gevonden"
+    "foundPercent": "{percent}% van de spelers heeft dit woord gevonden",
+    "hideFound": "Gevonden woorden verbergen"
   },
   "tutorial": {
     "skip": "Overslaan",
