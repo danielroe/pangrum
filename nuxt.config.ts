@@ -153,6 +153,11 @@ export default defineNuxtConfig({
   },
   sourcemap: true,
   compatibilityDate: '2025-07-15',
+  vite: {
+    optimizeDeps: {
+      include: ['uqr', 'partysocket', 'workbox-precaching', 'workbox-core', 'workbox-strategies', 'workbox-routing', 'workbox-background-sync'],
+    },
+  },
   eslint: {
     config: {
       stylistic: true,
