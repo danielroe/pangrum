@@ -221,6 +221,7 @@
     "shuffleLetters": "Shuffle letters",
     "deleteCharacter": "Delete character",
     "submitWord": "Submit word",
+    "replayWord": "Type last guess",
     "addLetter": "Add letter {letter}"
   },
   "hintsToggle": {

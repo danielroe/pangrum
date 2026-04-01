@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { mountSuspended } from '@nuxt/test-utils/runtime'
 import { LetterGrid } from '#components'
+import { useWord, useGuessHistory } from '#imports'
 
 describe('LetterGrid', () => {
   const defaultProps = {
@@ -88,5 +89,87 @@ describe('LetterGrid', () => {
     })
 
     expect(submitButtons.length).toBe(1)
+  })
+
+  it('shows replay button when input is empty and a word was guessed', async () => {
+    const guessHistory = useGuessHistory()
+    const word = useWord()
+    word.value = ''
+    guessHistory.value = ['TESTING']
+
+    const component = await mountSuspended(LetterGrid, {
+      props: defaultProps,
+    })
+
+    const buttons = component.findAll('button')
+    const replayButton = buttons.find((b) => {
+      const srOnly = b.find('.sr-only')
+      return srOnly.exists() && srOnly.text() === 'Type last guess'
+    })
+
+    expect(replayButton).toBeDefined()
+    // Should show the repeat icon, not the submit icon
+    expect(replayButton!.find('.i-lucide-repeat').exists()).toBe(true)
+    expect(replayButton!.find('.i-lucide-corner-down-left').exists()).toBe(false)
+  })
+
+  it('shows submit button when input has text', async () => {
+    const guessHistory = useGuessHistory()
+    const word = useWord()
+    word.value = 'TEST'
+    guessHistory.value = ['TESTING']
+
+    const component = await mountSuspended(LetterGrid, {
+      props: defaultProps,
+    })
+
+    const buttons = component.findAll('button')
+    const submitButton = buttons.find((b) => {
+      const srOnly = b.find('.sr-only')
+      return srOnly.exists() && srOnly.text() === 'Submit word'
+    })
+
+    expect(submitButton).toBeDefined()
+    expect(submitButton!.find('.i-lucide-corner-down-left').exists()).toBe(true)
+  })
+
+  it('replay button fills in the last guess', async () => {
+    const guessHistory = useGuessHistory()
+    const word = useWord()
+    word.value = ''
+    guessHistory.value = ['TESTING']
+
+    const component = await mountSuspended(LetterGrid, {
+      props: defaultProps,
+    })
+
+    const buttons = component.findAll('button')
+    const replayButton = buttons.find((b) => {
+      const srOnly = b.find('.sr-only')
+      return srOnly.exists() && srOnly.text() === 'Type last guess'
+    })
+
+    await replayButton!.trigger('click')
+    expect(word.value).toBe('TESTING')
+  })
+
+  it('shows submit button when no word has been guessed yet', async () => {
+    const guessHistory = useGuessHistory()
+    const word = useWord()
+    word.value = ''
+    guessHistory.value = []
+
+    const component = await mountSuspended(LetterGrid, {
+      props: defaultProps,
+    })
+
+    const buttons = component.findAll('button')
+    const submitButton = buttons.find((b) => {
+      const srOnly = b.find('.sr-only')
+      return srOnly.exists() && srOnly.text() === 'Submit word'
+    })
+
+    expect(submitButton).toBeDefined()
+    expect(submitButton!.find('.i-lucide-corner-down-left').exists()).toBe(true)
   })
 })

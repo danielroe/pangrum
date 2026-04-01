@@ -33,8 +33,40 @@ const incorrectGuesses = useLocalStorage<Record<string, string>>(
 )
 
 const word = useWord()
+const guessHistory = useGuessHistory()
+const historyIndex = ref(-1)
+const savedInput = ref('')
 const input = useTemplateRef('wordInput')
 const { triggerCelebration } = useParticles()
+
+function handleKeyDown(event: KeyboardEvent) {
+  if (event.key === 'ArrowUp') {
+    event.preventDefault()
+    if (guessHistory.value.length === 0) return
+
+    if (historyIndex.value === -1) {
+      savedInput.value = word.value
+    }
+
+    const nextIndex = Math.min(historyIndex.value + 1, guessHistory.value.length - 1)
+    if (nextIndex !== historyIndex.value) {
+      historyIndex.value = nextIndex
+      word.value = guessHistory.value[guessHistory.value.length - 1 - nextIndex]!
+    }
+  }
+  else if (event.key === 'ArrowDown') {
+    event.preventDefault()
+    if (historyIndex.value === -1) return
+
+    historyIndex.value -= 1
+    if (historyIndex.value === -1) {
+      word.value = savedInput.value
+    }
+    else {
+      word.value = guessHistory.value[guessHistory.value.length - 1 - historyIndex.value]!
+    }
+  }
+}
 
 const matchingWords = computed(() => {
   if (!word.value || word.value.length < 2) return []
@@ -92,6 +124,7 @@ function addWord() {
     if (!normalisedWord) {
       throw new Error(ERROR_KEYS.noWord)
     }
+    guessHistory.value.push(normalisedWord)
     if (normalisedWord.length < 4) {
       throw new Error(ERROR_KEYS.notLongEnough)
     }
@@ -172,8 +205,9 @@ function addWord() {
     })
   }
   finally {
-    // clear + prepare for next steps
     word.value = ''
+    historyIndex.value = -1
+    savedInput.value = ''
     if (navigator.maxTouchPoints === 0) {
       input.value?.focus()
     }
@@ -198,6 +232,7 @@ function addWord() {
           type="text"
           :aria-label="t('input.label')"
           class="word-input p-2 border-none rounded-none font-mono font-bold text-2xl sm:text-xl uppercase tracking-widest bg-transparent outline-none text-transparent caret-primary ls:p-1 ls:text-base"
+          @keydown="handleKeyDown"
         >
         <div
           v-if="word"

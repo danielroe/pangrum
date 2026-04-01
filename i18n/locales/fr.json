@@ -221,6 +221,7 @@
     "shuffleLetters": "Mélanger les lettres",
     "deleteCharacter": "Supprimer le caractère",
     "submitWord": "Soumettre le mot",
+    "replayWord": "Saisir le dernier essai",
     "addLetter": "Ajouter la lettre {letter}"
   },
   "hintsToggle": {

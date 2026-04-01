@@ -221,6 +221,7 @@
     "shuffleLetters": "Letters schudden",
     "deleteCharacter": "Teken verwijderen",
     "submitWord": "Woord indienen",
+    "replayWord": "Laatste poging typen",
     "addLetter": "Letter {letter} toevoegen"
   },
   "hintsToggle": {

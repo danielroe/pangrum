@@ -221,6 +221,7 @@
     "shuffleLetters": "Buchstaben mischen",
     "deleteCharacter": "Zeichen löschen",
     "submitWord": "Wort absenden",
+    "replayWord": "Letzten Versuch eingeben",
     "addLetter": "Buchstabe {letter} hinzufügen"
   },
   "hintsToggle": {

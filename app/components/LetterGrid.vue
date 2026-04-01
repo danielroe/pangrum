@@ -7,8 +7,12 @@ const props = defineProps<{
 }>()
 
 const word = useWord()
+const guessHistory = useGuessHistory()
 const pressedLetter = ref<string | null>(null)
 const shuffleOrder = ref([0, 1, 2, 3, 4, 5])
+
+const lastGuess = computed(() => guessHistory.value[guessHistory.value.length - 1] ?? '')
+const showReplay = computed(() => !word.value && !!lastGuess.value)
 
 function addLetter(letter: string) {
   word.value += letter
@@ -20,6 +24,10 @@ function deleteLetter() {
 
 function submitWord() {
   word.value += '\n'
+}
+
+function replayLastWord() {
+  word.value = lastGuess.value
 }
 
 // Fisher-Yates shuffle
@@ -142,13 +150,14 @@ const letterPositions = [
       <button
         class="w-10 h-10 flex items-center justify-center bg-surface text-muted-foreground border-1 border-solid border-muted rounded-lg cursor-pointer transition-colors hover:bg-surface-hover hover:text-on-surface active:bg-surface-active focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2 ls:w-9 ls:h-9"
         style="-webkit-tap-highlight-color: transparent"
-        @click="submitWord"
+        @click="showReplay ? replayLastWord() : submitWord()"
       >
         <span
-          class="i-lucide-corner-down-left text-lg ls:text-base"
+          :class="showReplay ? 'i-lucide-repeat' : 'i-lucide-corner-down-left'"
+          class="text-lg ls:text-base"
           aria-hidden="true"
         />
-        <span class="sr-only">{{ t('letterGrid.submitWord') }}</span>
+        <span class="sr-only">{{ showReplay ? t('letterGrid.replayWord') : t('letterGrid.submitWord') }}</span>
       </button>
     </div>
   </div>
