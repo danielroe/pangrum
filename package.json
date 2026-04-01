@@ -77,6 +77,12 @@
         "dependencies": {
           "estree-walker": "^3.0.3"
         }
+      },
+      "@vue/test-utils": {
+        "peerDependencies": {
+          "@vue/compiler-dom": "*",
+          "@vue/server-renderer": "*"
+        }
       }
     }
   },
