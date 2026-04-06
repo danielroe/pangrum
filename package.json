@@ -54,7 +54,7 @@
     "workbox-strategies": "^7.4.0"
   },
   "devDependencies": {
-    "@playwright/test": "1.58.2",
+    "@playwright/test": "1.59.1",
     "@vite-pwa/assets-generator": "1.0.2",
     "@vitest/browser-playwright": "4.1.2",
     "@vitest/coverage-v8": "4.1.2",
@@ -64,7 +64,7 @@
     "lint-staged": "16.4.0",
     "nano-staged": "0.9.0",
     "partykit": "0.0.115",
-    "playwright-core": "1.58.2",
+    "playwright-core": "1.59.1",
     "simple-git-hooks": "2.13.1",
     "typescript": "6.0.2",
     "vitest": "4.1.2",
