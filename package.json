@@ -27,7 +27,7 @@
     "@nuxt/a11y": "1.0.0-alpha.1",
     "@nuxt/eslint": "1.15.2",
     "@nuxt/fonts": "0.14.0",
-    "@nuxt/scripts": "0.13.2",
+    "@nuxt/scripts": "0.13.3",
     "@nuxt/test-utils": "4.0.0",
     "@nuxtjs/color-mode": "^4.0.0",
     "@nuxtjs/i18n": "^10.2.1",
