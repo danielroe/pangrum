@@ -56,8 +56,8 @@
   "devDependencies": {
     "@playwright/test": "1.60.0",
     "@vite-pwa/assets-generator": "1.0.2",
-    "@vitest/browser-playwright": "4.1.6",
-    "@vitest/coverage-v8": "4.1.6",
+    "@vitest/browser-playwright": "4.1.7",
+    "@vitest/coverage-v8": "4.1.7",
     "@vue/test-utils": "2.4.10",
     "eslint": "10.4.0",
     "get-port-please": "3.2.0",
@@ -67,7 +67,7 @@
     "playwright-core": "1.60.0",
     "simple-git-hooks": "2.13.1",
     "typescript": "6.0.3",
-    "vitest": "4.1.6",
+    "vitest": "4.1.7",
     "vue-tsc": "3.3.1",
     "workbox-background-sync": "7.4.1"
   },
