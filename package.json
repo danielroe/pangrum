@@ -61,14 +61,14 @@
     "@vue/test-utils": "2.4.10",
     "eslint": "10.4.0",
     "get-port-please": "3.2.0",
-    "lint-staged": "17.0.5",
+    "lint-staged": "17.0.7",
     "nano-staged": "1.0.2",
     "partykit": "0.0.115",
     "playwright-core": "1.60.0",
     "simple-git-hooks": "2.13.1",
     "typescript": "6.0.3",
     "vitest": "4.1.7",
-    "vue-tsc": "3.3.2",
+    "vue-tsc": "3.3.3",
     "workbox-background-sync": "7.4.1"
   },
   "pnpm": {
@@ -80,7 +80,7 @@
       }
     }
   },
-  "packageManager": "pnpm@10.33.4",
+  "packageManager": "pnpm@10.34.1",
   "simple-git-hooks": {
     "pre-commit": "npx lint-staged"
   },
