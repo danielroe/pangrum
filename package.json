@@ -27,7 +27,7 @@
     "@nuxt/a11y": "1.0.0-alpha.1",
     "@nuxt/eslint": "1.15.2",
     "@nuxt/fonts": "0.14.0",
-    "@nuxt/scripts": "1.1.1",
+    "@nuxt/scripts": "1.2.1",
     "@nuxt/test-utils": "4.0.0",
     "@nuxtjs/color-mode": "^4.0.0",
     "@nuxtjs/i18n": "^10.2.1",
@@ -58,7 +58,7 @@
     "@vite-pwa/assets-generator": "1.0.2",
     "@vitest/browser-playwright": "4.1.8",
     "@vitest/coverage-v8": "4.1.8",
-    "@vue/test-utils": "2.4.10",
+    "@vue/test-utils": "2.4.11",
     "eslint": "10.4.1",
     "get-port-please": "3.2.0",
     "lint-staged": "17.0.7",
@@ -68,7 +68,7 @@
     "simple-git-hooks": "2.13.1",
     "typescript": "6.0.3",
     "vitest": "4.1.8",
-    "vue-tsc": "3.3.3",
+    "vue-tsc": "3.3.4",
     "workbox-background-sync": "7.4.1"
   },
   "pnpm": {
