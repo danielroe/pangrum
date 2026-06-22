@@ -18,7 +18,7 @@ jobs:
     timeout-minutes: 10
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - run: corepack enable
       - uses: actions/setup-node@v6
         with:
@@ -36,7 +36,7 @@ jobs:
     timeout-minutes: 15
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - run: corepack enable
       - uses: actions/setup-node@v6
         with:
@@ -65,7 +65,7 @@ jobs:
       image: mcr.microsoft.com/playwright:v1.61.0-noble
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - run: npm i -g --force corepack && corepack enable
       - uses: actions/setup-node@v6
         with:
