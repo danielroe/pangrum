@@ -68,7 +68,7 @@
     "simple-git-hooks": "2.13.1",
     "typescript": "6.0.3",
     "vitest": "4.1.10",
-    "vue-tsc": "3.3.6",
+    "vue-tsc": "3.3.7",
     "workbox-background-sync": "7.4.1"
   },
   "pnpm": {
@@ -80,7 +80,7 @@
       }
     }
   },
-  "packageManager": "pnpm@10.34.4",
+  "packageManager": "pnpm@10.34.5",
   "simple-git-hooks": {
     "pre-commit": "npx lint-staged"
   },
