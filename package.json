@@ -80,7 +80,7 @@
       }
     }
   },
-  "packageManager": "pnpm@10.34.5",
+  "packageManager": "pnpm@12.4.1",
   "simple-git-hooks": {
     "pre-commit": "npx lint-staged"
   },
