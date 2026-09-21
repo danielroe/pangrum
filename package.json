@@ -35,7 +35,7 @@
     "@unocss/transformer-directives": "^66.5.12",
     "@vercel/kv": "^3.0.0",
     "@vite-pwa/nuxt": "1.1.1",
-    "@vueuse/nuxt": "14.4.0",
+    "@vueuse/nuxt": "15.0.0",
     "beasties": "^0.5.0",
     "estree-walker": "^3.0.3",
     "language-packages": "^1.0.1",
