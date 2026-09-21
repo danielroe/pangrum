@@ -59,7 +59,7 @@
     "@vitest/browser-playwright": "5.0.1",
     "@vitest/coverage-v8": "5.0.1",
     "@vue/test-utils": "2.5.1",
-    "eslint": "10.10.0",
+    "eslint": "10.11.0",
     "get-port-please": "3.2.0",
     "lint-staged": "17.5.1",
     "nano-staged": "1.0.2",
