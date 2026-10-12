@@ -54,7 +54,7 @@
     "workbox-strategies": "^7.4.0"
   },
   "devDependencies": {
-    "@playwright/test": "1.63.0",
+    "@playwright/test": "1.64.0",
     "@vite-pwa/assets-generator": "2.0.0",
     "@vitest/browser-playwright": "5.0.3",
     "@vitest/coverage-v8": "5.0.3",
@@ -64,11 +64,11 @@
     "lint-staged": "17.6.0",
     "nano-staged": "1.0.2",
     "partykit": "0.0.115",
-    "playwright-core": "1.63.0",
+    "playwright-core": "1.64.0",
     "simple-git-hooks": "2.14.0",
     "typescript": "6.0.3",
     "vitest": "5.0.3",
-    "vue-tsc": "3.3.12",
+    "vue-tsc": "3.3.13",
     "workbox-background-sync": "7.4.1"
   },
   "pnpm": {
