@@ -54,7 +54,7 @@
     "workbox-strategies": "^7.4.0"
   },
   "devDependencies": {
-    "@playwright/test": "1.64.0",
+    "@playwright/test": "1.64.1",
     "@vite-pwa/assets-generator": "2.0.0",
     "@vitest/browser-playwright": "5.0.3",
     "@vitest/coverage-v8": "5.0.3",
@@ -64,7 +64,7 @@
     "lint-staged": "17.6.0",
     "nano-staged": "1.0.2",
     "partykit": "0.0.115",
-    "playwright-core": "1.64.0",
+    "playwright-core": "1.64.1",
     "simple-git-hooks": "2.14.0",
     "typescript": "6.0.3",
     "vitest": "5.0.3",
@@ -80,7 +80,7 @@
       }
     }
   },
-  "packageManager": "pnpm@10.34.6",
+  "packageManager": "pnpm@10.34.7",
   "simple-git-hooks": {
     "pre-commit": "npx lint-staged"
   },
